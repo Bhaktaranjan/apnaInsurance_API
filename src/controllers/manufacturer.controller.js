@@ -3,7 +3,13 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
 
-// Retrieve all manufacturers
+/**
+ * Retrieve all manufacturers.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.getAllManufacturers = async (req, res, next) => {
     try {
         // Get the list of manufacturers
@@ -80,9 +86,11 @@ exports.createManufacturer = async (req, res, next) => {
     try {
         // Log the request body
         logger.info('Message: Create Manufacturer request', req.body);
+
+        // Validate the request body
         manufacturerCheckValidation(req);
 
-
+        // Check if the manufacturer already exists
         const manufacturer = await ManufacturerModel.findManufacturerByNameQuery(req.body);
 
         if (manufacturer) {
@@ -133,6 +141,7 @@ exports.updateManufacturer = async (req, res, next) => {
             res.status(400).send({ message: 'Manufacturer Id can not be empty!' });
             return;
         }
+        // Perform validation on the request body
         manufacturerCheckValidation(req);
 
         // Check if the manufacturer already exists
@@ -182,14 +191,19 @@ exports.deleteManufacturer = async (req, res, next) => {
             return;
         }
 
+        // Delete the manufacturer
         const result = await ManufacturerModel.deleteManufacturerQuery(req.params.id);
 
+        // Check if the manufacturer was not found
         if (result && result.affectedRows === 0) {
             logger.error('Unable to delete Manufacturer!');
             throw new HttpException(500, 'Unable to delete Manufacturer!');
         }
+
+        // Log success message
         logger.success('Manufacturer deleted successfully!');
 
+        // Send success response
         res.status(200).send({
             status: 200,
             message: 'Manufacturer deleted successfully!',

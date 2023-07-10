@@ -10,7 +10,6 @@ const tableName = 'vehicle_model';
  * @returns {Promise<Array>} - A promise that resolves to an array of vehicle models.
  */
 exports.getAllVehicleModelsQuery = async (params = {}) => {
-    console.log('params.length', Object.keys(params).length);
     // Construct the base SQL query
     let sql = `SELECT * FROM ${tableName}`;
 
@@ -58,25 +57,43 @@ exports.createVehicleModelQuery = async ({ Name, ManufaturerId }) => {
     return affectedRows;
 }
 
+/**
+ * Update vehicle model query.
+ * @param {Object} params - The parameters for the update.
+ * @param {string} id - The id of the vehicle model to update.
+ * @returns {Promise<Object>} - The result of the update operation.
+ */
 exports.updateVehicleModelQuery = async (params, id) => {
-    // console.log(params);
-    // console.log(id);
+    // Generate column set and values for update statement
     const { columnSet, values } = multipleColumnSet(params);
+
+    // Construct the SQL update statement
     const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
 
+    // Log the generated SQL query
     logger.info(`DB Query : Update VehicleModel Sql : ${sql}`);
 
+    // Execute the update query
     const result = await connection.query(sql, [...values, id]);
 
     return result;
 }
 
+/**
+ * Deletes a vehicle model from the database based on its ID.
+ * @param {number} id - The ID of the vehicle model to delete.
+ * @returns {Promise<object>} - A promise that resolves to the result of the deletion operation.
+ */
 exports.deleteVehicleModelQuery = async (id) => {
+    // Construct the SQL query to delete the vehicle model based on its ID
     const sql = `DELETE FROM ${tableName} WHERE id = ?`;
 
+    // Log the delete vehicle model query
     logger.info(`DB Query : Delete VehicleModel Sql : ${sql}`);
 
+    // Execute the delete query with the provided ID
     const result = await connection.query(sql, [id]);
 
+    // Return the result of the deletion operation
     return result;
 }

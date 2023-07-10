@@ -6,6 +6,7 @@ const {
     createUserSchema, validateLoginSchema, validatePasswordSchema,
 } = require('../middleware/validators/userValidator.middleware');
 const authAdmin = require('../middleware/adminAuth.middleware');
+
 router.get('/user/:id', userController.getUserById);
 router.post('/user', createUserSchema, userController.createUser);
 router.post('/signin', validateLoginSchema, userController.signinUser);

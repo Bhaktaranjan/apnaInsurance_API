@@ -141,9 +141,19 @@ exports.createEnquiryQuery = async (data) => {
     return affectedRows;
 };
 
+/**
+ * Deletes an enquiry from the database.
+ *
+ * @param {number} id - The ID of the enquiry to delete.
+ * @returns {Promise} A Promise that resolves with the result of the query.
+ */
 exports.deleteEnquiryQuery = async (id) => {
+    // Construct the delete query
     const sql = `DELETE FROM ${tableName} WHERE id = ?`;
+
+    // Log the query
     logger.info(`DB Query : Delete Enquiry Sql : ${sql}`);
 
+    // Execute the query and return the result
     return await connection.query(sql, [id]);
 }

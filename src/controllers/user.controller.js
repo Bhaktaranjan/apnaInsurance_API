@@ -73,7 +73,6 @@ exports.signinUser = async (req, res, next) => {
         const Pass = req.body.password;
 
         const user = await UserModel.findOneUserQuery({ UserName });
-        console.log(user.UserName);
         if (!user) {
             logger.error('Unable to find user!');
             res.status(401).send({

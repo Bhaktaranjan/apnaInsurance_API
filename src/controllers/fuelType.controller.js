@@ -3,12 +3,21 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
 
+/**
+ * Retrieve all fuel types.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.getAllFuelTypes = async (req, res, next) => {
     try {
         // Get the list of FuelTypes
         const fuelTypeList = await FuelTypeModel.getAllFuelTypesQuery();
+
         // Log success message
         logger.success('Fuel Types fetched successfully!');
+
         // Send response
         res.status(200).send({
             status: 200,
@@ -18,11 +27,19 @@ exports.getAllFuelTypes = async (req, res, next) => {
     } catch (err) {
         // Log error message
         logger.error(err.message);
+
         // Send error response
         res.status(500).send({ message: err.message || 'Some error occurred while fetching all Fuel Types.' });
     }
 }
 
+/**
+ * Creates a new fuel type.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {function} next - The next middleware function.
+ */
 exports.createFuelType = async (req, res, next) => {
     try {
         // Log the request parameters
@@ -31,15 +48,18 @@ exports.createFuelType = async (req, res, next) => {
         // Find the FuelType by ID
         fuelTypeCheckValidation(req);
 
+        // Get all existing fuel types
         const fuelType = await FuelTypeModel.getAllFuelTypesQuery(req.body);
 
         if (fuelType && fuelType.length > 0) {
             logger.error('FuelType already exists!');
 
-            res.status(400).send({ status: 400, message: 'FuelType already exists!' });
+            res.status(400).send({
+                status: 400,
+                message: 'FuelType already exists!'
+            });
             return;
-        }
-        else {
+        } else {
             // Create the FuelType
             const result = await FuelTypeModel.createFuelTypeQuery(req.body);
 
@@ -61,21 +81,35 @@ exports.createFuelType = async (req, res, next) => {
     } catch (err) {
         // Log error message
         logger.error(err.message);
+
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while creating FuelType.' });
+        res.status(500).send({
+            message: err.message || 'Some error occurred while creating FuelType.'
+        });
     }
 }
 
+/**
+ * Updates a fuel type.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>}
+ */
 exports.updateFuelType = async (req, res, next) => {
     try {
         // Log the request parameters
         logger.info('Message : Update FuelType Params :', req.body);
+
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
             res.status(400).send({ message: 'FuelType Id can not be empty!' });
             return;
         }
+
+        // Perform validation checks on the request body
         fuelTypeCheckValidation(req);
+
         // Check if the FuelType already exists
         const fuelType = await FuelTypeModel.getAllFuelTypesQuery(req.body);
 
@@ -83,8 +117,7 @@ exports.updateFuelType = async (req, res, next) => {
             logger.error('FuelType already exists!');
             res.status(400).send({ status: 400, message: 'FuelType already exists!' });
             return;
-        }
-        else {
+        } else {
             // Update the FuelType
             const result = await FuelTypeModel.updateFuelTypeQuery(req.body, req.params.id);
 
@@ -107,6 +140,7 @@ exports.updateFuelType = async (req, res, next) => {
     } catch (err) {
         // Log error message
         logger.error(err.message);
+
         // Send error response
         res.status(500).send({ message: err.message || 'Some error occurred while updating FuelType.' });
     }
@@ -149,9 +183,15 @@ exports.deleteFuelType = async (req, res, next) => {
 
 //Function to validate request
 
-fuelTypeCheckValidation = (req) => {
+// Function to validate the fuel type check
+const fuelTypeCheckValidation = (req) => {
+    // Validate the request using the validationResult function
     const errors = validationResult(req);
+
+    // If there are validation errors
     if (!errors.isEmpty()) {
-        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
+        // Throw an HttpException with the first error message
+        const firstErrorMessage = errors.errors[0].msg;
+        throw new HttpException(400, firstErrorMessage, firstErrorMessage);
     }
 };

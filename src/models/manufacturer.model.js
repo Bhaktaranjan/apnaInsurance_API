@@ -41,7 +41,6 @@ exports.findAllManufacturersQuery = async (params = {}) => {
 exports.findManufacturerByNameQuery = async (params) => {
     // Generate columnSet and values for the query
     const { columnSet, values } = multipleColumnSet(params);
-    console.log('columnSet', columnSet);
     // Construct the SQL query
     const sql = `SELECT * FROM ${tableName}
     WHERE ${columnSet}`;
