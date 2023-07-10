@@ -5,29 +5,38 @@ const bcrypt = require('bcryptjs');
 const logger = require('../middleware/logger');
 const jwt = require('jsonwebtoken');
 
-//Function to get user by Request Id from Database
-
+/**
+ * Retrieves a user by ID.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.getUserById = async (req, res, next) => {
-
+    // Log the request parameters
     logger.info('Message : GetById User Params :', req.params);
 
+    // Check if the ID parameter is missing or empty
     if (!req.params.id || req.params.id === ':id') {
-        res.status(400).send({ message: 'User Id can not be empty!' });
+        res.status(400).send({ message: 'User ID cannot be empty!' });
         return;
     }
+
+    // Find the user by ID
     const user = await UserModel.findOneUserQuery({ id: req.params.id });
 
+    // Check if the user exists
     if (!user) {
+        // Log the error and send a 404 response
         logger.error('Message : User not found!');
         res.status(404).send({
             status: 404,
             message: "User not found!",
         });
     } else {
-
+        // Exclude the password field from the user object
         const { Password, ...userWithoutPassword } = user;
+        // Log the success message and send a 200 response with the user data
         logger.success('User fetched successfully!');
-
         res.status(200).send({
             status: 200,
             message: "User fetched successfully!",
@@ -36,62 +45,89 @@ exports.getUserById = async (req, res, next) => {
     }
 };
 
-//Function to create an user in Database
-
+/**
+ * Create a new user
+ * 
+ * @param {Object} req - The request object
+ * @param {Object} res - The response object
+ * @param {Function} next - The next middleware function
+ */
 exports.createUser = async (req, res, next) => {
     try {
+        // Log the request body
         logger.info('Message: Create User request', req.body);
+
+        // Validate the user request
         userCheckValidation(req);
 
+        // Hash the user password
         await hashPassword(req);
+
+        // Create the user in the database
         const result = await UserModel.createUserQuery(req.body);
 
+        // Check if user creation was successful
         if (!result) {
             logger.error('Unable to create user!');
             throw new HttpException(500, 'Unable to create user!');
         }
+
+        // Log success message
         logger.success('User created successfully!');
 
+        // Send response to client
         res.status(200).send({
             status: 200,
             message: 'User created successfully!',
         });
     } catch (err) {
-
+        // Log and handle errors
         logger.error(err.message);
         res.status(500).send({ message: err.message || 'Some error occurred while fetching all users.' });
     }
 };
 
-//Function to Validate and SignIn user with username and password
-
+/**
+ * Sign in a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.signinUser = async (req, res, next) => {
     try {
+        // Log the sign-in request
         logger.info('Message: SignIn request', req.body);
-        // const { UserName, Password: Pass } = req.body;
+
+        // Extract the username and password from the request body
         const UserName = req.body.userName;
         const Pass = req.body.password;
 
+        // Find the user in the database
         const user = await UserModel.findOneUserQuery({ UserName });
+
+        // If user is not found, send an error response
         if (!user) {
             logger.error('Unable to find user!');
-            res.status(401).send({
+            return res.status(401).send({
                 status: 401,
                 message: 'Unable to find user!'
             });
         }
-        logger.success(`Message : User Found : ${JSON.stringify(user.UserName)}`);
+
+        // Check if the password matches the stored password
         const isMatch = await bcrypt.compare(Pass, user.Password);
 
         console.log('isPassword Match', isMatch);
 
         if (!isMatch) {
-            res.status(401).send({
+            // If password does not match, send an error response
+            return res.status(401).send({
                 status: 401,
                 message: 'Incorrect password!'
             });
         } else {
-            // user matched!
+            // Generate a JWT token
             const secretKey = process.env.SECRET_JWT || '';
             logger.info('Get secretKey from env :', secretKey);
 
@@ -100,48 +136,69 @@ exports.signinUser = async (req, res, next) => {
             });
             logger.info('Create Token using secretKey :', token);
 
+            // Remove the password from the user object before sending the response
             const { Password, ...userWithoutPassword } = user;
-            res.status(200).send({
+            return res.status(200).send({
                 status: 200,
                 message: 'Admin authentication successful!',
                 token: token,
-                userData: user,
+                userData: userWithoutPassword,
             });
         }
     } catch (err) {
-
+        // Handle any errors that occur during sign-in
+        next(err);
     }
 };
 
-//Function to change password
-
+/**
+ * Updates the password for a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.updatePassword = async (req, res, next) => {
     try {
+        // Log the request body
         logger.info('Message: Update Password for user request', req.body);
+
+        // Check if the user id is provided
         if (!req.params.id || req.params.id === ':id') {
             res.status(400).send({ message: 'User Id can not be empty!' });
             return;
         }
+
+        // Validate the request body
         userCheckValidation(req);
 
+        // Hash the password
         await hashPassword(req);
 
+        // Separate the Confirm_Password field and the rest of the updates
         const { Confirm_Password, ...restOfUpdates } = req.body;
+
+        // Update the password in the database
         const result = await UserModel.updatePasswordQuery(restOfUpdates, req.params.id);
 
+        // Check if the update was successful
         if (!result) {
             throw new HttpException(404, 'Something went wrong');
         }
 
+        // Log the success message
         logger.success(`Message : Password Successfully Updated`);
+
         const { affectedRows, changedRows, info } = result;
 
+        // Generate the appropriate message based on the update result
         const message = !affectedRows
             ? 'User not found'
             : affectedRows && changedRows
                 ? 'Password updated successfully'
                 : 'Update failed';
 
+        // Send the response
         res.status(200).send({
             status: 200,
             message: message,
@@ -149,8 +206,10 @@ exports.updatePassword = async (req, res, next) => {
         });
 
     } catch (err) {
-
+        // Log the error message
         logger.error(err.message);
+
+        // Send the error response
         res.status(500).send({ message: err.message || 'Some error occurred while updating password.' });
     }
 };
