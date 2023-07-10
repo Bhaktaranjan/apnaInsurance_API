@@ -16,7 +16,6 @@ const authAdmin = () => {
         if (!token) return res.status(403).send({ message: "No token provided!" });
 
         jwt.verify(token, secretKey, (err, decoded) => {
-            logger.error('Error in JWT verify', err);
             if (err) return res.status(401).send({ status: 401, message: "Unauthorized!" });
             req.userId = decoded.id;
             // logger.info('decoded', decoded);

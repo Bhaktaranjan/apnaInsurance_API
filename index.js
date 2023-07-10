@@ -5,6 +5,9 @@ const cors = require('cors');
 
 const userRouter = require('./src/routes/user.route');
 const enquiryRouter = require('./src/routes/enquiry.route');
+const manufacturerRouter = require('./src/routes/manufacturer.route');
+const modelVariantRouter = require('./src/routes/modelVariant.route');
+const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 
 // Init express
 const app = express();
@@ -35,14 +38,17 @@ console.log(`Port number : ${port}`);
 
 app.use(`/userapi`, userRouter);
 app.use(`/enquiryapi`, enquiryRouter);
+app.use(`/manufacturerapi`, manufacturerRouter);
+app.use(`/modelVariantapi`, modelVariantRouter);
+app.use(`/vehicleModelapi`, vehicleModelRouter);
 
 app.get('/', function (req, res) {
-    res.send(`Widget Utility listening on port ${port}`);
+    res.send(`Apna Insurane listening on port ${port}`);
 });
 
 app.listen(port, function () {
     console.log(
-        `Widget Utility listening on port ${port}`
+        `Apna Insurane listening on port ${port}`
     );
 });
 

@@ -33,3 +33,15 @@ exports.createUserQuery = async ({
 
     return affectedRows;
 };
+
+exports.updatePasswordQuery = async (params, id) => {
+    // console.log(params);
+    // console.log(id);
+    const { columnSet, values } = multipleColumnSet(params);
+    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
+
+    logger.info(`DB Query : Update Password Sql : ${sql}`);
+
+    const result = await connection.query(sql, [...values, id]);
+    return result;
+};

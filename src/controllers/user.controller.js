@@ -41,7 +41,7 @@ exports.getUserById = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         logger.info('Message: Create User request', req.body);
-        checkValidation(req);
+        userCheckValidation(req);
 
         await hashPassword(req);
         const result = await UserModel.createUserQuery(req.body);
@@ -72,7 +72,8 @@ exports.signinUser = async (req, res, next) => {
         const UserName = req.body.userName;
         const Pass = req.body.password;
 
-        const user = await UserModel.findOneUserQuery({ UserName })
+        const user = await UserModel.findOneUserQuery({ UserName });
+        console.log(user.UserName);
         if (!user) {
             logger.error('Unable to find user!');
             res.status(401).send({
@@ -113,13 +114,54 @@ exports.signinUser = async (req, res, next) => {
     }
 };
 
+//Function to change password
+
+exports.updatePassword = async (req, res, next) => {
+    try {
+        logger.info('Message: Update Password for user request', req.body);
+        if (!req.params.id || req.params.id === ':id') {
+            res.status(400).send({ message: 'User Id can not be empty!' });
+            return;
+        }
+        userCheckValidation(req);
+
+        await hashPassword(req);
+
+        const { Confirm_Password, ...restOfUpdates } = req.body;
+        const result = await UserModel.updatePasswordQuery(restOfUpdates, req.params.id);
+
+        if (!result) {
+            throw new HttpException(404, 'Something went wrong');
+        }
+
+        logger.success(`Message : Password Successfully Updated`);
+        const { affectedRows, changedRows, info } = result;
+
+        const message = !affectedRows
+            ? 'User not found'
+            : affectedRows && changedRows
+                ? 'Password updated successfully'
+                : 'Update failed';
+
+        res.status(200).send({
+            status: 200,
+            message: message,
+            info: info
+        });
+
+    } catch (err) {
+
+        logger.error(err.message);
+        res.status(500).send({ message: err.message || 'Some error occurred while updating password.' });
+    }
+};
+
 //Function to validate request
 
-checkValidation = (req) => {
-    console.log(req.body);
+userCheckValidation = (req) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        throw new HttpException(400, 'Validation failed', errors);
+        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
     }
 };
 

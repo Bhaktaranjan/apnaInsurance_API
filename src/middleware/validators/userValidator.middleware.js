@@ -50,7 +50,7 @@ exports.createUserSchema = [
 		.withMessage('Role must be at least 3 chars long'),
 ];
 
-exports.validateLogin = [
+exports.validateLoginSchema = [
 	body('UserName')
 		.exists()
 		.withMessage('User name is required')
@@ -61,4 +61,27 @@ exports.validateLogin = [
 		.withMessage('Password is required')
 		.notEmpty()
 		.withMessage('Password must be filled'),
+];
+
+exports.validatePasswordSchema = [
+	body('Password')
+		.optional()
+		// .notEmpty()
+		.isLength({
+			min: 4,
+		})
+		.withMessage('Password must contain at least 4 characters')
+		.isLength({
+			max: 64,
+		})
+		.withMessage('Password can contain max 64 characters')
+		.custom((value, { req }) => !!req.body.Confirm_Password)
+		.withMessage('Please confirm your password'),
+
+	body('Confirm_Password')
+		.optional()
+		.custom((value, { req }) => value === req.body.Password)
+		.withMessage(
+			'Confirm Password field must have the same value as the Password field'
+		),
 ];

@@ -28,7 +28,7 @@ exports.getAllEnquires = async (req, res, next) => {
 exports.createEnquiry = async (req, res, next) => {
     try {
         logger.info('Message: Create Enquiry request', req.body);
-        // checkValidation(req);
+        // enquiryCheckValidation(req);
 
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
@@ -52,7 +52,7 @@ exports.createEnquiry = async (req, res, next) => {
 
 //Function to validate request
 
-checkValidation = (req) => {
+enquiryCheckValidation = (req) => {
     console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
