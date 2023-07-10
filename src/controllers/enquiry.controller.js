@@ -28,7 +28,7 @@ exports.getAllEnquires = async (req, res, next) => {
 exports.createEnquiry = async (req, res, next) => {
     try {
         logger.info('Message: Create Enquiry request', req.body);
-        // enquiryCheckValidation(req);
+        enquiryCheckValidation(req);
 
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
@@ -50,13 +50,39 @@ exports.createEnquiry = async (req, res, next) => {
     }
 };
 
+exports.deleteEnquiry = async (req, res, next) => {
+    try {
+        logger.info('Message: Delete Enquiry request', req.body);
+        // Check if the ID is empty or invalid
+        if (!req.params.id || req.params.id === ':id') {
+            res.status(400).send({ message: 'FuelType Id can not be empty!' });
+            return;
+        }
+
+        const result = await EnquiryModel.deleteEnquiryQuery(req.params.id);
+
+        if (result && result.affectedRows === 0) {
+            logger.error('Unable to delete Enquiry!');
+            throw new HttpException(500, 'Unable to delete Enquiry!');
+        }
+
+        logger.success('Enquiry deleted successfully!');
+
+        res.status(200).send({
+            status: 200,
+            message: 'Enquiry deleted successfully!',
+        })
+    } catch (err) {
+        logger.error(err.message);
+        res.status(500).send({ message: err.message || 'Some error occurred while deleting Enquiry.' });
+    }
+}
 //Function to validate request
 
 enquiryCheckValidation = (req) => {
-    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        throw new HttpException(400, 'Validation failed', errors);
+        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
     }
 };
 

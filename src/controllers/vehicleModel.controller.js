@@ -26,6 +26,7 @@ exports.getAllVehicleModels = async (req, res, next) => {
 exports.createVehicleModel = async (req, res, next) => {
     try {
         logger.info('Message: Create Vehicle Model request', req.body);
+        vehicleModelCheckValidation(req);
 
         // Get the vehicle model
         const vehicleModel = await VehicleModelModel.getAllVehicleModelsQuery(req.body);
@@ -69,6 +70,7 @@ exports.updateVehicleModel = async (req, res, next) => {
             res.status(400).send({ message: 'Vehicle Model Id can not be empty!' });
             return;
         }
+        vehicleModelCheckValidation(req);
         // Check if the manufacturer already exists
         const vehicleModel = await VehicleModelModel.getAllVehicleModelsQuery(req.body);
 
@@ -79,18 +81,19 @@ exports.updateVehicleModel = async (req, res, next) => {
         } else {
             // Get the vehicle model
             const result = await VehicleModelModel.updateVehicleModelQuery(req.body, req.params.id);
-            if (!result) {
+
+            if (result && result.affectedRows === 0) {
                 logger.error('Unable to update vehicle model!');
                 throw new HttpException(500, 'Unable to update vehicle model!');
-            } else {
-                // Log success message
-                logger.success('Vehicle Model updated successfully!');
-                // Send response
-                res.status(200).send({
-                    status: 200,
-                    message: 'Vehicle Model updated successfully!'
-                });
             }
+
+            // Log success message
+            logger.success('Vehicle Model updated successfully!');
+            // Send response
+            res.status(200).send({
+                status: 200,
+                message: 'Vehicle Model updated successfully!'
+            });
         }
     } catch (err) {
         // Log error message
@@ -115,7 +118,9 @@ exports.deleteVehicleModel = async (req, res, next) => {
             logger.error('Unable to delete vehicle model!');
             throw new HttpException(500, 'Unable to delete vehicle model!');
         }
+
         logger.success('Vehicle Model deleted successfully!');
+
         res.status(200).send({
             status: 200,
             message: 'Vehicle Model deleted successfully!',
@@ -127,3 +132,10 @@ exports.deleteVehicleModel = async (req, res, next) => {
         res.status(500).send({ message: err.message || 'Some error occurred while deleting vehicle model.' });
     }
 }
+
+vehicleModelCheckValidation = (req) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
+    }
+};

@@ -1,14 +1,14 @@
 const connection = require('../db/db-connection');
-const { multipleColumnSet, multipleColumnSetQueryParams } = require('../utils/common.utils');
+const { multipleColumnSet } = require('../utils/common.utils');
 const logger = require('../middleware/logger');
 
-const tableName = 'model_variant';
+const tableName = 'fueltype';
 
-exports.getAllModelVariantsQuery = async (params = {}) => {
+exports.getAllFuelTypesQuery = async (params = {}) => {
     console.log(Object.keys(params).length);
     // Construct the base SQL query
     let sql = `SELECT * FROM ${tableName}`;
-    logger.info(`DB Query: Get AllModelVariants Sql: ${sql}`);
+    logger.info(`DB Query: Get AllFuelTypes Sql: ${sql}`);
 
     // Check if there are any additional filter parameters
     if (Object.keys(params).length <= 0) {
@@ -17,45 +17,45 @@ exports.getAllModelVariantsQuery = async (params = {}) => {
     } else {
 
         // Generate the column set and values for the filter parameters
-        const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
-        // console.log('columnSetQueryParams', columnSetQueryParams);
+        const { columnSet, values } = multipleColumnSet(params);
+        console.log('columnSet', columnSet);
         // Append the filter condition to the SQL query
-        sql += ` WHERE ${columnSetQueryParams}`;
-
+        sql += ` WHERE ${columnSet}`;
+        console.log('sql', sql);
         // Execute the query with the filter parameters and return the result
         return await connection.query(sql, [...values]);
     }
 }
 
-exports.createModelVariantQuery = async ({ VehicleModelId, ManufaturerId, Name }) => {
-    // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleModelId, ManufaturerId, Name ) VALUES (?,?,?)`;
+exports.createFuelTypeQuery = async ({ FuelType }) => {
 
-    // Log the SQL query
-    logger.info(` DB Query : Create ModelVariant Sql : ${sql}`);
+    // Construct the SQL query
 
-    // Execute the SQL query and get the result
-    const result = await connection.query(sql, [VehicleModelId, ManufaturerId, Name]);
+    const sql = `INSERT INTO ${tableName} (FuelType) VALUES (?)`;
+
+    // Execute the query and get the result
+    const result = await connection.query(sql, [FuelType]);
+
     return result;
 }
 
-exports.updateModelVariantQuery = async (params, id) => {
+exports.updateFuelTypeQuery = async (params, id) => {
     // console.log(params);
     // console.log(id);
     const { columnSet, values } = multipleColumnSet(params);
     const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
 
-    logger.info(`DB Query : Update ModelVariant Sql : ${sql}`);
+    logger.info(`DB Query : Update FuelType Sql : ${sql}`);
 
     const result = await connection.query(sql, [...values, id]);
 
     return result;
 }
 
-exports.deleteModelVariantQuery = async (id) => {
+exports.deleteFuelTypeQuery = async (id) => {
     const sql = `DELETE FROM ${tableName} WHERE id = ?`;
 
-    logger.info(`DB Query : Delete ModelVariant Sql : ${sql}`);
+    logger.info(`DB Query : Delete FuelType Sql : ${sql}`);
 
     const result = await connection.query(sql, [id]);
 

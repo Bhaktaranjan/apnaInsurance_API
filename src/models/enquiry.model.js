@@ -140,3 +140,10 @@ exports.createEnquiryQuery = async (data) => {
 
     return affectedRows;
 };
+
+exports.deleteEnquiryQuery = async (id) => {
+    const sql = `DELETE FROM ${tableName} WHERE id = ?`;
+    logger.info(`DB Query : Delete Enquiry Sql : ${sql}`);
+
+    return await connection.query(sql, [id]);
+}

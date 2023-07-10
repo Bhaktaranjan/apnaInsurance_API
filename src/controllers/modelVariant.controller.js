@@ -30,6 +30,8 @@ exports.createModelVariant = async (req, res, next) => {
     try {
         // Log the request parameters
         logger.info('Message : Create Model Variant Params :', req.body);
+        modelVariantCheckValidation(req);
+
 
         const modelVariant = await ModelVariantModel.getAllModelVariantsQuery(req.body);
 
@@ -72,6 +74,7 @@ exports.updateModelVariant = async (req, res, next) => {
             res.status(400).send({ message: 'Manufacturer Id can not be empty!' });
             return;
         }
+        modelVariantCheckValidation(req);
 
         const modelVariant = await ModelVariantModel.getAllModelVariantsQuery(req.body);
 
@@ -83,7 +86,7 @@ exports.updateModelVariant = async (req, res, next) => {
         } else {
             const result = await ModelVariantModel.updateModelVariantQuery(req.body, req.params.id);
 
-            if (!result) {
+            if (result && result.affectedRows === 0) {
                 logger.error('Unable to update model variant!');
                 throw new HttpException(500, 'Unable to update model variant!');
             }
@@ -120,15 +123,14 @@ exports.deleteModelVariant = async (req, res, next) => {
         if (result && result.affectedRows === 0) {
             logger.error('Unable to delete model variant!');
             throw new HttpException(500, 'Unable to delete model variant!');
-        } else {
-
-            logger.success('Model Variant deleted successfully!');
-
-            res.status(200).send({
-                status: 200,
-                message: 'Model Variant deleted successfully!',
-            })
         }
+
+        logger.success('Model Variant deleted successfully!');
+
+        res.status(200).send({
+            status: 200,
+            message: 'Model Variant deleted successfully!',
+        })
     } catch (err) {
         // Log error message
         logger.error(err.message);
@@ -137,3 +139,10 @@ exports.deleteModelVariant = async (req, res, next) => {
         res.status(500).send({ message: err.message || 'Some error occurred while deleting Model Variant.' });
     }
 }
+
+modelVariantCheckValidation = (req) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
+    }
+};

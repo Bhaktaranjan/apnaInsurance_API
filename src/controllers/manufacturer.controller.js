@@ -80,6 +80,8 @@ exports.createManufacturer = async (req, res, next) => {
     try {
         // Log the request body
         logger.info('Message: Create Manufacturer request', req.body);
+        manufacturerCheckValidation(req);
+
 
         const manufacturer = await ManufacturerModel.findManufacturerByNameQuery(req.body);
 
@@ -131,6 +133,7 @@ exports.updateManufacturer = async (req, res, next) => {
             res.status(400).send({ message: 'Manufacturer Id can not be empty!' });
             return;
         }
+        manufacturerCheckValidation(req);
 
         // Check if the manufacturer already exists
         const manufacturer = await ManufacturerModel.findManufacturerByNameQuery(req.body);
@@ -141,11 +144,14 @@ exports.updateManufacturer = async (req, res, next) => {
         } else {
             // Update the manufacturer
             const result = await ManufacturerModel.updateManufacturerQuery(req.body, req.params.id);
-            if (!result) {
+
+            if (result && result.affectedRows === 0) {
                 logger.error('Unable to update Manufacturer!');
                 throw new HttpException(500, 'Unable to update Manufacturer!');
             }
+
             logger.success('Manufacturer updated successfully!');
+
             res.status(200).send({
                 status: 200,
                 message: 'Manufacturer updated successfully!',
@@ -194,3 +200,10 @@ exports.deleteManufacturer = async (req, res, next) => {
         res.status(500).send({ message: err.message || 'Some error occurred while deleting Manufacturer.' });
     }
 }
+
+manufacturerCheckValidation = (req) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
+    }
+};
