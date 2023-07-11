@@ -33,6 +33,31 @@ exports.getAllVehicleModels = async (req, res, next) => {
     }
 }
 
+exports.getAllVehicleModelsByManufacturerId = async (req, res, next) => {
+    try {
+        logger.info('Message: Get Vehicle Model Params', req.params);
+
+        // Get the list of vehicle models
+        const vehicleModelList = await VehicleModelModel.getAllVehicleModelsByManufacturerIdQuery(req.params.manufacurterId);
+
+        // Log success message
+        logger.success('Vehicle Models fetched successfully!');
+
+        // Send response
+        res.status(200).send({
+            status: 200,
+            message: 'Vehicle Models fetched successfully!',
+            vehicleModels: vehicleModelList,
+        })
+    } catch (err) {
+        // Log error message
+        logger.error(err.message);
+
+        // Send error response
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all vehicle models.' });
+    }
+}
+
 /**
  * Create a vehicle model.
  * 

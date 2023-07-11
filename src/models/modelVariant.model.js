@@ -30,6 +30,16 @@ exports.getAllModelVariantsQuery = async (params = {}) => {
     }
 }
 
+exports.getAllModelVariantsByVehicleModelIdQuery = async (VehicleModelId) => {
+    // Construct the base SQL query
+    let sql = `SELECT * FROM ${tableName} WHERE  VehicleModelId = ?`;
+    logger.info(`DB Query: Get AllModelVariantsByVehicleModelId Sql: ${sql}`);
+
+    // Execute the query and return the result
+
+    return await connection.query(sql, [VehicleModelId]);
+}
+
 /**
  * Creates a model variant query in the database.
  * 

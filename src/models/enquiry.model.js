@@ -62,7 +62,9 @@ exports.createEnquiryQuery = async (data) => {
         FirstName,
         LastName,
         DOB,
-        PermanentAddress,
+        PermanentAddress1,
+        PermanentAddress2,
+        PermanentAddress3,
         ContactNumber,
         EmailId,
         Manufacturer,
@@ -88,7 +90,9 @@ exports.createEnquiryQuery = async (data) => {
     FirstName,
     LastName, 
     DOB,
-    PermanentAddress,
+    PermanentAddress1,
+    PermanentAddress2,
+    PermanentAddress3,
     ContactNumber,
     EmailId,
     Manufacturer,
@@ -106,7 +110,7 @@ exports.createEnquiryQuery = async (data) => {
     PolicyNumber,
     NomineeName,
     NomineeAge,
-    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     // Log the DB query
     logger.info(`DB Query: Create Enquiry SQL: ${sql}`);
@@ -116,7 +120,9 @@ exports.createEnquiryQuery = async (data) => {
         FirstName,
         LastName,
         DOB,
-        PermanentAddress,
+        PermanentAddress1,
+        PermanentAddress2,
+        PermanentAddress3,
         ContactNumber,
         EmailId,
         Manufacturer,

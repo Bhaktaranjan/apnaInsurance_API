@@ -32,6 +32,26 @@ exports.getAllModelVariants = async (req, res, next) => {
     }
 }
 
+exports.getAllModelVariantsByVehicleModelId = async (req, res, next) => {
+    try {
+        logger.info('Message : Get Model Variant Params :', req.params);
+
+        const modelVariantList = await ModelVariantModel.getAllModelVariantsByVehicleModelIdQuery(req.params.vehiclemodelid);
+
+        logger.success('Model Variants fetched successfully!');
+
+        res.status(200).send({
+            status: 200,
+            message: 'Model Variants fetched successfully!',
+            modelVariants: modelVariantList
+        });
+    } catch (err) {
+        logger.error(err.message);
+
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all Model Variants.' });
+    }
+}
+
 /**
  * Create a model variant.
  * 

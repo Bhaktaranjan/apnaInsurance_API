@@ -12,7 +12,7 @@ const tableName = 'manufacturer';
  */
 exports.findAllManufacturersQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT * FROM ${tableName}`;
+    let sql = `SELECT Id,Name FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
@@ -42,7 +42,7 @@ exports.findManufacturerByNameQuery = async (params) => {
     // Generate columnSet and values for the query
     const { columnSet, values } = multipleColumnSet(params);
     // Construct the SQL query
-    const sql = `SELECT * FROM ${tableName}
+    const sql = `SELECT Id,Name FROM ${tableName}
     WHERE ${columnSet}`;
 
     // Log the SQL query

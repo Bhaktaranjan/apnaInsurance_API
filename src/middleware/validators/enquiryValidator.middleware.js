@@ -6,27 +6,49 @@ exports.createEnquirySchema = [
         .withMessage("FirstName is required")
         .isLength({
             min: 3,
+            max: 25,
         })
         .withMessage("FirstName must be at least 3 chars long"),
+
     body("LastName")
         .exists()
         .withMessage("LastName is required")
         .isLength({
             min: 3,
+            max: 25,
+
         })
         .withMessage("LastName must be at least 3 chars long"),
+
     body("DOB")
         .exists()
         .withMessage("DOB is required")
         .isDate()
         .withMessage("DOB must be a valid date"),
-    body("PermanentAddress")
+
+    body("PermanentAddress1")
         .exists()
-        .withMessage("PermanentAddress is required")
+        .withMessage("PermanentAddress1 is required")
         .isLength({
-            min: 10,
+            max: 50,
         })
-        .withMessage("PermanentAddress must be at least 10 chars long"),
+        .withMessage("PermanentAddress1 must be maximum 50 chars long"),
+
+    body("PermanentAddress2")
+        .exists()
+        .withMessage("PermanentAddress2 is required")
+        .isLength({
+            max: 50,
+        })
+        .withMessage("PermanentAddress2 must be maximum 50 chars long"),
+
+    body("PermanentAddress3")
+        .exists()
+        .withMessage("PermanentAddress3 is required")
+        .isLength({
+            max: 50,
+        })
+        .withMessage("PermanentAddress3 must be maximum 50 chars long"),
 
     body("ContactNumber")
         .exists()
@@ -35,94 +57,113 @@ exports.createEnquirySchema = [
         .withMessage("Must be a valid mobile number")
         .isLength({
             min: 10,
+            max: 10,
         })
         .withMessage("ContactNumber must be at least 10 digits long"),
+
     body("EmailId")
         .exists()
         .withMessage("EmailId is required")
         .isEmail()
         .withMessage("Must be a valid email")
         .normalizeEmail(),
+
     body("Manufacturer")
         .exists()
-        .withMessage("MakeName is required"),
+        .withMessage("Manufacturer is required"),
+
     body("Vehicle")
         .exists()
         .withMessage("Vehicle is required"),
+
     body("ModelName")
         .exists()
         .withMessage("ModelName is required"),
+
     body("DateOfRegistration")
         .exists()
         .withMessage("DateOfRegistration is required")
         .isDate()
         .withMessage("DateOfRegistration must be a valid date"),
+
     body("YearOfManufacture")
         .exists()
         .withMessage("YearOfManufacture is required")
         .isNumeric()
         .withMessage("YearOfManufacture must be a number"),
+
     body("RtoRegistered")
         .exists()
         .withMessage("RtoRegistered is required"),
+
     body("RegistrationNumber")
         .exists()
-        .withMessage("RegistrationNumber is required")
-        .isLength({
-            min: 3,
-        })
-        .withMessage("RegistrationNumber must be at least 3 chars long"),
+        .withMessage("RegistrationNumber is required"),
+
     body("EngineNumber")
         .exists()
         .withMessage("EngineNumber is required")
         .isLength({
-            min: 3,
+            max: 20,
         })
         .withMessage("EngineNumber must be at least 3 chars long"),
+
     body("ChasisNumber")
         .exists()
         .withMessage("ChasisNumber is required")
         .isLength({
-            min: 3,
+            max: 20,
         })
         .withMessage("ChasisNumber must be at least 3 chars long"),
+
     body("CubicCapacity")
         .exists()
         .withMessage("CubicCapacity is required")
+        .isLength({
+            max: 4,
+        })
+        .withMessage("CubicCapacity must be maximum 4 digits long")
         .isNumeric()
         .withMessage("CubicCapacity must be a number"),
+
     body("SeatingCapacity")
         .exists()
         .withMessage("SeatingCapacity is required")
         .isNumeric()
         .withMessage("SeatingCapacity must be a number"),
+
     body("FuelType")
         .exists()
         .withMessage("FuelType is required"),
+
     body("PolicyNumber")
         .exists()
         .withMessage("PolicyNumber is required")
         .isLength({
-            min: 3,
+            max: 20,
         })
         .withMessage("PolicyNumber must be at least 3 chars long"),
+
     body("NomineeName")
         .exists()
         .withMessage("NomineeName is required")
         .isLength({
             min: 3,
+            max: 20,
         })
         .withMessage("NomineeName must be at least 3 chars long"),
+
     body("NomineeAge")
         .exists()
         .withMessage("NomineeAge is required")
         .isNumeric()
-        .withMessage("NomineeAge must be a number"),
+        .withMessage("NomineeAge must be a number")
+        .isLength({
+            max: 3,
+        })
+        .withMessage("NomineeAge must be maximum 3 digits long"),
+
     body("NomineeRelationship")
         .exists()
-        .withMessage("NomineeRelationship is required")
-        .isLength({
-            min: 3,
-        })
-        .withMessage("NomineeRelationship must be at least 3 chars long"),
+        .withMessage("NomineeRelationship is required"),
 ];
