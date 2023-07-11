@@ -82,15 +82,11 @@ exports.createEnquirySchema = [
 
     body("DateOfRegistration")
         .exists()
-        .withMessage("DateOfRegistration is required")
-        .isDate()
-        .withMessage("DateOfRegistration must be a valid date"),
+        .withMessage("DateOfRegistration is required"),
 
     body("YearOfManufacture")
         .exists()
-        .withMessage("YearOfManufacture is required")
-        .isNumeric()
-        .withMessage("YearOfManufacture must be a number"),
+        .withMessage("YearOfManufacture is required"),
 
     body("RtoRegistered")
         .exists()

@@ -37,7 +37,9 @@ exports.createEnquiry = async (req, res, next) => {
 
         // Validate the enquiry request
         enquiryCheckValidation(req);
-
+        rtoFormatRegex(req);
+        registrationNoFormat(req);
+        manufactureYearValidation(req);
         // Create the enquiry using EnquiryModel
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
@@ -121,3 +123,25 @@ const enquiryCheckValidation = (req) => {
     }
 };
 
+const rtoFormatRegex = (req) => {
+    const regex = /^[A-Z]{2}[-][0-9]{2}$/;
+    if (!regex.test(req.body.RtoRegistered)) {
+        throw new HttpException(400, 'RtoRegistered is not valid! Please enter valid RtoRegistered (e.g. MH-02)');
+    }
+}
+
+const registrationNoFormat = (req) => {
+    const regex = /^[A-Z]{2}[-][0-9]{1,2}(?:-[A-Z]{1,2})[-][0-9]{4}$/;
+    if (!regex.test(req.body.RegistrationNumber)) {
+        throw new HttpException(400, 'RegistrationNumber is not valid! Please enter valid RegistrationNumber (e.g. MH-02--CD-1234)');
+    }
+}
+
+const manufactureYearValidation = (req) => {
+    const currentYear = new Date().getFullYear();
+    const validateYear = currentYear - 15;
+
+    if (currentYear < req.body.YearOfManufacture || req.body.YearOfManufacture < validateYear) {
+        throw new HttpException(400, `YearOfManufacture is not valid! Please enter valid YearOfManufacture (e.g. greaterthan ${validateYear - 1})`);
+    }
+}
