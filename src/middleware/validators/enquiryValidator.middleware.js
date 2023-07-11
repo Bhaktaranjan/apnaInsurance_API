@@ -43,12 +43,12 @@ exports.createEnquirySchema = [
         .isEmail()
         .withMessage("Must be a valid email")
         .normalizeEmail(),
+    body("Manufacturer")
+        .exists()
+        .withMessage("MakeName is required"),
     body("Vehicle")
         .exists()
         .withMessage("Vehicle is required"),
-    body("MakeName")
-        .exists()
-        .withMessage("MakeName is required"),
     body("ModelName")
         .exists()
         .withMessage("ModelName is required"),
