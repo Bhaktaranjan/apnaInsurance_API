@@ -149,7 +149,7 @@ const manufactureYearValidation = (req) => {
 
 const cubicCapacityValidation = (req) => {
     const cubicCapacityRegex = /^[0-9]{4}[c]{2}$/;
-    if (!cubicCapacityRegex.test(req.body.CubicCapacity)) {
+    if (!cubicCapacityRegex.test(req.body.CubicCapacity || req.body.CubicCapacity === '')) {
         throw new HttpException(400, 'CubicCapacity is not valid! Please enter valid CubicCapacity (e.g. 4000cc)');
     }
 }
