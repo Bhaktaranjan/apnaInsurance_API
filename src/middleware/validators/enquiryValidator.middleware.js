@@ -116,11 +116,9 @@ exports.createEnquirySchema = [
         .exists()
         .withMessage("CubicCapacity is required")
         .isLength({
-            max: 4,
+            max: 6,
         })
-        .withMessage("CubicCapacity must be maximum 4 digits long")
-        .isNumeric()
-        .withMessage("CubicCapacity must be a number"),
+        .withMessage("CubicCapacity must be maximum 6 chars long"),
 
     body("SeatingCapacity")
         .exists()

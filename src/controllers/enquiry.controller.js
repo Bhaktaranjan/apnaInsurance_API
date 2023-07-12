@@ -40,6 +40,7 @@ exports.createEnquiry = async (req, res, next) => {
         rtoFormatRegex(req);
         registrationNoFormat(req);
         manufactureYearValidation(req);
+        cubicCapacityValidation(req);
         // Create the enquiry using EnquiryModel
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
@@ -124,15 +125,15 @@ const enquiryCheckValidation = (req) => {
 };
 
 const rtoFormatRegex = (req) => {
-    const regex = /^[A-Z]{2}[-][0-9]{2}$/;
-    if (!regex.test(req.body.RtoRegistered)) {
+    const rtoRegex = /^[A-Z]{2}[-][0-9]{2}$/;
+    if (!rtoRegex.test(req.body.RtoRegistered)) {
         throw new HttpException(400, 'RtoRegistered is not valid! Please enter valid RtoRegistered (e.g. MH-02)');
     }
 }
 
 const registrationNoFormat = (req) => {
-    const regex = /^[A-Z]{2}[-][0-9]{1,2}(?:-[A-Z]{1,2})[-][0-9]{4}$/;
-    if (!regex.test(req.body.RegistrationNumber)) {
+    const regiNoRegex = /^[A-Z]{2}[-][0-9]{1,2}(?:-[A-Z]{1,2})[-][0-9]{4}$/;
+    if (!regiNoRegex.test(req.body.RegistrationNumber)) {
         throw new HttpException(400, 'RegistrationNumber is not valid! Please enter valid RegistrationNumber (e.g. MH-02--CD-1234)');
     }
 }
@@ -143,5 +144,12 @@ const manufactureYearValidation = (req) => {
 
     if (currentYear < req.body.YearOfManufacture || req.body.YearOfManufacture < validateYear) {
         throw new HttpException(400, `YearOfManufacture is not valid! Please enter valid YearOfManufacture (e.g. greaterthan ${validateYear - 1})`);
+    }
+}
+
+const cubicCapacityValidation = (req) => {
+    const cubicCapacityRegex = /^[0-9]{4}[c]{2}$/;
+    if (!cubicCapacityRegex.test(req.body.CubicCapacity)) {
+        throw new HttpException(400, 'CubicCapacity is not valid! Please enter valid CubicCapacity (e.g. 4000cc)');
     }
 }

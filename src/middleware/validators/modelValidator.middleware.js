@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-exports.createVehicleModelSchema = [
+exports.createModelSchema = [
     body('Name')
         .exists()
         .withMessage('Name is required')
@@ -9,8 +9,7 @@ exports.createVehicleModelSchema = [
         })
         .withMessage('Name must be at least 3 chars long'),
 ]
-
-exports.updateVehicleModelSchema = [
+exports.updateModelSchema = [
     body('Name')
         .exists()
         .withMessage('Name is required')

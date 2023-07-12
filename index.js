@@ -6,8 +6,8 @@ const cors = require('cors');
 const userRouter = require('./src/routes/user.route');
 const enquiryRouter = require('./src/routes/enquiry.route');
 const manufacturerRouter = require('./src/routes/manufacturer.route');
-const modelVariantRouter = require('./src/routes/modelVariant.route');
-const vehicleModelRouter = require('./src/routes/vehicleModel.route');
+const modelVariantRouter = require('./src/routes/model.route');
+const vehicleModelRouter = require('./src/routes/vehicle.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
 
 // Init express
@@ -40,8 +40,8 @@ console.log(`Port number : ${port}`);
 app.use(`/userapi`, userRouter);
 app.use(`/enquiryapi`, enquiryRouter);
 app.use(`/manufacturerapi`, manufacturerRouter);
-app.use(`/modelVariantapi`, modelVariantRouter);
-app.use(`/vehicleModelapi`, vehicleModelRouter);
+app.use(`/makeapi`, modelVariantRouter);
+app.use(`/vehicleapi`, vehicleModelRouter);
 app.use(`/fuelTypeapi`, fuelTypeRouter);
 
 app.get('/', function (req, res) {
