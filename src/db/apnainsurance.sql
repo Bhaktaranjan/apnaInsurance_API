@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2023 at 02:17 PM
+-- Generation Time: Jul 12, 2023 at 02:19 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -31,7 +31,7 @@ CREATE TABLE `enquires` (
   `Id` int(11) NOT NULL,
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
-  `DOB` date NOT NULL,
+  `DOB` datetime NOT NULL,
   `PermanentAddress1` varchar(500) NOT NULL,
   `PermanentAddress2` varchar(200) NOT NULL,
   `PermanentAddress3` varchar(200) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `enquires` (
   `Manufacturer` varchar(100) NOT NULL,
   `Vehicle` varchar(100) NOT NULL,
   `Model` varchar(100) NOT NULL,
-  `DateOfRegistration` date NOT NULL,
+  `DateOfRegistration` datetime NOT NULL,
   `YearOfManufacture` year(4) NOT NULL,
   `RtoRegistered` varchar(200) NOT NULL,
   `RegistrationNumber` varchar(100) NOT NULL,
