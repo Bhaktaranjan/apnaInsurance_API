@@ -5,6 +5,22 @@ const logger = require('../middleware/logger');
 const tableName = 'user';
 
 /**
+ * Retrieve all users with the role 'agent' from the database.
+ *
+ * @returns {Promise<Array>} A promise that resolves to an array of user objects.
+ */
+exports.findAllUserQuery = async () => {
+    // Construct the base SQL query
+    let sql = `SELECT Id,Name,Email,UserName,PhoneNo,Role FROM ${tableName} WHERE Role = 'agent'`;
+
+    // Log the SQL query
+    logger.info(`DB Query: Get AllUsers Sql: ${sql}`);
+
+    // Execute the query with the filter parameters and return the result
+    return await connection.query(sql);
+}
+
+/**
  * Finds a user based on the provided parameters.
  * @param {object} params - The parameters used to search for the user.
  * @returns {object} - The found user.

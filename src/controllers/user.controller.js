@@ -5,6 +5,31 @@ const bcrypt = require('bcryptjs');
 const logger = require('../middleware/logger');
 const jwt = require('jsonwebtoken');
 
+exports.getAllUsers = async (req, res, next) => {
+    try {
+        // Get the list of Users
+        const userList = await UserModel.findAllUserQuery();
+
+        // Log success message
+        logger.success('Users fetched successfully!');
+
+        // Send response
+        res.status(200).send({
+            status: 200,
+            message: 'Users fetched successfully!',
+            users: userList,
+        });
+    } catch (err) {
+        // Log error message
+        logger.error(err.message);
+
+        // Send error response
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all Users.' });
+    }
+
+
+}
+
 /**
  * Retrieves a user by ID.
  * @param {Object} req - The request object.

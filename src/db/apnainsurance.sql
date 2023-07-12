@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2023 at 02:19 PM
+-- Generation Time: Jul 12, 2023 at 02:42 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -90,7 +90,7 @@ CREATE TABLE `manufacturer` (
 
 CREATE TABLE `model` (
   `Id` int(11) NOT NULL,
-  `VehicleModelId` int(11) NOT NULL,
+  `VehicleId` int(11) NOT NULL,
   `ManufaturerId` int(11) NOT NULL,
   `Name` varchar(200) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
@@ -166,7 +166,7 @@ ALTER TABLE `manufacturer`
 --
 ALTER TABLE `model`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `VehicleModelId` (`VehicleModelId`,`ManufaturerId`);
+  ADD UNIQUE KEY `VehicleModelId` (`VehicleId`,`ManufaturerId`);
 
 --
 -- Indexes for table `user`

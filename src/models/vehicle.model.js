@@ -11,7 +11,7 @@ const tableName = 'vehicle';
  */
 exports.getAllVehiclesQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT * FROM ${tableName}`;
+    let sql = `SELECT Id,Name FROM ${tableName}`;
 
     // Log the query to the console
     logger.info(`DB Query: Get AllVehicles Sql: ${sql}`);
@@ -33,7 +33,7 @@ exports.getAllVehiclesQuery = async (params = {}) => {
 
 exports.getAllVehiclesByManufacturerIdQuery = async (ManufaturerId) => {
     // Construct the base SQL query
-    let sql = `SELECT * FROM ${tableName} WHERE ManufaturerId = ?`;
+    let sql = `SELECT Id,Name FROM ${tableName} WHERE ManufaturerId = ?`;
 
     // Log the query to the console
     logger.info(`DB Query: Get AllVehiclesByManufacturerId Sql: ${sql}`);

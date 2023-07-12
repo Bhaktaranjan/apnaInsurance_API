@@ -11,7 +11,7 @@ const tableName = 'fueltype';
  */
 exports.getAllFuelTypesQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT * FROM ${tableName}`;
+    let sql = `SELECT Id,FuelType FROM ${tableName}`;
 
     // Log the SQL query
     logger.info(`DB Query: Get AllFuelTypes Sql: ${sql}`);
