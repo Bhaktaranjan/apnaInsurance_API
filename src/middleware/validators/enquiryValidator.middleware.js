@@ -5,7 +5,7 @@ exports.createEnquirySchema = [
         .exists()
         .withMessage("FirstName is required")
         .isLength({
-            min: 3,
+            min: 1,
             max: 25,
         })
         .withMessage("FirstName must be at least 3 chars long"),
@@ -14,7 +14,7 @@ exports.createEnquirySchema = [
         .exists()
         .withMessage("LastName is required")
         .isLength({
-            min: 3,
+            min: 1,
             max: 25,
 
         })
@@ -110,7 +110,7 @@ exports.createEnquirySchema = [
         .isLength({
             max: 20,
         })
-        .withMessage("ChasisNumber must be at least 3 chars long"),
+        .withMessage("ChasisNumber must be maximum 20 chars long"),
 
     body("CubicCapacity")
         .exists()
@@ -136,16 +136,16 @@ exports.createEnquirySchema = [
         .isLength({
             max: 20,
         })
-        .withMessage("PolicyNumber must be at least 3 chars long"),
+        .withMessage("PolicyNumber must be maximum 20 chars long"),
 
     body("NomineeName")
         .exists()
         .withMessage("NomineeName is required")
         .isLength({
-            min: 3,
+            min: 4,
             max: 20,
         })
-        .withMessage("NomineeName must be at least 3 chars long"),
+        .withMessage("NomineeName must be maximum 20 chars long"),
 
     body("NomineeAge")
         .exists()

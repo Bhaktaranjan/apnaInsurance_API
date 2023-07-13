@@ -239,6 +239,42 @@ exports.updatePassword = async (req, res, next) => {
     }
 };
 
+exports.deleteUser = async (req, res, next) => {
+    try {
+        // Log the request body
+        logger.info('Message: Delete User request', req.body);
+
+        // Check if the user id is provided
+        if (!req.params.id || req.params.id === ':id') {
+            res.status(400).send({ message: 'User Id can not be empty!' });
+            return;
+        }
+
+        // Delete the user from the database
+        const result = await UserModel.deleteUserQuery(req.params.id);
+
+        // Check if the user was deleted successfully
+        if (result && result.affectedRows === 0) {
+            throw new HttpException(404, 'Unable to delete User!');
+        }
+
+        // Log the success message
+        logger.success('User deleted successfully!');
+
+        // Send the success response
+        res.status(200).send({
+            status: 200,
+            message: 'User deleted successfully!',
+        })
+    } catch (err) {
+        // Log the error message
+        logger.error(err.message);
+
+        // Send the error response
+        res.status(500).send({ message: err.message || 'Some error occurred while deleting user.' });
+    }
+}
+
 //Function to validate request
 
 userCheckValidation = (req) => {

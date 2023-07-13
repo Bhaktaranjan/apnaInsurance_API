@@ -11,7 +11,7 @@ const tableName = 'user';
  */
 exports.findAllUserQuery = async () => {
     // Construct the base SQL query
-    let sql = `SELECT Id,Name,Email,UserName,PhoneNo,Role FROM ${tableName} WHERE Role = 'agent'`;
+    let sql = `SELECT Id,Name,Email,UserName,PhoneNo,Role FROM ${tableName} WHERE Role = 'agent' AND EntityState = 1`;
 
     // Log the SQL query
     logger.info(`DB Query: Get AllUsers Sql: ${sql}`);
@@ -110,3 +110,17 @@ exports.updatePasswordQuery = async (params, id) => {
     const result = await connection.query(sql, [...values, id]);
     return result;
 };
+
+
+exports.deleteUserQuery = async (id) => {
+    // Construct the SQL query
+    const sql = `UPDATE ${tableName} SET EntityState = 0 WHERE id = ?`;
+
+    // Log the query
+    logger.info(`DB Query : Delete User Sql : ${sql}`);
+
+    // Execute the query
+    const result = await connection.query(sql, [id]);
+
+    return result;
+}
