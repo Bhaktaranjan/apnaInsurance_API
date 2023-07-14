@@ -54,15 +54,15 @@ exports.getAllVehiclesQuery = async (params = {}) => {
     return await connection.query(sql, [...values]);
 }
 
-exports.getAllVehiclesByManufacturerIdQuery = async (ManufaturerId) => {
+exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
     // Construct the base SQL query
-    let sql = `SELECT Id,VehicleName, ManufacturerId FROM ${tableName} WHERE ManufaturerId = ?`;
+    let sql = `SELECT Id,VehicleName, ManufacturerId FROM ${tableName} WHERE ManufacturerId = ?`;
 
     // Log the query to the console
     logger.info(`DB Query: Get AllVehiclesByManufacturerId Sql: ${sql}`);
 
     // Execute the query and return the result
-    return await connection.query(sql, [ManufaturerId]);
+    return await connection.query(sql, [ManufacturerId]);
 }
 
 /**
