@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2023 at 05:15 PM
+-- Generation Time: Jul 14, 2023 at 06:04 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -91,7 +91,7 @@ CREATE TABLE `manufacturer` (
 CREATE TABLE `model` (
   `Id` int(11) NOT NULL,
   `VehicleId` int(11) NOT NULL,
-  `ManufaturerId` int(11) NOT NULL,
+  `ManufacturerId` int(11) NOT NULL,
   `ModelName` varchar(200) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
@@ -134,7 +134,7 @@ INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `R
 
 CREATE TABLE `vehicle` (
   `Id` int(11) NOT NULL,
-  `ManufaturerId` int(11) NOT NULL,
+  `ManufacturerId` int(11) NOT NULL,
   `VehicleName` varchar(200) NOT NULL,
   `EntityState` tinyint(4) NOT NULL DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
@@ -167,7 +167,7 @@ ALTER TABLE `manufacturer`
 --
 ALTER TABLE `model`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `VehicleModelId` (`VehicleId`,`ManufaturerId`);
+  ADD UNIQUE KEY `VehicleModelId` (`VehicleId`,`ManufacturerId`);
 
 --
 -- Indexes for table `user`
@@ -181,7 +181,7 @@ ALTER TABLE `user`
 --
 ALTER TABLE `vehicle`
   ADD PRIMARY KEY (`Id`),
-  ADD KEY `ManufaturerId` (`ManufaturerId`);
+  ADD KEY `ManufacturerId` (`ManufacturerId`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
