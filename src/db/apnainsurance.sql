@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2023 at 02:42 PM
+-- Generation Time: Jul 14, 2023 at 05:15 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -77,7 +77,7 @@ CREATE TABLE `fueltype` (
 
 CREATE TABLE `manufacturer` (
   `Id` int(11) NOT NULL,
-  `Name` varchar(200) NOT NULL,
+  `ManufacturerName` varchar(200) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -92,7 +92,7 @@ CREATE TABLE `model` (
   `Id` int(11) NOT NULL,
   `VehicleId` int(11) NOT NULL,
   `ManufaturerId` int(11) NOT NULL,
-  `Name` varchar(200) NOT NULL,
+  `ModelName` varchar(200) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -120,10 +120,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `Role`, `EntityState`, `CreatedOn`) VALUES
-(1, 'Partha', 'partha@gmail.com', 'partha', '$2a$08$FQrkIsYN7DwZKCqh7mTlPO5gdiKLek/L13lUf4P7Sb5wyxmXJ08Bu', '9178626257', 'admin', 1, '2023-06-30 06:10:01'),
-(3, 'Akhil', 'akhil@gmail.com', 'akhil', '$2a$08$Zt//vC3/WFN68Ld1XXnweO39MW//TT0ChStyJUafL9MuodP1l5/7y', '9178626257', 'agent', 1, '2023-07-07 09:08:36'),
+(1, 'Admin', 'admin@gmail.com', 'admin', '$2a$08$.P2unq7jCm9eSQ0YwETjn.iaTUEwYDmp0Bnb3K3ec4KkHLF0G3qP2', '1111111111', 'admin', 1, '2023-06-30 06:10:01'),
+(3, 'Akhil', 'akhil@gmail.com', 'akhil', '$2a$08$Zt//vC3/WFN68Ld1XXnweO39MW//TT0ChStyJUafL9MuodP1l5/7y', '9178626257', 'agent', 0, '2023-07-07 09:08:36'),
 (4, 'Anisha', 'anisha@gmail.com', 'anisha', '$2a$08$nkO5OCiYXwKKtFMT13IATOk7NxYZJ9Z8Uzf/bNuWo4MLgtKVYv.Zy', '9178626257', 'agent', 1, '2023-07-07 10:35:58'),
-(7, 'Anisha', 'anisha@gmail.com', 'anisha1', '$2a$08$OvZSrWQbFIK/2Im62G3OhuHMiXxsA57nS5phv4JqvKtZ9RxeP/1zG', '9178626257', 'agent', 1, '2023-07-10 10:23:00');
+(7, 'Anisha', 'anisha@gmail.com', 'anisha1', '$2a$08$OvZSrWQbFIK/2Im62G3OhuHMiXxsA57nS5phv4JqvKtZ9RxeP/1zG', '9178626257', 'agent', 0, '2023-07-10 10:23:00'),
+(9, 'Anisha', 'anisha@gmail.com', 'akhil1', '$2a$08$6d9qOvHklOyp1AiYfocwm.gnNono..Wv3RI.h4bwq.pEFY3tAn67q', '9178626257', 'agent', 0, '2023-07-12 13:20:37');
 
 -- --------------------------------------------------------
 
@@ -134,7 +135,7 @@ INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `R
 CREATE TABLE `vehicle` (
   `Id` int(11) NOT NULL,
   `ManufaturerId` int(11) NOT NULL,
-  `Name` varchar(200) NOT NULL,
+  `VehicleName` varchar(200) NOT NULL,
   `EntityState` tinyint(4) NOT NULL DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -196,7 +197,7 @@ ALTER TABLE `enquires`
 -- AUTO_INCREMENT for table `fueltype`
 --
 ALTER TABLE `fueltype`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `manufacturer`
@@ -214,7 +215,7 @@ ALTER TABLE `model`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `vehicle`
