@@ -8,7 +8,7 @@ exports.getAllModelsWithVehicleNameQuery = async (params = {}) => {
     // Construct the base SQL query
     let sql = `SELECT model.Id, model.ModelName, vehicle.VehicleName, manufacturer.ManufacturerName FROM model 
     INNER JOIN vehicle ON model.VehicleId = vehicle.Id 
-    INNER JOIN manufacturer ON vehicle.ManufaturerId = manufacturer.Id`;
+    INNER JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id`;
 
     logger.info(`DB Query: Get AllModelsWithVehicleName Sql: ${sql}`);
 
@@ -55,7 +55,7 @@ exports.getAllModelsQuery = async (params = {}) => {
 
 exports.getAllModelsByVehicleModelIdQuery = async (VehicleId) => {
     // Construct the base SQL query
-    let sql = `SELECT Id,ModelName, VehicleId, ManufaturerId FROM ${tableName} WHERE  VehicleId = ?`;
+    let sql = `SELECT Id,ModelName, VehicleId, ManufacturerId FROM ${tableName} WHERE  VehicleId = ?`;
     logger.info(`DB Query: Get AllModelsByVehicleId Sql: ${sql}`);
 
     // Execute the query and return the result
@@ -68,19 +68,19 @@ exports.getAllModelsByVehicleModelIdQuery = async (VehicleId) => {
  * 
  * @param {Object} options - The options for creating the model  query.
  * @param {number} options.VehicleId - The ID of the vehicle model.
- * @param {number} options.ManufaturerId - The ID of the manufacturer.
+ * @param {number} options.ManufacturerId - The ID of the manufacturer.
  * @param {string} options.Name - The name of the model .
  * @returns {Promise<Object>} - The result of the SQL query execution.
  */
-exports.createModelQuery = async ({ VehicleId, ManufaturerId, ModelName }) => {
+exports.createModelQuery = async ({ VehicleId, ManufacturerId, ModelName }) => {
     // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleId, ManufaturerId, ModelName ) VALUES (?,?,?)`;
+    const sql = `INSERT INTO ${tableName} (VehicleId, ManufacturerId, ModelName ) VALUES (?,?,?)`;
 
     // Log the SQL query
     logger.info(` DB Query : Create Model Sql : ${sql}`);
 
     // Execute the SQL query and get the result
-    const result = await connection.query(sql, [VehicleId, ManufaturerId, ModelName]);
+    const result = await connection.query(sql, [VehicleId, ManufacturerId, ModelName]);
     return result;
 }
 

@@ -11,7 +11,7 @@ const tableName = 'vehicle';
  */
 exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle INNER JOIN manufacturer ON vehicle.ManufaturerId = manufacturer.Id;
+    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle INNER JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id;
     `;
 
     // Log the query to the console
@@ -73,16 +73,16 @@ exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
  * @param {number} data.ManufacturerId - The ID of the manufacturer.
  * @returns {Promise<number>} - The number of affected rows in the database.
  */
-exports.createVehicleQuery = async ({ VehicleName, ManufaturerId }) => {
+exports.createVehicleQuery = async ({ VehicleName, ManufacturerId }) => {
 
     // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleName, ManufaturerId) VALUES (?,?)`;
+    const sql = `INSERT INTO ${tableName} (VehicleName, ManufacturerId) VALUES (?,?)`;
 
     // Log the SQL query
     logger.info(` DB Query : Create Vehicle Sql : ${sql}`);
 
     // Execute the SQL query and get the result
-    const result = await connection.query(sql, [VehicleName, ManufaturerId]);
+    const result = await connection.query(sql, [VehicleName, ManufacturerId]);
 
     // Get the number of affected rows
     const affectedRows = result ? result.affectedRows : 0;
