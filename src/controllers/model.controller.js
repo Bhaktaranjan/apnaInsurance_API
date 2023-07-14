@@ -12,7 +12,7 @@ const logger = require('../middleware/logger');
 exports.getAllModels = async (req, res, next) => {
     try {
         // Get the list of model s
-        const modelList = await MakeModel.getAllModelsQuery();
+        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery();
 
         // Log success message
         logger.success('Models fetched successfully!');

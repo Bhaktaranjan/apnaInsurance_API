@@ -15,18 +15,24 @@ exports.createUserSchema = [
 		.withMessage('Must be a valid email')
 		.normalizeEmail(),
 
+	body('UserName')
+		.exists()
+		.withMessage('User name is required')
+		.isAlphanumeric()
+		.withMessage('Must be a valid user name'),
+
 	body('Password')
 		.exists()
 		.withMessage('Password is required')
 		.notEmpty()
 		.isLength({
-			min: 6,
+			min: 5,
 		})
-		.withMessage('Password must contain at least 6 characters')
+		.withMessage('Password must contain at least 5 characters')
 		.isLength({
-			max: 10,
+			max: 64,
 		})
-		.withMessage('Password can contain max 10 characters'),
+		.withMessage('Password can contain max 64 characters'),
 
 	body('Confirm_Password')
 		.exists()
@@ -68,9 +74,9 @@ exports.validatePasswordSchema = [
 		.optional()
 		// .notEmpty()
 		.isLength({
-			min: 4,
+			min: 5,
 		})
-		.withMessage('Password must contain at least 4 characters')
+		.withMessage('Password must contain at least 5 characters')
 		.isLength({
 			max: 64,
 		})

@@ -4,6 +4,29 @@ const logger = require('../middleware/logger');
 
 const tableName = 'model';
 
+exports.getAllModelsWithVehicleNameQuery = async (params = {}) => {
+    // Construct the base SQL query
+    let sql = `SELECT model.Id, model.ModelName, vehicle.VehicleName, manufacturer.ManufacturerName FROM model 
+    INNER JOIN vehicle ON model.VehicleId = vehicle.Id 
+    INNER JOIN manufacturer ON vehicle.ManufaturerId = manufacturer.Id`;
+
+    logger.info(`DB Query: Get AllModelsWithVehicleName Sql: ${sql}`);
+
+    // Check if there are any additional filter parameters
+    if (Object.keys(params).length <= 0) {
+        // If not, execute the query and return the result
+        return await connection.query(sql);
+    }
+
+    // Generate the column set and values for the filter parameters
+    const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
+    // Append the filter condition to the SQL query
+    sql += ` WHERE ${columnSetQueryParams}`;
+
+    // Execute the query with the filter parameters and return the result
+    return await connection.query(sql, [...values]);
+}
+
 /**
  * Retrieves all model s from the database.
  * 
@@ -12,7 +35,7 @@ const tableName = 'model';
  */
 exports.getAllModelsQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT Id,Name FROM ${tableName}`;
+    let sql = `SELECT * FROM ${tableName}`;
     logger.info(`DB Query: Get AllModels Sql: ${sql}`);
 
     // Check if there are any additional filter parameters
@@ -32,7 +55,7 @@ exports.getAllModelsQuery = async (params = {}) => {
 
 exports.getAllModelsByVehicleModelIdQuery = async (VehicleId) => {
     // Construct the base SQL query
-    let sql = `SELECT Id,Name FROM ${tableName} WHERE  VehicleId = ?`;
+    let sql = `SELECT Id,ModelName, VehicleId, ManufaturerId FROM ${tableName} WHERE  VehicleId = ?`;
     logger.info(`DB Query: Get AllModelsByVehicleId Sql: ${sql}`);
 
     // Execute the query and return the result
@@ -49,15 +72,15 @@ exports.getAllModelsByVehicleModelIdQuery = async (VehicleId) => {
  * @param {string} options.Name - The name of the model .
  * @returns {Promise<Object>} - The result of the SQL query execution.
  */
-exports.createModelQuery = async ({ VehicleId, ManufaturerId, Name }) => {
+exports.createModelQuery = async ({ VehicleId, ManufaturerId, ModelName }) => {
     // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleId, ManufaturerId, Name ) VALUES (?,?,?)`;
+    const sql = `INSERT INTO ${tableName} (VehicleId, ManufaturerId, ModelName ) VALUES (?,?,?)`;
 
     // Log the SQL query
     logger.info(` DB Query : Create Model Sql : ${sql}`);
 
     // Execute the SQL query and get the result
-    const result = await connection.query(sql, [VehicleId, ManufaturerId, Name]);
+    const result = await connection.query(sql, [VehicleId, ManufaturerId, ModelName]);
     return result;
 }
 

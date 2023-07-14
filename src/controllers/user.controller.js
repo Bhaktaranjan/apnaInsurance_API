@@ -239,6 +239,55 @@ exports.updatePassword = async (req, res, next) => {
     }
 };
 
+exports.updateUser = async (req, res, next) => {
+    try {
+        // Log the request body
+        logger.info('Message: Update User request', req.body);
+
+        // Check if the user id is provided
+        if (!req.params.id || req.params.id === ':id') {
+            res.status(400).send({ message: 'User Id can not be empty!' });
+            return;
+        }
+
+        // Validate the request body
+        userCheckValidation(req);
+
+        // Update the user in the database
+        const result = await UserModel.updateUserQuery(req.body, req.params.id);
+
+        // Check if the update was successful
+        if (!result) {
+            throw new HttpException(404, 'Unable to update User!');
+        }
+
+        // Log the success message
+        logger.success(`Message : User Successfully Updated!`);
+
+        const { affectedRows, changedRows, info } = result;
+
+        // Generate the appropriate message based on the update result
+        const message = !affectedRows
+            ? 'User not found!'
+            : affectedRows && changedRows
+                ? 'User updated successfully!'
+                : 'Update failed!';
+
+        // Send the response
+        res.status(200).send({
+            status: 200,
+            message: message,
+            info: info
+        })
+    } catch (err) {
+        // Log the error message
+        logger.error(err.message);
+
+        // Send the error response
+        res.status(500).send({ message: err.message || 'Some error occurred while updating user!' });
+    }
+}
+
 exports.deleteUser = async (req, res, next) => {
     try {
         // Log the request body

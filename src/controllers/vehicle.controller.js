@@ -13,7 +13,7 @@ const logger = require('../middleware/logger');
 exports.getAllVehicles = async (req, res, next) => {
     try {
         // Get the list of Vehicle
-        const vehicleList = await VehicleModel.getAllVehiclesQuery();
+        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery();
 
         // Log success message
         logger.success('Vehicles fetched successfully!');

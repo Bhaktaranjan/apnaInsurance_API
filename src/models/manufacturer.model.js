@@ -12,7 +12,7 @@ const tableName = 'manufacturer';
  */
 exports.findAllManufacturersQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT Id,Name FROM ${tableName}`;
+    let sql = `SELECT Id,ManufacturerName FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
@@ -42,7 +42,7 @@ exports.findManufacturerByNameQuery = async (params) => {
     // Generate columnSet and values for the query
     const { columnSet, values } = multipleColumnSet(params);
     // Construct the SQL query
-    const sql = `SELECT Id,Name FROM ${tableName}
+    const sql = `SELECT Id,ManufacturerName FROM ${tableName}
     WHERE ${columnSet}`;
 
     // Log the SQL query
@@ -59,15 +59,15 @@ exports.findManufacturerByNameQuery = async (params) => {
 /**
  * Creates a query to insert a new manufacturer into the database.
  * @param {Object} manufacturer - The manufacturer object.
- * @param {string} manufacturer.Name - The name of the manufacturer.
+ * @param {string} manufacturer.ManufacturerName - The name of the manufacturer.
  * @returns {Promise<number>} The number of affected rows.
  */
-exports.createManufacturerQuery = async ({ Name }) => {
+exports.createManufacturerQuery = async ({ ManufacturerName }) => {
     // Define the SQL query
-    const sql = `INSERT INTO ${tableName} ( Name ) VALUES (?)`;
+    const sql = `INSERT INTO ${tableName} ( ManufacturerName ) VALUES (?)`;
 
     // Execute the query and get the result
-    const result = await connection.query(sql, [Name]);
+    const result = await connection.query(sql, [ManufacturerName]);
 
     // Extract the number of affected rows from the result
     const affectedRows = result ? result.affectedRows : 0;

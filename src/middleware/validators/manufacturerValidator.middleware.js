@@ -1,21 +1,21 @@
 const { body } = require('express-validator');
 
 exports.createManufacturerSchema = [
-    body('Name')
+    body('ManufacturerName')
         .exists()
-        .withMessage('Name is required')
+        .withMessage('ManufacturerName is required')
         .isLength({
             min: 3,
         })
-        .withMessage('Name must be at least 3 chars long'),
+        .withMessage('ManufacturerName must be at least 3 chars long'),
 ]
 
 exports.updateManufacturerSchema = [
-    body('Name')
+    body('ManufacturerName')
         .exists()
-        .withMessage('Name is required')
+        .withMessage('ManufacturerName is required')
         .isLength({
             min: 3,
         })
-        .withMessage('Name must be at least 3 chars long'),
+        .withMessage('ManufacturerName must be at least 3 chars long'),
 ]

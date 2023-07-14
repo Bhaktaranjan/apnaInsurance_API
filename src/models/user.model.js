@@ -111,6 +111,20 @@ exports.updatePasswordQuery = async (params, id) => {
     return result;
 };
 
+exports.updateUserQuery = async (params, id) => {
+    // Generate the column set and corresponding values for the update query
+    const { columnSet, values } = multipleColumnSet(params);
+
+    // Construct the SQL query
+    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
+
+    // Log the update user SQL query
+    logger.info(`DB Query : Update User Sql : ${sql}`);
+
+    // Execute the update query
+    const result = await connection.query(sql, [...values, id]);
+    return result;
+}
 
 exports.deleteUserQuery = async (id) => {
     // Construct the SQL query
