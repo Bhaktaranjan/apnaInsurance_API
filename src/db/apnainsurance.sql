@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2023 at 04:24 PM
+-- Generation Time: Jul 17, 2023 at 04:56 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -32,17 +32,17 @@ CREATE TABLE `enquires` (
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
   `DOB` datetime NOT NULL,
-  `PermanentAddress1` varchar(500) NOT NULL,
-  `PermanentAddress2` varchar(200) NOT NULL,
-  `PermanentAddress3` varchar(200) NOT NULL,
+  `PermanentAddress1` varchar(100) NOT NULL,
+  `PermanentAddress2` varchar(100) NOT NULL,
+  `PermanentAddress3` varchar(100) NOT NULL,
   `ContactNumber` varchar(11) NOT NULL,
-  `EmailId` varchar(200) NOT NULL,
+  `EmailId` varchar(100) NOT NULL,
   `Manufacturer` varchar(100) NOT NULL,
   `Vehicle` varchar(100) NOT NULL,
   `Model` varchar(100) NOT NULL,
   `DateOfRegistration` datetime NOT NULL,
   `YearOfManufacture` year(4) NOT NULL,
-  `RtoRegistered` varchar(200) NOT NULL,
+  `RtoRegistered` varchar(100) NOT NULL,
   `RegistrationNumber` varchar(100) NOT NULL,
   `EngineNumber` varchar(100) NOT NULL,
   `ChasisNumber` varchar(100) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `enquires` (
   `SeatingCapacity` int(10) NOT NULL,
   `FuelType` varchar(100) NOT NULL,
   `PolicyNumber` varchar(100) NOT NULL,
-  `NomineeName` varchar(200) NOT NULL,
+  `NomineeName` varchar(100) NOT NULL,
   `NomineeAge` varchar(11) NOT NULL,
   `NomineeRelationship` varchar(100) NOT NULL,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
@@ -64,7 +64,7 @@ CREATE TABLE `enquires` (
 
 CREATE TABLE `fueltype` (
   `Id` int(11) NOT NULL,
-  `FuelType` varchar(200) NOT NULL,
+  `FuelType` varchar(100) NOT NULL,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `EntityState` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -77,7 +77,7 @@ CREATE TABLE `fueltype` (
 
 CREATE TABLE `manufacturer` (
   `Id` int(11) NOT NULL,
-  `ManufacturerName` varchar(200) NOT NULL,
+  `ManufacturerName` varchar(100) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -92,7 +92,7 @@ CREATE TABLE `model` (
   `Id` int(11) NOT NULL,
   `VehicleId` int(11) NOT NULL,
   `ManufacturerId` int(11) NOT NULL,
-  `ModelName` varchar(200) NOT NULL,
+  `ModelName` varchar(100) NOT NULL,
   `EntityState` tinyint(4) DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -105,10 +105,10 @@ CREATE TABLE `model` (
 
 CREATE TABLE `user` (
   `Id` int(11) NOT NULL,
-  `Name` varchar(200) NOT NULL,
-  `Email` varchar(200) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Email` varchar(100) NOT NULL,
   `UserName` varchar(100) NOT NULL,
-  `Password` varchar(200) NOT NULL,
+  `Password` varchar(100) NOT NULL,
   `PhoneNo` varchar(15) NOT NULL,
   `Role` varchar(40) NOT NULL,
   `EntityState` tinyint(4) NOT NULL DEFAULT 1,
@@ -132,7 +132,7 @@ INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `R
 CREATE TABLE `vehicle` (
   `Id` int(11) NOT NULL,
   `ManufacturerId` int(11) NOT NULL,
-  `VehicleName` varchar(200) NOT NULL,
+  `VehicleName` varchar(100) NOT NULL,
   `EntityState` tinyint(4) NOT NULL DEFAULT 1,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
