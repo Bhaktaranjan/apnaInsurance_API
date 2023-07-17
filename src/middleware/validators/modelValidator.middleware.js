@@ -5,16 +5,16 @@ exports.createModelSchema = [
         .exists()
         .withMessage('ModelName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('ModelName must be at least 3 chars long'),
+        .withMessage('ModelName must be at least 1 chars long'),
 ]
 exports.updateModelSchema = [
     body('ModelName')
         .exists()
         .withMessage('ModelName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('ModelName must be at least 3 chars long'),
+        .withMessage('ModelName must be at least 1 chars long'),
 ]

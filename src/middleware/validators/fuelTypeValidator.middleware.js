@@ -5,9 +5,9 @@ exports.createFuelTypeSchema = [
         .exists()
         .withMessage('FuelType is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('FuelType must be at least 3 chars long'),
+        .withMessage('FuelType must be at least 1 chars long'),
 ];
 
 exports.updateFuelTypeSchema = [
@@ -15,7 +15,7 @@ exports.updateFuelTypeSchema = [
         .exists()
         .withMessage('FuelType is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('FuelType must be at least 3 chars long'),
+        .withMessage('FuelType must be at least 1 chars long'),
 ];

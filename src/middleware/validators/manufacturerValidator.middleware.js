@@ -5,9 +5,9 @@ exports.createManufacturerSchema = [
         .exists()
         .withMessage('ManufacturerName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('ManufacturerName must be at least 3 chars long'),
+        .withMessage('ManufacturerName must be at least 1 chars long'),
 ]
 
 exports.updateManufacturerSchema = [
@@ -15,7 +15,7 @@ exports.updateManufacturerSchema = [
         .exists()
         .withMessage('ManufacturerName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('ManufacturerName must be at least 3 chars long'),
+        .withMessage('ManufacturerName must be at least 1 chars long'),
 ]

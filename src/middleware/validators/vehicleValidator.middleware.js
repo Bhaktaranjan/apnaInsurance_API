@@ -5,9 +5,9 @@ exports.createVehicleSchema = [
         .exists()
         .withMessage('VehicleName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('VehicleName must be at least 3 chars long'),
+        .withMessage('VehicleName must be at least 1 chars long'),
 ]
 
 exports.updateVehicleSchema = [
@@ -15,7 +15,7 @@ exports.updateVehicleSchema = [
         .exists()
         .withMessage('VehicleName is required')
         .isLength({
-            min: 3,
+            min: 1,
         })
-        .withMessage('VehicleName must be at least 3 chars long'),
+        .withMessage('VehicleName must be at least 1 chars long'),
 ]

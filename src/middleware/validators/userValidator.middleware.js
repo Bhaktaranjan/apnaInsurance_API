@@ -46,7 +46,16 @@ exports.createUserSchema = [
 		.withMessage('Mobile number is required')
 		.notEmpty()
 		.isMobilePhone('any')
-		.withMessage('Mobile number is not valid!'),
+		.withMessage('Mobile number is not valid!')
+		.isLength({
+			min: 10
+		})
+		.withMessage('Mobile number must be at least 10 digits long')
+		.isLength({
+			max: 10
+		})
+		.withMessage('Mobile number must be at most 10 digits long'),
+	,
 	body('Role')
 		.optional()
 		.notEmpty()
@@ -91,3 +100,48 @@ exports.validatePasswordSchema = [
 			'Confirm Password field must have the same value as the Password field'
 		),
 ];
+
+exports.UpdateUserSchema = [
+	body('Name')
+		.exists()
+		.withMessage('Name is required')
+		.isLength({
+			min: 3,
+		})
+		.withMessage('Name must be at least 3 chars long'),
+
+	body('Email')
+		.optional()
+		.isEmail()
+		.withMessage('Must be a valid email')
+		.normalizeEmail(),
+
+	body('UserName')
+		.exists()
+		.withMessage('User name is required')
+		.isAlphanumeric()
+		.withMessage('Must be a valid user name'),
+
+	body('PhoneNo')
+		.exists()
+		.withMessage('Mobile number is required')
+		.notEmpty()
+		.isMobilePhone('any')
+		.withMessage('Mobile number is not valid!')
+		.isLength({
+			min: 10
+		})
+		.withMessage('Mobile number must be at least 10 digits long')
+		.isLength({
+			max: 10
+		})
+		.withMessage('Mobile number must be at most 10 digits long'),
+	,
+	// body('Role')
+	// 	.optional()
+	// 	.notEmpty()
+	// 	.isLength({
+	// 		min: 3,
+	// 	})
+	// 	.withMessage('Role must be at least 3 chars long'),
+]

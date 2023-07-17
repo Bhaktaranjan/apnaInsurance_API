@@ -8,7 +8,7 @@ exports.createEnquirySchema = [
             min: 1,
             max: 25,
         })
-        .withMessage("FirstName must be at least 3 chars long"),
+        .withMessage("FirstName must be maximum 25 chars long"),
 
     body("LastName")
         .exists()
@@ -18,7 +18,7 @@ exports.createEnquirySchema = [
             max: 25,
 
         })
-        .withMessage("LastName must be at least 3 chars long"),
+        .withMessage("LastName must be maximum 25 chars long"),
 
     body("DOB")
         .exists()
@@ -102,7 +102,7 @@ exports.createEnquirySchema = [
         .isLength({
             max: 20,
         })
-        .withMessage("EngineNumber must be at least 3 chars long"),
+        .withMessage("EngineNumber must be maximum 20 chars long"),
 
     body("ChasisNumber")
         .exists()
@@ -142,7 +142,7 @@ exports.createEnquirySchema = [
         .exists()
         .withMessage("NomineeName is required")
         .isLength({
-            min: 4,
+            min: 1,
             max: 20,
         })
         .withMessage("NomineeName must be maximum 20 chars long"),
