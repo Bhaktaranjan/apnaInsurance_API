@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2023 at 06:04 PM
+-- Generation Time: Jul 17, 2023 at 04:24 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -120,11 +120,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `Role`, `EntityState`, `CreatedOn`) VALUES
-(1, 'Admin', 'admin@gmail.com', 'admin', '$2a$08$.P2unq7jCm9eSQ0YwETjn.iaTUEwYDmp0Bnb3K3ec4KkHLF0G3qP2', '1111111111', 'admin', 1, '2023-06-30 06:10:01'),
-(3, 'Akhil', 'akhil@gmail.com', 'akhil', '$2a$08$Zt//vC3/WFN68Ld1XXnweO39MW//TT0ChStyJUafL9MuodP1l5/7y', '9178626257', 'agent', 0, '2023-07-07 09:08:36'),
-(4, 'Anisha', 'anisha@gmail.com', 'anisha', '$2a$08$nkO5OCiYXwKKtFMT13IATOk7NxYZJ9Z8Uzf/bNuWo4MLgtKVYv.Zy', '9178626257', 'agent', 1, '2023-07-07 10:35:58'),
-(7, 'Anisha', 'anisha@gmail.com', 'anisha1', '$2a$08$OvZSrWQbFIK/2Im62G3OhuHMiXxsA57nS5phv4JqvKtZ9RxeP/1zG', '9178626257', 'agent', 0, '2023-07-10 10:23:00'),
-(9, 'Anisha', 'anisha@gmail.com', 'akhil1', '$2a$08$6d9qOvHklOyp1AiYfocwm.gnNono..Wv3RI.h4bwq.pEFY3tAn67q', '9178626257', 'agent', 0, '2023-07-12 13:20:37');
+(1, 'Admin', 'admin@gmail.com', 'admin', '$2a$08$.P2unq7jCm9eSQ0YwETjn.iaTUEwYDmp0Bnb3K3ec4KkHLF0G3qP2', '1234567890', 'admin', 1, '2023-07-17 10:46:11'),
+(2, 'Agent', 'agent@gmail.com', 'agent', '$2a$08$9xP/2ynrpoCxeXLOsXK7T.hDqqlVjn.OtnHBxQNIyP731WPoe36Ya', '1234567890', 'agent', 1, '2023-07-17 10:53:48');
 
 -- --------------------------------------------------------
 
@@ -215,7 +212,7 @@ ALTER TABLE `model`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vehicle`
