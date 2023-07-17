@@ -6,7 +6,7 @@ const tableName = 'model';
 
 exports.getAllModelsWithVehicleNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT model.Id, model.ModelName, vehicle.VehicleName, manufacturer.ManufacturerName FROM model 
+    let sql = `SELECT model.Id, model.ModelName, model.ManufacturerId, vehicle.VehicleName, manufacturer.ManufacturerName FROM model 
     LEFT JOIN vehicle ON model.VehicleId = vehicle.Id 
     LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id`;
 
