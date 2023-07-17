@@ -55,7 +55,6 @@ exports.createUserSchema = [
 			max: 10
 		})
 		.withMessage('Mobile number must be at most 10 digits long'),
-	,
 	body('Role')
 		.optional()
 		.notEmpty()
@@ -136,7 +135,6 @@ exports.UpdateUserSchema = [
 			max: 10
 		})
 		.withMessage('Mobile number must be at most 10 digits long'),
-	,
 	// body('Role')
 	// 	.optional()
 	// 	.notEmpty()
@@ -144,4 +142,4 @@ exports.UpdateUserSchema = [
 	// 		min: 3,
 	// 	})
 	// 	.withMessage('Role must be at least 3 chars long'),
-]
+];
