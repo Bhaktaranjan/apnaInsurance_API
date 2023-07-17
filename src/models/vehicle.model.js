@@ -11,7 +11,7 @@ const tableName = 'vehicle';
  */
 exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle INNER JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id;
+    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id;
     `;
 
     // Log the query to the console
