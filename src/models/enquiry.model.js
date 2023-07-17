@@ -10,11 +10,12 @@ const tableName = 'enquires';
  * @returns {Promise<Array>} - A promise that resolves to an array of enquiries.
  */
 exports.findAllEnquiriesQuery = async (params = {}) => {
+    console.log('findAllEnquiriesQuery Params', params);
     // Construct the base SQL query
     let sql = `SELECT * FROM ${tableName} ORDER BY Id DESC`;
 
     // Log the query
-    logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
+    // logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
 
     // Check if additional query parameters were provided
     if (!Object.keys(params).length) {
@@ -24,10 +25,11 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
 
     // Generate the column set and corresponding values for the WHERE clause
     const { columnSet, values } = multipleColumnSet(params);
-    sql += ` WHERE ${columnSet}`;
+    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
 
     // Execute the query with the provided parameters
-    return await query(sql, [...values]);
+    return await connection.query(sql, [...values]);
 }
 
 /**

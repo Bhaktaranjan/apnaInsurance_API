@@ -13,7 +13,13 @@ const logger = require('../middleware/logger');
  */
 exports.getAllEnquires = async (req, res, next) => {
     try {
-        const enquiries = await EnquiryModel.findAllEnquiriesQuery();
+        let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
+
+        const params = {
+            limit: req.query.limit ? req.query.limit : 10,
+            offset: offset
+        }
+        const enquiries = await EnquiryModel.findAllEnquiriesQuery(params);
         res.status(200).send({
             message: 'Enquiries fetched successfully!',
             enquiries,
