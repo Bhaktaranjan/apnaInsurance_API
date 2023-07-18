@@ -45,6 +45,7 @@ exports.getAllModelsByVehicleModelId = async (req, res, next) => {
         // Check if the ID is empty or invalid
 
         if (!req.params.vehicleId || req.params.vehicleId === ':vehicleId') {
+            logger.error('Vehicle Id can not be empty!');
             res.status(400).send({ message: 'Vehicle Id can not be empty!' });
             return;
         }
@@ -128,6 +129,7 @@ exports.updateModel = async (req, res, next) => {
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('Manufacturer Id can not be empty!');
             res.status(400).send({ message: 'Manufacturer Id can not be empty!' });
             return;
         }
@@ -182,6 +184,7 @@ exports.deleteModel = async (req, res, next) => {
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('Manufacturer Id can not be empty!');
             res.status(400).send({ message: 'Manufacturer Id can not be empty!' });
             return;
         }
@@ -211,6 +214,7 @@ exports.deleteModel = async (req, res, next) => {
 modelCheckValidation = (req) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        logger.error('Validation Failed!', errors.errors[0].msg);
         throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
     }
 };

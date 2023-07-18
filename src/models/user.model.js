@@ -31,7 +31,7 @@ exports.findOneUserQuery = async (params) => {
 
     // Generate the SQL query
     const sql = `SELECT * FROM ${tableName}
-    WHERE ${columnSet}`;
+    WHERE ${columnSet} AND EntityState = 1`;
 
     // Log the DB query
     logger.info(` DB Query : Get User Sql : ${sql}`);

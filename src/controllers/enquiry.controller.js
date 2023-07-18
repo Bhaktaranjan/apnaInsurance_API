@@ -25,6 +25,7 @@ exports.getAllEnquires = async (req, res, next) => {
             enquiries,
         });
     } catch (err) {
+        logger.error(err.message);
         res.status(500).send({ message: err.message || 'Some error occurred while fetching all Enquiries.' });
     }
 };
@@ -87,7 +88,8 @@ exports.deleteEnquiry = async (req, res, next) => {
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
-            res.status(400).send({ message: 'FuelType Id can not be empty!' });
+            logger.error('Enquiry Id can not be empty!');
+            res.status(400).send({ message: 'Enquiry Id can not be empty!' });
             return;
         }
 
@@ -125,6 +127,7 @@ const enquiryCheckValidation = (req) => {
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
+        logger.error('Validation Failed!', validationErrors.errors[0].msg);
         const firstErrorMessage = validationErrors.errors[0].msg;
         throw new HttpException(400, firstErrorMessage, firstErrorMessage);
     }
@@ -132,14 +135,18 @@ const enquiryCheckValidation = (req) => {
 
 const rtoFormatRegex = (req) => {
     const rtoRegex = /^[A-Z]{2}[-][0-9]{2}$/;
+
     if (!rtoRegex.test(req.body.RtoRegistered)) {
+        logger.error('RtoRegistered is not valid!');
         throw new HttpException(400, 'RtoRegistered is not valid! Please enter valid RtoRegistered (e.g. MH-02)');
     }
 }
 
 const registrationNoFormat = (req) => {
     const regiNoRegex = /^[A-Z]{2}[-][0-9]{1,2}(?:-[A-Z]{1,2})[-][0-9]{4}$/;
+
     if (!regiNoRegex.test(req.body.RegistrationNumber)) {
+        logger.error('RegistrationNumber is not valid!');
         throw new HttpException(400, 'RegistrationNumber is not valid! Please enter valid RegistrationNumber (e.g. MH-02--CD-1234)');
     }
 }
@@ -149,13 +156,16 @@ const manufactureYearValidation = (req) => {
     const validateYear = currentYear - 15;
 
     if (currentYear < req.body.YearOfManufacture || req.body.YearOfManufacture < validateYear) {
+        logger.error('YearOfManufacture is not valid!');
         throw new HttpException(400, `YearOfManufacture is not valid! Please enter valid YearOfManufacture (e.g. greaterthan ${validateYear - 1})`);
     }
 }
 
 const cubicCapacityValidation = (req) => {
     const cubicCapacityRegex = /^[0-9]{4}[c]{2}$/;
+
     if (!cubicCapacityRegex.test(req.body.CubicCapacity || req.body.CubicCapacity === '')) {
+        logger.error('CubicCapacity is not valid!');
         throw new HttpException(400, 'CubicCapacity is not valid! Please enter valid CubicCapacity (e.g. 4000cc)');
     }
 }

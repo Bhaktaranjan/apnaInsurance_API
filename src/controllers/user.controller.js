@@ -143,9 +143,10 @@ exports.signinUser = async (req, res, next) => {
         // Check if the password matches the stored password
         const isMatch = await bcrypt.compare(Pass, user.Password);
 
-        console.log('isPassword Match', isMatch);
+        logger.info('isPassword Match', isMatch);
 
         if (!isMatch) {
+            logger.error('Password does not match!');
             // If password does not match, send an error response
             return res.status(401).send({
                 status: 401,
@@ -190,6 +191,7 @@ exports.updatePassword = async (req, res, next) => {
 
         // Check if the user id is provided
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('User Id can not be empty!');
             res.status(400).send({ message: 'User Id can not be empty!' });
             return;
         }
@@ -208,6 +210,7 @@ exports.updatePassword = async (req, res, next) => {
 
         // Check if the update was successful
         if (!result) {
+            logger.error('Unable to update Password!');
             throw new HttpException(404, 'Something went wrong');
         }
 
@@ -246,6 +249,7 @@ exports.updateUser = async (req, res, next) => {
 
         // Check if the user id is provided
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('User Id can not be empty!');
             res.status(400).send({ message: 'User Id can not be empty!' });
             return;
         }
@@ -258,6 +262,7 @@ exports.updateUser = async (req, res, next) => {
 
         // Check if the update was successful
         if (!result) {
+            logger.error('Unable to update User!');
             throw new HttpException(404, 'Unable to update User!');
         }
 
@@ -295,6 +300,7 @@ exports.deleteUser = async (req, res, next) => {
 
         // Check if the user id is provided
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('User Id can not be empty!');
             res.status(400).send({ message: 'User Id can not be empty!' });
             return;
         }
@@ -304,6 +310,7 @@ exports.deleteUser = async (req, res, next) => {
 
         // Check if the user was deleted successfully
         if (result && result.affectedRows === 0) {
+            logger.error('Unable to delete User!');
             throw new HttpException(404, 'Unable to delete User!');
         }
 
@@ -329,6 +336,7 @@ exports.deleteUser = async (req, res, next) => {
 userCheckValidation = (req) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        logger.error('Validation Failed!', errors.errors[0].msg);
         throw new HttpException(400, errors.errors[0].msg, errors.errors[0].msg);
     }
 };

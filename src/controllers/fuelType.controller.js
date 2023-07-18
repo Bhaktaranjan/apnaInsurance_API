@@ -103,6 +103,7 @@ exports.updateFuelType = async (req, res, next) => {
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('FuelType Id cannot be empty!');
             res.status(400).send({ message: 'FuelType Id can not be empty!' });
             return;
         }
@@ -152,6 +153,7 @@ exports.deleteFuelType = async (req, res, next) => {
         logger.info('Message : Delete FuelType Params :', req.body);
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
+            logger.error('FuelType Id cannot be empty!');
             res.status(400).send({ message: 'FuelType Id can not be empty!' });
             return;
         }
@@ -191,6 +193,7 @@ const fuelTypeCheckValidation = (req) => {
     // If there are validation errors
     if (!errors.isEmpty()) {
         // Throw an HttpException with the first error message
+        logger.error('Validation Failed!', errors.errors[0].msg);
         const firstErrorMessage = errors.errors[0].msg;
         throw new HttpException(400, firstErrorMessage, firstErrorMessage);
     }
