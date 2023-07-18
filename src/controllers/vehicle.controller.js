@@ -12,8 +12,14 @@ const logger = require('../middleware/logger');
  */
 exports.getAllVehicles = async (req, res, next) => {
     try {
+        let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
+
+        const params = {
+            limit: req.query.limit ? req.query.limit : 10,
+            offset: offset
+        }
         // Get the list of Vehicle
-        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery();
+        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery(params);
 
         // Log success message
         logger.success('Vehicles fetched successfully!');

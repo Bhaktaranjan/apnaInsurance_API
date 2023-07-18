@@ -11,8 +11,14 @@ const logger = require('../middleware/logger');
  */
 exports.getAllModels = async (req, res, next) => {
     try {
+        let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
+
+        const params = {
+            limit: req.query.limit ? req.query.limit : 10,
+            offset: offset
+        }
         // Get the list of model s
-        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery();
+        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery(params);
 
         // Log success message
         logger.success('Models fetched successfully!');

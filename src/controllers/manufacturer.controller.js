@@ -12,8 +12,16 @@ const logger = require('../middleware/logger');
  */
 exports.getAllManufacturers = async (req, res, next) => {
     try {
+
+        let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
+
+        const params = {
+            limit: req.query.limit ? req.query.limit : 10,
+            offset: offset
+        }
+
         // Get the list of manufacturers
-        const manufacturerList = await ManufacturerModel.findAllManufacturersQuery();
+        const manufacturerList = await ManufacturerModel.findAllManufacturersQuery(params);
 
         // Log success message
         logger.success('Manufacturers fetched successfully!');

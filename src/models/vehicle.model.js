@@ -11,7 +11,7 @@ const tableName = 'vehicle';
  */
 exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id;
+    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id
     `;
 
     // Log the query to the console
@@ -26,7 +26,8 @@ exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Generate the column set and values for the filter parameters
     const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
     // Append the filter condition to the SQL query
-    sql += ` WHERE ${columnSetQueryParams}`;
+    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    logger.info(` DB Query : Get AllVehicles Sql : ${sql}`);
 
     // Execute the query with the filter parameters and return the result
     return await connection.query(sql, [...values]);
