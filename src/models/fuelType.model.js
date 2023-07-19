@@ -4,32 +4,50 @@ const logger = require('../middleware/logger');
 
 const tableName = 'fueltype';
 
+exports.getAllFuelTypesQuery = async (params = {}) => {
+    // Generate base SQL query
+    let sql = `SELECT Id, FuelType FROM ${tableName} WHERE EntityState = 1`;
+
+    // Log the generated SQL query
+    logger.info(` DB Query : Get AllFuelTypes Sql : ${sql}`);
+
+    // Check if params object is empty
+    if (!Object.keys(params).length) {
+        // If params object is empty, return all FuelTypes
+        return await connection.query(sql);
+    }
+
+    // Generate column set and values for WHERE clause
+    const { columnSet, values } = multipleColumnSet(params);
+
+    // Append WHERE clause to SQL query
+    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    logger.info(` DB Query : Get FuelTypes Sql : ${sql}`);
+
+    // Execute the query with the specified values
+    return await connection.query(sql, [...values]);
+}
+
 /**
  * Retrieves all fuel types from the database.
  * @param {object} params - Additional filter parameters (optional).
  * @returns {Promise<Array<object>>} - A promise that resolves to an array of fuel types.
  */
-exports.getAllFuelTypesQuery = async (params = {}) => {
-    // Construct the base SQL query
-    let sql = `SELECT Id,FuelType FROM ${tableName} WHERE EntityState = 1`;
+exports.getAllFuelTypeByNameQuery = async (params = {}) => {
+    // Generate columnSet and values for the query
+    const { columnSet, values } = multipleColumnSet(params);
+    // Construct the SQL query
+    const sql = `SELECT Id,FuelType FROM ${tableName}
+     WHERE ${columnSet}`;
 
     // Log the SQL query
-    logger.info(`DB Query: Get AllFuelTypes Sql: ${sql}`);
+    logger.info(` DB Query : Get FuelTypeById Sql : ${sql}`);
 
-    // Check if there are any additional filter parameters
-    if (Object.keys(params).length <= 0) {
-        // If not, execute the query and return the result
-        return await connection.query(sql);
-    } else {
-        // Generate the column set and values for the filter parameters
-        const { columnSet, values } = multipleColumnSet(params);
+    // Execute the query and retrieve the result
+    const result = await connection.query(sql, [...values]);
 
-        // Append the filter condition to the SQL query
-        sql += ` WHERE ${columnSet}`;
-
-        // Execute the query with the filter parameters and return the result
-        return await connection.query(sql, [...values]);
-    }
+    // Return the FuelType record
+    return result[0];
 }
 
 /**

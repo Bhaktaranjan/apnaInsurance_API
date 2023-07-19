@@ -49,9 +49,9 @@ exports.createFuelType = async (req, res, next) => {
         fuelTypeCheckValidation(req);
 
         // Get all existing fuel types
-        const fuelType = await FuelTypeModel.getAllFuelTypesQuery(req.body);
+        const fuelType = await FuelTypeModel.getAllFuelTypeByNameQuery(req.body);
 
-        if (fuelType && fuelType.length > 0) {
+        if (fuelType) {
             logger.error('FuelType already exists!');
 
             res.status(400).send({
@@ -112,8 +112,8 @@ exports.updateFuelType = async (req, res, next) => {
         fuelTypeCheckValidation(req);
 
         // Check if the FuelType already exists
-        const fuelType = await FuelTypeModel.getAllFuelTypesQuery(req.body);
-
+        const fuelType = await FuelTypeModel.getAllFuelTypeByNameQuery(req.body);
+        console.log('fuelType', fuelType);
         if (fuelType && fuelType.Id != req.params.id) {
             logger.error('FuelType already exists!');
             res.status(400).send({ status: 400, message: 'FuelType already exists!' });

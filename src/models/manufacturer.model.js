@@ -28,7 +28,7 @@ exports.findAllManufacturersQuery = async (params = {}) => {
 
     // Append WHERE clause to SQL query
     sql += ` LIMIT ${values[1]}, ${values[0]}`;
-    logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
+    logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
 
     // Execute the query with the specified values
     return await connection.query(sql, [...values]);

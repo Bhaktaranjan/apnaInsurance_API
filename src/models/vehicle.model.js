@@ -54,7 +54,8 @@ exports.getAllVehiclesQuery = async (params = {}) => {
     sql += ` WHERE ${columnSetQueryParams} `;
 
     // Execute the query with the filter parameters and return the result
-    return await connection.query(sql, [...values]);
+    const result = await connection.query(sql, [...values]);
+    return result[0];
 }
 
 exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
