@@ -276,7 +276,7 @@ exports.updateUser = async (req, res, next) => {
             ? 'User not found!'
             : affectedRows && changedRows
                 ? 'User updated successfully!'
-                : 'Update failed!';
+                : 'Nothing changed!';
 
         // Send the response
         res.status(200).send({

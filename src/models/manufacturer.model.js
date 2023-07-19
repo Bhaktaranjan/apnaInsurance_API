@@ -12,7 +12,7 @@ const tableName = 'manufacturer';
  */
 exports.findAllManufacturersQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT Id, ManufacturerName FROM ${tableName}`;
+    let sql = `SELECT Id, ManufacturerName FROM ${tableName} WHERE EntityState = 1`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);

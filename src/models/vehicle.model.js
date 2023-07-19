@@ -11,11 +11,13 @@ const tableName = 'vehicle';
  */
 exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id
+    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle 
+    LEFT JOIN manufacturer ON 
+    vehicle.ManufacturerId = manufacturer.Id WHERE vehicle.EntityState = 1
     `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehicles Sql: ${sql}`);
+    logger.info(`DB Query: Get AllVehicles Sql: ${sql} `);
 
     // Check if there are any additional filter parameters
     if (!Object.keys(params).length) {
@@ -26,8 +28,8 @@ exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     // Generate the column set and values for the filter parameters
     const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
     // Append the filter condition to the SQL query
-    sql += ` LIMIT ${values[1]}, ${values[0]}`;
-    logger.info(` DB Query : Get AllVehicles Sql : ${sql}`);
+    sql += ` LIMIT ${values[1]}, ${values[0]} `;
+    logger.info(` DB Query: Get AllVehicles Sql: ${sql} `);
 
     // Execute the query with the filter parameters and return the result
     return await connection.query(sql, [...values]);
@@ -35,10 +37,10 @@ exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
 
 exports.getAllVehiclesQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT * FROM ${tableName}`;
+    let sql = `SELECT * FROM ${tableName} `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehicles Sql: ${sql}`);
+    logger.info(`DB Query: Get AllVehicles Sql: ${sql} `);
 
     // Check if there are any additional filter parameters
     if (!Object.keys(params).length) {
@@ -49,7 +51,7 @@ exports.getAllVehiclesQuery = async (params = {}) => {
     // Generate the column set and values for the filter parameters
     const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
     // Append the filter condition to the SQL query
-    sql += ` WHERE ${columnSetQueryParams}`;
+    sql += ` WHERE ${columnSetQueryParams} `;
 
     // Execute the query with the filter parameters and return the result
     return await connection.query(sql, [...values]);
@@ -57,10 +59,10 @@ exports.getAllVehiclesQuery = async (params = {}) => {
 
 exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
     // Construct the base SQL query
-    let sql = `SELECT Id,VehicleName, ManufacturerId FROM ${tableName} WHERE ManufacturerId = ?`;
+    let sql = `SELECT Id, VehicleName, ManufacturerId FROM ${tableName} WHERE ManufacturerId = ? `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehiclesByManufacturerId Sql: ${sql}`);
+    logger.info(`DB Query: Get AllVehiclesByManufacturerId Sql: ${sql} `);
 
     // Execute the query and return the result
     return await connection.query(sql, [ManufacturerId]);
@@ -77,10 +79,10 @@ exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
 exports.createVehicleQuery = async ({ VehicleName, ManufacturerId }) => {
 
     // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleName, ManufacturerId) VALUES (?,?)`;
+    const sql = `INSERT INTO ${tableName} (VehicleName, ManufacturerId) VALUES(?,?)`;
 
     // Log the SQL query
-    logger.info(` DB Query : Create Vehicle Sql : ${sql}`);
+    logger.info(` DB Query: Create Vehicle Sql: ${sql} `);
 
     // Execute the SQL query and get the result
     const result = await connection.query(sql, [VehicleName, ManufacturerId]);
@@ -103,10 +105,10 @@ exports.updateVehicleQuery = async (params, id) => {
     const { columnSet, values } = multipleColumnSet(params);
 
     // Construct the SQL update statement
-    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
+    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ? `;
 
     // Log the generated SQL query
-    logger.info(`DB Query : Update Vehicle Sql : ${sql}`);
+    logger.info(`DB Query: Update Vehicle Sql: ${sql} `);
 
     // Execute the update query
     const result = await connection.query(sql, [...values, id]);
@@ -121,10 +123,10 @@ exports.updateVehicleQuery = async (params, id) => {
  */
 exports.deleteVehicleQuery = async (id) => {
     // Construct the SQL query to delete the vehicle based on its ID
-    const sql = `DELETE FROM ${tableName} WHERE id = ?`;
+    const sql = `DELETE FROM ${tableName} WHERE id = ? `;
 
     // Log the delete vehicle query
-    logger.info(`DB Query : Delete Vehicle Sql : ${sql}`);
+    logger.info(`DB Query: Delete Vehicle Sql: ${sql} `);
 
     // Execute the delete query with the provided ID
     const result = await connection.query(sql, [id]);

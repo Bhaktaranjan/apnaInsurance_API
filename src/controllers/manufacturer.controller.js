@@ -155,7 +155,8 @@ exports.updateManufacturer = async (req, res, next) => {
 
         // Check if the manufacturer already exists
         const manufacturer = await ManufacturerModel.findManufacturerByNameQuery(req.body);
-        if (manufacturer) {
+
+        if (manufacturer && manufacturer.Id != req.params.id) {
             logger.error('Manufacturer already exists!');
             res.status(400).send({ status: 400, message: 'Manufacturer already exists!' });
             return;

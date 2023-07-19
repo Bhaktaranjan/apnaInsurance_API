@@ -8,7 +8,7 @@ exports.getAllModelsWithVehicleNameQuery = async (params = {}) => {
     // Construct the base SQL query
     let sql = `SELECT model.Id, model.ModelName, model.ManufacturerId, model.VehicleId, vehicle.VehicleName, manufacturer.ManufacturerName FROM model 
     LEFT JOIN vehicle ON model.VehicleId = vehicle.Id 
-    LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id`;
+    LEFT JOIN manufacturer ON vehicle.ManufacturerId = manufacturer.Id WHERE model.EntityState = 1`;
 
     logger.info(`DB Query: Get AllModelsWithVehicleName Sql: ${sql}`);
 
@@ -54,7 +54,7 @@ exports.getAllModelsQuery = async (params = {}) => {
     }
 }
 
-exports.getAllModelsByVehicleModelIdQuery = async (VehicleId) => {
+exports.getAllModelsByVehicleIdQuery = async (VehicleId) => {
     // Construct the base SQL query
     let sql = `SELECT Id,ModelName, VehicleId, ManufacturerId FROM ${tableName} WHERE  VehicleId = ?`;
     logger.info(`DB Query: Get AllModelsByVehicleId Sql: ${sql}`);

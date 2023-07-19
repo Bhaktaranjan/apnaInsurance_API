@@ -49,7 +49,7 @@ exports.getAllModelsByVehicleModelId = async (req, res, next) => {
             res.status(400).send({ message: 'Vehicle Id can not be empty!' });
             return;
         }
-        const modelList = await MakeModel.getAllModelsByVehicleModelIdQuery(req.params.vehicleId);
+        const modelList = await MakeModel.getAllModelsByVehicleIdQuery(req.params.vehicleId);
 
         logger.success('Models fetched successfully!');
 
@@ -140,7 +140,7 @@ exports.updateModel = async (req, res, next) => {
         // Check if the model  already exists
         const model = await MakeModel.getAllModelsQuery(req.body);
 
-        if (model && model.length > 0) {
+        if (model && model.Id != req.params.id) {
             logger.error('Model already exists!');
 
             res.status(400).send({ status: 400, message: 'Model already exists!' });
