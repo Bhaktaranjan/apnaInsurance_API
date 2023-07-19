@@ -135,3 +135,17 @@ exports.deleteVehicleQuery = async (id) => {
     // Return the result of the deletion operation
     return result;
 }
+
+exports.deleteModelByVehicleId = async (id) => {
+    // Construct the SQL query
+    const sql = `DELETE FROM model WHERE VehicleId = ?`;
+
+    // Log the generated SQL query
+    logger.info(`DB Query : Delete deleteModelByVehicleId Sql : ${sql}`);
+
+    // Execute the query and retrieve the result
+    const result = await connection.query(sql, [id]);
+
+    // Return the result
+    return result;
+}

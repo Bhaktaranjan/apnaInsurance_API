@@ -202,6 +202,23 @@ exports.deleteManufacturer = async (req, res, next) => {
             return;
         }
 
+        const vehicle = await ManufacturerModel.deleteModelByManufacturerId(req.params.id);
+
+        if (!vehicle) {
+            logger.error(' ManufacturerID not found in Vehicle!');
+
+        } else {
+            logger.success(' ManufacturerID found in Vehicle and deleted successfully');
+        }
+
+        const model = await ManufacturerModel.deleteVehicleByManufacturerId(req.params.id);
+
+        if (!model) {
+            logger.error(' ManufacturerID not found in Model!');
+
+        } else {
+            logger.success(' ManufacturerID found in Model and deleted successfully');
+        }
         // Delete the manufacturer
         const result = await ManufacturerModel.deleteManufacturerQuery(req.params.id);
 

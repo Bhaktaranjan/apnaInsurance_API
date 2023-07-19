@@ -120,3 +120,30 @@ exports.deleteManufacturerQuery = async (id) => {
     // Return the result
     return result;
 }
+
+exports.deleteModelByManufacturerId = async (id) => {
+    // Construct the SQL query
+    const sql = `DELETE FROM model WHERE ManufacturerId = ?`;
+
+    // Log the generated SQL query
+    logger.info(`DB Query : Delete deleteModelByManufacturerId Sql : ${sql}`);
+
+    // Execute the query and retrieve the result
+    const result = await connection.query(sql, [id]);
+
+    // Return the result
+    return result;
+}
+exports.deleteVehicleByManufacturerId = async (id) => {
+    // Construct the SQL query
+    const sql = `DELETE FROM vehicle WHERE ManufacturerId = ?`;
+
+    // Log the generated SQL query
+    logger.info(`DB Query : Delete deleteVehicleByManufacturerId Sql : ${sql}`);
+
+    // Execute the query and retrieve the result
+    const result = await connection.query(sql, [id]);
+
+    // Return the result
+    return result;
+}

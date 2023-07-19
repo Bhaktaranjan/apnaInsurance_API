@@ -194,7 +194,13 @@ exports.deleteVehicle = async (req, res, next) => {
             res.status(400).send({ message: 'Vehicle Id can not be empty!' });
             return;
         }
+        const model = await VehicleModel.deleteModelByVehicleId(req.params.id);
 
+        if (!model) {
+            logger.error(' VehicleID not found in Model!');
+        } else {
+            logger.success(' VehicleID found in Model and deleted successfully!');
+        }
         // Delete the Vehicle
         const result = await VehicleModel.deleteVehicleQuery(req.params.id);
 
