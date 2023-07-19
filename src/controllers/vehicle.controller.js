@@ -89,7 +89,7 @@ exports.createVehicle = async (req, res, next) => {
         // Get the Vehicle
         const vehicle = await VehicleModel.getAllVehiclesQuery(req.body);
 
-        if (vehicle && vehicle.length > 0) {
+        if (vehicle) {
             // Vehicle already exists
             logger.error('Vehicle already exists!');
             res.status(400).send({ status: 400, message: 'Vehicle already exists!' });

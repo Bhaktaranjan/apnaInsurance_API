@@ -84,7 +84,7 @@ exports.createModel = async (req, res, next) => {
         const models = await MakeModel.getAllModelsQuery(req.body);
 
         // If a model  already exists, return an error
-        if (models && models.length > 0) {
+        if (models) {
             logger.error('Model already exists!');
             res.status(400).send({ status: 400, message: 'Model already exists!' });
             return;
