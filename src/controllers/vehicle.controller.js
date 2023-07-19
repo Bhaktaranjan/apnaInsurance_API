@@ -130,6 +130,7 @@ exports.updateVehicle = async (req, res, next) => {
     try {
         // Log the request body
         logger.info('Message: Update Vehicle request', req.body);
+        logger.info('Message: Update Vehicle request Params', req.params);
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
@@ -143,7 +144,7 @@ exports.updateVehicle = async (req, res, next) => {
 
         // Check if the Vehicle already exists
         const vehicle = await VehicleModel.getAllVehiclesQuery(req.body);
-
+        console.log(vehicle);
         if (vehicle && vehicle.Id != req.params.id) {
             logger.error('Vehicle already exists!');
             res.status(400).send({ status: 400, message: 'Vehicle already exists!' });
