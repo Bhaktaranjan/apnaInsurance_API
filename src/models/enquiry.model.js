@@ -25,7 +25,7 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
 
     // Generate the column set and corresponding values for the WHERE clause
     const { columnSet, values } = multipleColumnSet(params);
-    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    sql += ` LIMIT ${params.offset}`;
     logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
 
     // Execute the query with the provided parameters

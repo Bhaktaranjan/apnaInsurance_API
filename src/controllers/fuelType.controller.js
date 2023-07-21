@@ -54,8 +54,8 @@ exports.createFuelType = async (req, res, next) => {
         if (fuelType) {
             logger.error('FuelType already exists!');
 
-            res.status(400).send({
-                status: 400,
+            res.status(409).send({
+                status: 409,
                 message: 'FuelType already exists!'
             });
             return;
@@ -116,7 +116,7 @@ exports.updateFuelType = async (req, res, next) => {
         console.log('fuelType', fuelType);
         if (fuelType && fuelType.Id != req.params.id) {
             logger.error('FuelType already exists!');
-            res.status(400).send({ status: 400, message: 'FuelType already exists!' });
+            res.status(409).send({ status: 409, message: 'FuelType already exists!' });
             return;
         } else {
             // Update the FuelType

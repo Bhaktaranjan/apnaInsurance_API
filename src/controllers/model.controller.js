@@ -86,7 +86,7 @@ exports.createModel = async (req, res, next) => {
         // If a model  already exists, return an error
         if (models) {
             logger.error('Model already exists!');
-            res.status(400).send({ status: 400, message: 'Model already exists!' });
+            res.status(409).send({ status: 409, message: 'Model already exists!' });
             return;
         } else {
             // Create a new model 
@@ -143,7 +143,7 @@ exports.updateModel = async (req, res, next) => {
         if (model && model.Id != req.params.id) {
             logger.error('Model already exists!');
 
-            res.status(400).send({ status: 400, message: 'Model already exists!' });
+            res.status(409).send({ status: 409, message: 'Model already exists!' });
             return;
         } else {
             // Update the model 

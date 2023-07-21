@@ -105,7 +105,7 @@ exports.createManufacturer = async (req, res, next) => {
         if (manufacturer) {
             logger.error('Manufacturer already exists!');
 
-            res.status(400).send({ status: 400, message: 'Manufacturer already exists!' });
+            res.status(409).send({ status: 409, message: 'Manufacturer already exists!' });
             return;
         } else {
             // Create the manufacturer
@@ -158,7 +158,7 @@ exports.updateManufacturer = async (req, res, next) => {
 
         if (manufacturer && manufacturer.Id != req.params.id) {
             logger.error('Manufacturer already exists!');
-            res.status(400).send({ status: 400, message: 'Manufacturer already exists!' });
+            res.status(409).send({ status: 409, message: 'Manufacturer already exists!' });
             return;
         } else {
             // Update the manufacturer

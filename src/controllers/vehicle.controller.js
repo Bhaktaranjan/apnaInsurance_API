@@ -92,7 +92,7 @@ exports.createVehicle = async (req, res, next) => {
         if (vehicle) {
             // Vehicle already exists
             logger.error('Vehicle already exists!');
-            res.status(400).send({ status: 400, message: 'Vehicle already exists!' });
+            res.status(409).send({ status: 409, message: 'Vehicle already exists!' });
             return;
         } else {
             // Create the Vehicle
@@ -147,7 +147,7 @@ exports.updateVehicle = async (req, res, next) => {
         console.log(vehicle);
         if (vehicle && vehicle.Id != req.params.id) {
             logger.error('Vehicle already exists!');
-            res.status(400).send({ status: 400, message: 'Vehicle already exists!' });
+            res.status(409).send({ status: 409, message: 'Vehicle already exists!' });
             return;
         } else {
             // Update the Vehicle
