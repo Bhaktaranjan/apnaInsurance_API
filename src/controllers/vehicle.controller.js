@@ -19,7 +19,7 @@ exports.getAllVehicles = async (req, res, next) => {
             offset: offset
         }
         // Get the list of Vehicle
-        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery(params);
+        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery();
 
         // Log success message
         logger.success('Vehicles fetched successfully!');

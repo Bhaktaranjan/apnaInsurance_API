@@ -22,7 +22,7 @@ exports.getAllEnquires = async (req, res, next) => {
             // limit: req.query.limit ? req.query.limit : 10,
             offset: offset
         }
-        const enquiries = await EnquiryModel.findAllEnquiriesQuery(params);
+        const enquiries = await EnquiryModel.findAllEnquiriesQuery();
         res.status(200).send({
             message: 'Enquiries fetched successfully!',
             enquiries,

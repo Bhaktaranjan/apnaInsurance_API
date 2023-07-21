@@ -21,7 +21,7 @@ exports.getAllManufacturers = async (req, res, next) => {
         }
 
         // Get the list of manufacturers
-        const manufacturerList = await ManufacturerModel.findAllManufacturersQuery(params);
+        const manufacturerList = await ManufacturerModel.findAllManufacturersQuery();
 
         // Log success message
         logger.success('Manufacturers fetched successfully!');

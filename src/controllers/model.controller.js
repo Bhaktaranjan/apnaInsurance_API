@@ -18,7 +18,7 @@ exports.getAllModels = async (req, res, next) => {
             offset: offset
         }
         // Get the list of model s
-        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery(params);
+        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery();
 
         // Log success message
         logger.success('Models fetched successfully!');

@@ -15,7 +15,7 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
     let sql = `SELECT * FROM ${tableName} ORDER BY Id DESC`;
 
     // Log the query
-    // logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
+    logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
 
     // Check if additional query parameters were provided
     if (!Object.keys(params).length) {
