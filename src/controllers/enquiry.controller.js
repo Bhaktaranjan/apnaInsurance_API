@@ -15,7 +15,8 @@ exports.getAllEnquires = async (req, res, next) => {
     try {
         // let offset = (req.query.pagenumber + 1) * req.query.limit ? (req.query.pagenumber + 1) * req.query.limit : 0;
         // let numPerPage = 20;
-        let skip = (req.query.pagenumber - 1) * req.query.offset;
+        const pagenumber = req.query.pagenumber ? req.query.pagenumber : 1;
+        const skip = (pagenumber - 1) * req.query.offset;
         let offset = skip + ',' + req.query.offset;
         const params = {
             // limit: req.query.limit ? req.query.limit : 10,
