@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2023 at 04:56 PM
+-- Generation Time: Aug 03, 2023 at 06:37 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -31,7 +31,7 @@ CREATE TABLE `enquires` (
   `Id` int(11) NOT NULL,
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
-  `DOB` datetime NOT NULL,
+  `DOB` date NOT NULL,
   `PermanentAddress1` varchar(100) NOT NULL,
   `PermanentAddress2` varchar(100) NOT NULL,
   `PermanentAddress3` varchar(100) NOT NULL,
@@ -50,6 +50,7 @@ CREATE TABLE `enquires` (
   `SeatingCapacity` int(10) NOT NULL,
   `FuelType` varchar(100) NOT NULL,
   `PolicyNumber` varchar(100) NOT NULL,
+  `InsuranceCompany` varchar(100) NOT NULL,
   `NomineeName` varchar(100) NOT NULL,
   `NomineeAge` varchar(11) NOT NULL,
   `NomineeRelationship` varchar(100) NOT NULL,
@@ -121,7 +122,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`Id`, `Name`, `Email`, `UserName`, `Password`, `PhoneNo`, `Role`, `EntityState`, `CreatedOn`) VALUES
 (1, 'Admin', 'admin@gmail.com', 'admin', '$2a$08$.P2unq7jCm9eSQ0YwETjn.iaTUEwYDmp0Bnb3K3ec4KkHLF0G3qP2', '1234567890', 'admin', 1, '2023-07-17 10:46:11'),
-(2, 'Agent', 'agent@gmail.com', 'agent', '$2a$08$9xP/2ynrpoCxeXLOsXK7T.hDqqlVjn.OtnHBxQNIyP731WPoe36Ya', '1234567890', 'agent', 1, '2023-07-17 10:53:48');
+(2, 'Agent', 'agent@gmail.com', 'agent', '$2a$08$9xP/2ynrpoCxeXLOsXK7T.hDqqlVjn.OtnHBxQNIyP731WPoe36Ya', '9178626257', 'agent', 1, '2023-07-17 10:53:48');
 
 -- --------------------------------------------------------
 
@@ -163,8 +164,7 @@ ALTER TABLE `manufacturer`
 -- Indexes for table `model`
 --
 ALTER TABLE `model`
-  ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `VehicleModelId` (`VehicleId`,`ManufacturerId`);
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- Indexes for table `user`
@@ -177,8 +177,7 @@ ALTER TABLE `user`
 -- Indexes for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  ADD PRIMARY KEY (`Id`),
-  ADD KEY `ManufacturerId` (`ManufacturerId`) USING BTREE;
+  ADD PRIMARY KEY (`Id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -212,7 +211,7 @@ ALTER TABLE `model`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `vehicle`
