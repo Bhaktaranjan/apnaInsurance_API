@@ -137,7 +137,9 @@ exports.createEnquirySchema = [
             max: 20,
         })
         .withMessage("PolicyNumber must be maximum 20 chars long"),
-
+    body("InsuranceCompany")
+        .exists()
+        .withMessage("InsuranceCompany is required"),
     body("NomineeName")
         .exists()
         .withMessage("NomineeName is required")
