@@ -199,40 +199,54 @@ exports.updatePassword = async (req, res, next) => {
         // Validate the request body
         userCheckValidation(req);
 
-        // Hash the password
-        await hashPassword(req);
+        const userData = await UserModel.findOneUserQuery({ id: req.params.id });
 
-        // Separate the Confirm_Password field and the rest of the updates
-        const { Confirm_Password, ...restOfUpdates } = req.body;
+        const isMatch = await bcrypt.compare(req.body.Current_Password, userData.Password)
 
-        // Update the password in the database
-        const result = await UserModel.updatePasswordQuery(restOfUpdates, req.params.id);
+        // Check if the Current password is provided
+        if (isMatch) {
+            logger.success('Current Password Matched!');
+            // Hash the password
+            await hashPassword(req);
 
-        // Check if the update was successful
-        if (!result) {
-            logger.error('Unable to update Password!');
-            throw new HttpException(404, 'Something went wrong');
+            // Separate the Confirm_Password field and the rest of the updates
+            const { Confirm_Password, Current_Password, ...restOfUpdates } = req.body;
+
+            // Update the password in the database
+            const result = await UserModel.updatePasswordQuery(restOfUpdates, req.params.id);
+
+            // Check if the update was successful
+            if (!result) {
+                logger.error('Unable to update Password!');
+                throw new HttpException(404, 'Something went wrong');
+            }
+
+            // Log the success message
+            logger.success(`Message : Password Successfully Updated`);
+
+            const { affectedRows, changedRows, info } = result;
+
+            // Generate the appropriate message based on the update result
+            const message = !affectedRows
+                ? 'User not found'
+                : affectedRows && changedRows
+                    ? 'Password updated successfully'
+                    : 'Update failed';
+
+            // Send the response
+            res.status(200).send({
+                status: 200,
+                message: message,
+                info: info
+            });
+        } else {
+            logger.error('Current Password not Matched!');
+
+            res.status(400).send({
+                status: 400,
+                message: 'Please Enter your Current Password!'
+            });
         }
-
-        // Log the success message
-        logger.success(`Message : Password Successfully Updated`);
-
-        const { affectedRows, changedRows, info } = result;
-
-        // Generate the appropriate message based on the update result
-        const message = !affectedRows
-            ? 'User not found'
-            : affectedRows && changedRows
-                ? 'Password updated successfully'
-                : 'Update failed';
-
-        // Send the response
-        res.status(200).send({
-            status: 200,
-            message: message,
-            info: info
-        });
-
     } catch (err) {
         // Log the error message
         logger.error(err.message);

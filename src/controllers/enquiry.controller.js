@@ -3,6 +3,29 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
 
+
+// const getPagination = (_page, _limit) => {
+//     const limit = _limit ? +_limit : 20;
+//     const offset = _page ? _page * limit : 0;
+//     console.log('limit', limit);
+//     console.log('offset', offset);
+//     return { limit, offset };
+// };
+
+//get paginated data and organise it into totalItems, items, totalPages, currentPage
+// const getPagingData = (AllEnquiries, enquiries, page, limit) => {
+//     // console.log(data);
+//     // console.log('data.length', data.length);
+//     const totalItems = AllEnquiries.length;
+//     // const { rows: items } = data;
+//     const currentPage = page ? +page : 0;
+//     const totalPages = Math.ceil(totalItems / limit);
+//     console.log('page', page);
+//     console.log('currentPage', currentPage);
+//     return { enquiries, totalItems, totalPages, currentPage };
+// };
+
+
 //Function to get user by Request Id from Database
 
 /**
@@ -12,17 +35,28 @@ const logger = require('../middleware/logger');
  * @param {Function} next - The next middleware function.
  */
 exports.getAllEnquires = async (req, res, next) => {
+    // const { _page, _limit } = req.query;
+    // const { limit, offset } = getPagination(_page, _limit);
+    // console.log('_limit', _limit);
+    // console.log('_page', _page);
     try {
         // let offset = (req.query.pagenumber + 1) * req.query.limit ? (req.query.pagenumber + 1) * req.query.limit : 0;
         // let numPerPage = 20;
-        const pagenumber = req.query.pagenumber ? req.query.pagenumber : 1;
-        const skip = (pagenumber - 1) * req.query.offset;
-        let offset = skip + ',' + req.query.offset;
-        const params = {
-            // limit: req.query.limit ? req.query.limit : 10,
-            offset: offset
-        }
+        // const pagenumber = req.query.pagenumber ? req.query.pagenumber : 1;
+        // const skip = (pagenumber - 1) * req.query.offset;
+        // let offset = skip + ',' + req.query.offset;
+        // const params = {
+        //     // limit: req.query.limit ? req.query.limit : 10,
+        //     offset: offset
+        // }
         const enquiries = await EnquiryModel.findAllEnquiriesQuery();
+        // const enquiries = await EnquiryModel.findAllEnquiriesQuery({
+        //     limit,
+        //     offset
+        // });
+        // // console.log(users);
+        // const response = getPagingData(AllEnquiries, enquiries, _page, limit);
+
         res.status(200).send({
             message: 'Enquiries fetched successfully!',
             enquiries,
@@ -165,7 +199,7 @@ const manufactureYearValidation = (req) => {
 }
 
 const cubicCapacityValidation = (req) => {
-    const cubicCapacityRegex = /^[0-9]{4}$/;
+    const cubicCapacityRegex = /^[1-9]{1}[0-9]{3}$/;
 
     if (!cubicCapacityRegex.test(req.body.CubicCapacity || req.body.CubicCapacity === '')) {
         logger.error('CubicCapacity is not valid!');
