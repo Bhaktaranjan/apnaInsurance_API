@@ -244,7 +244,7 @@ exports.updatePassword = async (req, res, next) => {
 
             res.status(400).send({
                 status: 400,
-                message: 'Please Enter your Current Password!'
+                message: 'Invalid Current Password!'
             });
         }
     } catch (err) {
