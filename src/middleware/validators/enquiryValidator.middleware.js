@@ -6,6 +6,9 @@ exports. createEnquirySchema = [
         .withMessage("FirstName is required")
         .isLength({
             min: 1,
+        })
+        .withMessage("FirstName must be minimum 1 chars long")
+        .isLength({
             max: 25,
         })
         .withMessage("FirstName must be maximum 25 chars long"),
@@ -15,8 +18,12 @@ exports. createEnquirySchema = [
         .withMessage("LastName is required")
         .isLength({
             min: 1,
-            max: 25,
 
+        })
+        .withMessage("LastName must be minimum 1 chars long")
+        .isLength({
+            max: 25,
+            
         })
         .withMessage("LastName must be maximum 25 chars long"),
 
@@ -147,15 +154,22 @@ exports. createEnquirySchema = [
         .withMessage("CurrentInsuredFirstName is required")
         .isLength({
             min: 1,
+            
+        })
+        .withMessage("CurrentInsuredFirstName must be minimum 1 chars long")
+        .isLength({
             max: 25,
         })
         .withMessage("CurrentInsuredFirstName must be maximum 25 chars long"),
-        
+       
         body("CurrentInsuredLastName")
         .exists()
         .withMessage("CurrentInsuredLastName is required")
         .isLength({
             min: 1,
+        })
+        .withMessage("CurrentInsuredLastName must be minimum 1 chars long")
+        .isLength({
             max: 25,
         })
         .withMessage("CurrentInsuredLastName must be maximum 25 chars long"),
