@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-exports.createEnquirySchema = [
+exports. createEnquirySchema = [
     body("FirstName")
         .exists()
         .withMessage("FirstName is required")
@@ -137,9 +137,29 @@ exports.createEnquirySchema = [
             max: 20,
         })
         .withMessage("PolicyNumber must be maximum 20 chars long"),
+
     body("InsuranceCompany")
         .exists()
         .withMessage("InsuranceCompany is required"),
+
+    body("CurrentInsuredFirstName")
+        .exists()
+        .withMessage("CurrentInsuredFirstName is required")
+        .isLength({
+            min: 1,
+            max: 25,
+        })
+        .withMessage("CurrentInsuredFirstName must be maximum 25 chars long"),
+        
+        body("CurrentInsuredLastName")
+        .exists()
+        .withMessage("CurrentInsuredLastName is required")
+        .isLength({
+            min: 1,
+            max: 25,
+        })
+        .withMessage("CurrentInsuredLastName must be maximum 25 chars long"),
+        
     body("NomineeName")
         .exists()
         .withMessage("NomineeName is required")

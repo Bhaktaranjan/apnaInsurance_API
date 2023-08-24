@@ -85,6 +85,8 @@ exports.createEnquiryQuery = async (data) => {
         FuelType,
         PolicyNumber,
         InsuranceCompany,
+        CurrentInsuredFirstName,
+        CurrentInsuredLastName,
         NomineeName,
         NomineeAge,
         NomineeRelationship,
@@ -114,9 +116,11 @@ exports.createEnquiryQuery = async (data) => {
     FuelType,
     PolicyNumber,
     InsuranceCompany,
+    CurrentInsuredFirstName,
+    CurrentInsuredLastName,
     NomineeName,
     NomineeAge,
-    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     // Log the DB query
     logger.info(`DB Query: Create Enquiry SQL: ${sql}`);
@@ -145,6 +149,8 @@ exports.createEnquiryQuery = async (data) => {
         FuelType,
         PolicyNumber,
         InsuranceCompany,
+        CurrentInsuredFirstName,
+        CurrentInsuredLastName,
         NomineeName,
         NomineeAge,
         NomineeRelationship,
