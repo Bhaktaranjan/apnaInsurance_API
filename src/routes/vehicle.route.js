@@ -4,10 +4,10 @@ const VehicleController = require('../controllers/vehicle.controller');
 const authAdmin = require('../middleware/adminAuth.middleware');
 const { createVehicleSchema, updateVehicleSchema } = require('../middleware/validators/vehicleValidator.middleware');
 
-router.get('/vehicle', VehicleController.getAllVehicles);
-router.get('/vehicle/:manufacturerId', VehicleController.getAllVehiclesByManufacturerId);
-router.post('/vehicle', authAdmin(), createVehicleSchema, VehicleController.createVehicle);
-router.put('/vehicle/:id', authAdmin(), updateVehicleSchema, VehicleController.updateVehicle);
-router.delete('/vehicle/:id', authAdmin(), VehicleController.deleteVehicle);
+router.get('/vehiclemodel', VehicleController.getAllVehicleModels);
+router.get('/vehiclemodel/:manufacturerId', VehicleController.getAllVehicleModelsByManufacturerId);
+router.post('/vehiclemodel', authAdmin(), createVehicleSchema, VehicleController.createVehicleModel);
+router.put('/vehiclemodel/:id', authAdmin(), updateVehicleSchema, VehicleController.updateVehicleModel);
+router.delete('/vehiclemodel/:id', authAdmin(), VehicleController.deleteVehicleModel);
 
 module.exports = router;

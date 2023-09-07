@@ -1,20 +1,20 @@
 const { body } = require('express-validator');
 
 exports.createModelSchema = [
-    body('ModelName')
+    body('VariantName')
         .exists()
-        .withMessage('ModelName is required')
+        .withMessage('VariantName is required')
         .isLength({
             min: 1,
         })
-        .withMessage('ModelName must be at least 1 chars long'),
+        .withMessage('VariantName must be at least 1 chars long'),
 ]
 exports.updateModelSchema = [
-    body('ModelName')
+    body('VariantName')
         .exists()
-        .withMessage('ModelName is required')
+        .withMessage('VariantName is required')
         .isLength({
             min: 1,
         })
-        .withMessage('ModelName must be at least 1 chars long'),
+        .withMessage('VariantName must be at least 1 chars long'),
 ]

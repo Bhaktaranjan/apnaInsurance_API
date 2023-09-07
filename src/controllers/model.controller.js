@@ -1,4 +1,4 @@
-const MakeModel = require('../models/model.model');
+const MakeVariant = require('../models/model.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
@@ -9,7 +9,7 @@ const logger = require('../middleware/logger');
  * @param {object} res - The response object.
  * @param {function} next - The next middleware function.
  */
-exports.getAllModels = async (req, res, next) => {
+exports.getAllVariants = async (req, res, next) => {
     try {
         let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
 
@@ -18,29 +18,29 @@ exports.getAllModels = async (req, res, next) => {
             offset: offset
         }
         // Get the list of model s
-        const modelList = await MakeModel.getAllModelsWithVehicleNameQuery();
+        const variantList = await MakeVariant.getAllVariantsWithVehicleModelNameQuery();
 
         // Log success message
-        logger.success('Models fetched successfully!');
+        logger.success('variant fetched successfully!');
 
         // Send response
         res.status(200).send({
             status: 200,
-            message: 'Models fetched successfully!',
-            models: modelList,
+            message: 'variant fetched successfully!',
+            variants: variantList,
         });
     } catch (err) {
         // Log error message
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while fetching all Models.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all variant.' });
     }
 }
 
-exports.getAllModelsByVehicleModelId = async (req, res, next) => {
+exports.getAllVariantsByVehicleModelId = async (req, res, next) => {
     try {
-        logger.info('Message : Get Model Params :', req.params);
+        logger.info('Message : Get variant Params :', req.params);
 
         // Check if the ID is empty or invalid
 
@@ -49,19 +49,19 @@ exports.getAllModelsByVehicleModelId = async (req, res, next) => {
             res.status(400).send({ message: 'Vehicle Id can not be empty!' });
             return;
         }
-        const modelList = await MakeModel.getAllModelsByVehicleIdQuery(req.params.vehicleId);
+        const modelList = await MakeVariant.getAllVariantsByVehicleModelIdQuery(req.params.vehicleId);
 
-        logger.success('Models fetched successfully!');
+        logger.success('variant fetched successfully!');
 
         res.status(200).send({
             status: 200,
-            message: 'Models fetched successfully!',
+            message: 'variant fetched successfully!',
             models: modelList
         });
     } catch (err) {
         logger.error(err.message);
 
-        res.status(500).send({ message: err.message || 'Some error occurred while fetching all Models.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all variant.' });
     }
 }
 
@@ -72,38 +72,39 @@ exports.getAllModelsByVehicleModelId = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {function} next - The next middleware function.
  */
-exports.createModel = async (req, res, next) => {
+exports.createVariant = async (req, res, next) => {
     try {
         // Log the request parameters
-        logger.info('Message : Create Model Params :', req.body);
+        logger.info('Message : Create variant Params :', req.body);
+    
 
         // Check if the request body is valid
         modelCheckValidation(req);
 
         // Get all existing model s
-        const models = await MakeModel.getAllModelsQuery(req.body);
+        const models = await MakeVariant.getAllVariantsQuery(req.body);
 
         // If a model  already exists, return an error
         if (models) {
-            logger.error('Model already exists!');
-            res.status(409).send({ status: 409, message: 'Model already exists!' });
+            logger.error('variant already exists!');
+            res.status(409).send({ status: 409, message: 'variant already exists!' });
             return;
         } else {
             // Create a new model 
-            const result = await MakeModel.createModelQuery(req.body);
+            const result = await MakeVariant.createVariantQuery(req.body);
 
             // If unable to create the model , throw an error
             if (!result) {
-                logger.error('Unable to create model!');
-                throw new HttpException(500, 'Unable to create model!');
+                logger.error('Unable to create variant!');
+                throw new HttpException(500, 'Unable to create variant!');
             }
 
-            logger.success('Model created successfully!');
+            logger.success('variant created successfully!');
 
             // Send a success response
             res.status(200).send({
                 status: 200,
-                message: 'Model created successfully!',
+                message: 'variant created successfully!',
             })
         }
     } catch (err) {
@@ -122,10 +123,10 @@ exports.createModel = async (req, res, next) => {
  * @param {object} res - The response object.
  * @param {function} next - The next middleware function.
  */
-exports.updateModel = async (req, res, next) => {
+exports.updateVariant = async (req, res, next) => {
     try {
         // Log the request parameters
-        logger.info('Message : Update Model Params :', req.body);
+        logger.info('Message : Update variant Params :', req.body);
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
@@ -138,27 +139,28 @@ exports.updateModel = async (req, res, next) => {
         modelCheckValidation(req);
 
         // Check if the model  already exists
-        const model = await MakeModel.getAllModelsQuery(req.body);
+        const model = await MakeVariant.getAllVariantsQuery(req.body);
 
         if (model && model.Id != req.params.id) {
-            logger.error('Model already exists!');
+            logger.error('Variant already exists!');
 
-            res.status(409).send({ status: 409, message: 'Model already exists!' });
+            res.status(409).send({ status: 409, message: 'variant already exists!' });
             return;
         } else {
             // Update the model 
-            const result = await MakeModel.updateModelQuery(req.body, req.params.id);
+            const result = await MakeVariant.updateVariantQuery(req.body, req.params.id);
+            console.log(result)
 
             if (result && result.affectedRows === 0) {
-                logger.error('Unable to update model!');
-                throw new HttpException(500, 'Unable to update model!');
+                logger.error('Unable to update variant!');
+                throw new HttpException(500, 'Unable to update variant!');
             }
 
-            logger.success('Model updated successfully!');
+            logger.success('variant updated successfully!');
 
             res.status(200).send({
                 status: 200,
-                message: 'Model updated successfully!',
+                message: 'variant updated successfully!',
             });
         }
     } catch (err) {
@@ -166,7 +168,7 @@ exports.updateModel = async (req, res, next) => {
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while updating Model.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while updating variant.' });
     }
 }
 
@@ -177,7 +179,7 @@ exports.updateModel = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-exports.deleteModel = async (req, res, next) => {
+exports.deleteVariant = async (req, res, next) => {
     try {
         // Log the request parameters
         logger.info('Message: Delete Model Params:', req.params);
@@ -189,18 +191,18 @@ exports.deleteModel = async (req, res, next) => {
             return;
         }
 
-        const result = await MakeModel.deleteModelQuery(req.params.id);
+        const result = await MakeVariant.deleteVariantQuery(req.params.id);
 
         if (result && result.affectedRows === 0) {
-            logger.error('Unable to delete model!');
-            throw new HttpException(500, 'Unable to delete model!');
+            logger.error('Unable to delete variant!');
+            throw new HttpException(500, 'Unable to delete variant!');
         }
 
-        logger.success('Model deleted successfully!');
+        logger.success('variant deleted successfully!');
 
         res.status(200).send({
             status: 200,
-            message: 'Model deleted successfully!',
+            message: 'variant deleted successfully!',
         });
     } catch (err) {
         // Log error message

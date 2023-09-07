@@ -4,10 +4,10 @@ const MakeController = require('../controllers/model.controller');
 const authAdmin = require('../middleware/adminAuth.middleware');
 const { createModelSchema, updateModelSchema } = require('../middleware/validators/modelValidator.middleware');
 
-router.get('/model', MakeController.getAllModels);
-router.get('/model/:vehicleId', MakeController.getAllModelsByVehicleModelId);
-router.post('/model', authAdmin(), createModelSchema, MakeController.createModel);
-router.put('/model/:id', authAdmin(), updateModelSchema, MakeController.updateModel);
-router.delete('/model/:id', authAdmin(), MakeController.deleteModel);
+router.get('/variant', MakeController.getAllVariants);
+router.get('/variant/:vehicleId', MakeController.getAllVariantsByVehicleModelId);
+router.post('/variant', authAdmin(), createModelSchema, MakeController.createVariant);
+router.put('/variant/:id', authAdmin(), updateModelSchema, MakeController.updateVariant);
+router.delete('/variant/:id', authAdmin(), MakeController.deleteVariant);
 
 module.exports = router;

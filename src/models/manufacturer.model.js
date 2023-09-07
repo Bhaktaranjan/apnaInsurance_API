@@ -123,7 +123,7 @@ exports.deleteManufacturerQuery = async (id) => {
 
 exports.deleteModelByManufacturerId = async (id) => {
     // Construct the SQL query
-    const sql = `DELETE FROM model WHERE ManufacturerId = ?`;
+    const sql = `DELETE FROM variant WHERE ManufacturerId = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query : Delete deleteModelByManufacturerId Sql : ${sql}`);
@@ -136,7 +136,7 @@ exports.deleteModelByManufacturerId = async (id) => {
 }
 exports.deleteVehicleByManufacturerId = async (id) => {
     // Construct the SQL query
-    const sql = `DELETE FROM vehicle WHERE ManufacturerId = ?`;
+    const sql = `DELETE FROM vehicle_model WHERE ManufacturerId = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query : Delete deleteVehicleByManufacturerId Sql : ${sql}`);

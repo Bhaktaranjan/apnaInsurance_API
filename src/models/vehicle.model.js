@@ -2,22 +2,22 @@ const connection = require('../db/db-connection');
 const { multipleColumnSet, multipleColumnSetQueryParams } = require('../utils/common.utils');
 const logger = require('../middleware/logger');
 
-const tableName = 'vehicle';
+const tableName = 'vehicle_model';
 
 /**
  * Retrieves all vehicles from the database.
  * @param {Object} params - Additional parameters for filtering the results (optional).
  * @returns {Promise<Array>} - A promise that resolves to an array of vehicles.
  */
-exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
+exports.getAllVehicleModelsWithManufacturerNameQuery = async (params = {}) => {
     // Construct the base SQL query
-    let sql = `SELECT vehicle.Id,vehicle.VehicleName,manufacturer.ManufacturerName FROM vehicle 
+    let sql = `SELECT vehicle_model.Id,vehicle_model.VehicleModelName,manufacturer.ManufacturerName FROM vehicle_model 
     LEFT JOIN manufacturer ON 
-    vehicle.ManufacturerId = manufacturer.Id WHERE vehicle.EntityState = 1
+    vehicle_model.ManufacturerId = manufacturer.Id WHERE vehicle_model.EntityState = 1
     `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehicles Sql: ${sql} `);
+    logger.info(`DB Query: Get AllVehicleModels Sql: ${sql} `);
 
     // Check if there are any additional filter parameters
     if (!Object.keys(params).length) {
@@ -29,18 +29,18 @@ exports.getAllVehiclesWithManufacturerNameQuery = async (params = {}) => {
     const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
     // Append the filter condition to the SQL query
     sql += ` LIMIT ${values[1]}, ${values[0]} `;
-    logger.info(` DB Query: Get AllVehicles Sql: ${sql} `);
+    logger.info(` DB Query: Get AllVehicleModels Sql: ${sql} `);
 
     // Execute the query with the filter parameters and return the result
     return await connection.query(sql, [...values]);
 }
 
-exports.getAllVehiclesQuery = async (params = {}) => {
+exports.getAllVehicleModelsQuery = async (params = {}) => {
     // Construct the base SQL query
     let sql = `SELECT * FROM ${tableName} `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehicles Sql: ${sql} `);
+    logger.info(`DB Query: Get AllVehicleModels Sql: ${sql} `);
 
     // Check if there are any additional filter parameters
     if (!Object.keys(params).length) {
@@ -58,12 +58,12 @@ exports.getAllVehiclesQuery = async (params = {}) => {
     return result[0];
 }
 
-exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
+exports.getAllVehicleModelsByManufacturerIdQuery = async (ManufacturerId) => {
     // Construct the base SQL query
-    let sql = `SELECT Id, VehicleName, ManufacturerId FROM ${tableName} WHERE ManufacturerId = ? `;
+    let sql = `SELECT Id, VehicleModelName, ManufacturerId FROM ${tableName} WHERE ManufacturerId = ? `;
 
     // Log the query to the console
-    logger.info(`DB Query: Get AllVehiclesByManufacturerId Sql: ${sql} `);
+    logger.info(`DB Query: Get AllVehicleModelsByManufacturerId Sql: ${sql} `);
 
     // Execute the query and return the result
     return await connection.query(sql, [ManufacturerId]);
@@ -77,16 +77,16 @@ exports.getAllVehiclesByManufacturerIdQuery = async (ManufacturerId) => {
  * @param {number} data.ManufacturerId - The ID of the manufacturer.
  * @returns {Promise<number>} - The number of affected rows in the database.
  */
-exports.createVehicleQuery = async ({ VehicleName, ManufacturerId }) => {
+exports.createVehicleModelQuery = async ({ VehicleModelName, ManufacturerId }) => {
 
     // Create the SQL query
-    const sql = `INSERT INTO ${tableName} (VehicleName, ManufacturerId) VALUES(?,?)`;
+    const sql = `INSERT INTO ${tableName} (VehicleModelName, ManufacturerId) VALUES(?,?)`;
 
     // Log the SQL query
-    logger.info(` DB Query: Create Vehicle Sql: ${sql} `);
+    logger.info(` DB Query: Create VehicleModel Sql: ${sql} `);
 
     // Execute the SQL query and get the result
-    const result = await connection.query(sql, [VehicleName, ManufacturerId]);
+    const result = await connection.query(sql, [VehicleModelName, ManufacturerId]);
 
     // Get the number of affected rows
     const affectedRows = result ? result.affectedRows : 0;
@@ -101,7 +101,7 @@ exports.createVehicleQuery = async ({ VehicleName, ManufacturerId }) => {
  * @param {string} id - The id of the vehicle to update.
  * @returns {Promise<Object>} - The result of the update operation.
  */
-exports.updateVehicleQuery = async (params, id) => {
+exports.updateVehicleModelQuery = async (params, id) => {
     // Generate column set and values for update statement
     const { columnSet, values } = multipleColumnSet(params);
 
@@ -109,7 +109,7 @@ exports.updateVehicleQuery = async (params, id) => {
     const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ? `;
 
     // Log the generated SQL query
-    logger.info(`DB Query: Update Vehicle Sql: ${sql} `);
+    logger.info(`DB Query: Update VehicleModel Sql: ${sql} `);
 
     // Execute the update query
     const result = await connection.query(sql, [...values, id]);
@@ -122,12 +122,12 @@ exports.updateVehicleQuery = async (params, id) => {
  * @param {number} id - The ID of the vehicle to delete.
  * @returns {Promise<object>} - A promise that resolves to the result of the deletion operation.
  */
-exports.deleteVehicleQuery = async (id) => {
+exports.deleteVehicleModelQuery = async (id) => {
     // Construct the SQL query to delete the vehicle based on its ID
     const sql = `DELETE FROM ${tableName} WHERE id = ? `;
 
     // Log the delete vehicle query
-    logger.info(`DB Query: Delete Vehicle Sql: ${sql} `);
+    logger.info(`DB Query: Delete VehicleModel Sql: ${sql} `);
 
     // Execute the delete query with the provided ID
     const result = await connection.query(sql, [id]);
@@ -136,9 +136,9 @@ exports.deleteVehicleQuery = async (id) => {
     return result;
 }
 
-exports.deleteModelByVehicleId = async (id) => {
+exports.deleteVariantByVehicleModelId = async (id) => {
     // Construct the SQL query
-    const sql = `DELETE FROM model WHERE VehicleId = ?`;
+    const sql = `DELETE FROM variant WHERE VehicleModelId = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query : Delete deleteModelByVehicleId Sql : ${sql}`);

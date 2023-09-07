@@ -10,7 +10,7 @@ const logger = require('../middleware/logger');
  * @param {Object} res - The response object
  * @param {Function} next - The next middleware function
  */
-exports.getAllVehicles = async (req, res, next) => {
+exports.getAllVehicleModels = async (req, res, next) => {
     try {
         let offset = req.query.pagenumber * req.query.limit ? req.query.pagenumber * req.query.limit : 0;
 
@@ -19,15 +19,15 @@ exports.getAllVehicles = async (req, res, next) => {
             offset: offset
         }
         // Get the list of Vehicle
-        const vehicleList = await VehicleModel.getAllVehiclesWithManufacturerNameQuery();
+        const vehicleList = await VehicleModel.getAllVehicleModelsWithManufacturerNameQuery();
 
         // Log success message
-        logger.success('Vehicles fetched successfully!');
+        logger.success('VehicleModels fetched successfully!');
 
         // Send response
         res.status(200).send({
             status: 200,
-            message: 'Vehicles fetched successfully!',
+            message: 'VehicleModels fetched successfully!',
             vehicles: vehicleList,
         });
     } catch (err) {
@@ -35,11 +35,11 @@ exports.getAllVehicles = async (req, res, next) => {
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while fetching all Vehicles.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching all VehicleModels.' });
     }
 }
 
-exports.getAllVehiclesByManufacturerId = async (req, res, next) => {
+exports.getAllVehicleModelsByManufacturerId = async (req, res, next) => {
     try {
         logger.info('Message: Get Vehicle Params', req.params);
 
@@ -51,15 +51,15 @@ exports.getAllVehiclesByManufacturerId = async (req, res, next) => {
             return;
         }
         // Get the list of Vehicle
-        const vehicleList = await VehicleModel.getAllVehiclesByManufacturerIdQuery(req.params.manufacturerId);
+        const vehicleList = await VehicleModel.getAllVehicleModelsByManufacturerIdQuery(req.params.manufacturerId);
 
         // Log success message
-        logger.success('Vehicle fetched successfully!');
+        logger.success('VehicleModel fetched successfully!');
 
         // Send response
         res.status(200).send({
             status: 200,
-            message: 'Vehicle fetched successfully!',
+            message: 'VehicleModel fetched successfully!',
             vehicles: vehicleList,
         })
     } catch (err) {
@@ -67,7 +67,7 @@ exports.getAllVehiclesByManufacturerId = async (req, res, next) => {
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while fetching Vehicle by ManufacturerId.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while fetching VehicleModel by ManufacturerId.' });
     }
 }
 
@@ -78,36 +78,36 @@ exports.getAllVehiclesByManufacturerId = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-exports.createVehicle = async (req, res, next) => {
+exports.createVehicleModel = async (req, res, next) => {
     try {
         // Log request
-        logger.info('Message: Create Vehicle request', req.body);
+        logger.info('Message: Create VehicleModel request', req.body);
 
         // Validate request
         vehicleCheckValidation(req);
 
         // Get the Vehicle
-        const vehicle = await VehicleModel.getAllVehiclesQuery(req.body);
+        const vehicle = await VehicleModel.getAllVehicleModelsQuery(req.body);
 
         if (vehicle) {
             // Vehicle already exists
-            logger.error('Vehicle already exists!');
-            res.status(409).send({ status: 409, message: 'Vehicle already exists!' });
+            logger.error('VehicleModel already exists!');
+            res.status(409).send({ status: 409, message: 'VehicleModel already exists!' });
             return;
         } else {
             // Create the Vehicle
-            const result = await VehicleModel.createVehicleQuery(req.body);
+            const result = await VehicleModel.createVehicleModelQuery(req.body);
 
             if (!result) {
                 // Unable to create Vehicle
-                logger.error('Unable to create Vehicle!');
-                throw new HttpException(500, 'Unable to create Vehicle!');
+                logger.error('Unable to create VehicleModel!');
+                throw new HttpException(500, 'Unable to create VehicleModel!');
             } else {
                 // Vehicle created successfully
-                logger.success('Vehicle created successfully!');
+                logger.success('VehicleModel created successfully!');
                 res.status(200).send({
                     status: 200,
-                    message: 'Vehicle created successfully!'
+                    message: 'VehicleModel created successfully!'
                 });
             }
         }
@@ -115,7 +115,7 @@ exports.createVehicle = async (req, res, next) => {
         // Log error message
         logger.error(err.message);
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while creating Vehicle.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while creating VehicleModel.' });
     }
 }
 
@@ -126,16 +126,16 @@ exports.createVehicle = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-exports.updateVehicle = async (req, res, next) => {
+exports.updateVehicleModel = async (req, res, next) => {
     try {
         // Log the request body
-        logger.info('Message: Update Vehicle request', req.body);
-        logger.info('Message: Update Vehicle request Params', req.params);
+        logger.info('Message: Update VehicleModel request', req.body);
+        logger.info('Message: Update VehicleModel request Params', req.params);
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
-            logger.error('Vehicle Id can not be empty!');
-            res.status(400).send({ message: 'Vehicle Id can not be empty!' });
+            logger.error('VehicleModel Id can not be empty!');
+            res.status(400).send({ message: 'VehicleModel Id can not be empty!' });
             return;
         }
 
@@ -143,28 +143,28 @@ exports.updateVehicle = async (req, res, next) => {
         vehicleCheckValidation(req);
 
         // Check if the Vehicle already exists
-        const vehicle = await VehicleModel.getAllVehiclesQuery(req.body);
-        console.log(vehicle);
-        if (vehicle && vehicle.Id != req.params.id) {
-            logger.error('Vehicle already exists!');
-            res.status(409).send({ status: 409, message: 'Vehicle already exists!' });
+        const vehiclemodel = await VehicleModel.getAllVehicleModelsQuery(req.body);
+        console.log(vehiclemodel);
+        if (vehiclemodel && vehiclemodel.Id != req.params.id) {
+            logger.error('VehicleModel already exists!');
+            res.status(409).send({ status: 409, message: 'VehicleModel already exists!' });
             return;
         } else {
             // Update the Vehicle
-            const result = await VehicleModel.updateVehicleQuery(req.body, req.params.id);
+            const result = await VehicleModel.updateVehicleModelQuery(req.body, req.params.id);
 
             if (result && result.affectedRows === 0) {
-                logger.error('Unable to update Vehicle!');
+                logger.error('Unable to update VehicleModel!');
                 throw new HttpException(500, 'Unable to update Vehicle!');
             }
 
             // Log success message
-            logger.success('Vehicle updated successfully!');
+            logger.success('VehicleModel updated successfully!');
 
             // Send response
             res.status(200).send({
                 status: 200,
-                message: 'Vehicle updated successfully!'
+                message: 'VehicleModel updated successfully!'
             });
         }
     } catch (err) {
@@ -172,7 +172,7 @@ exports.updateVehicle = async (req, res, next) => {
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while updating Vehicle.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while updating VehicleModel.' });
     }
 }
 
@@ -183,47 +183,47 @@ exports.updateVehicle = async (req, res, next) => {
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function.
  */
-exports.deleteVehicle = async (req, res, next) => {
+exports.deleteVehicleModel = async (req, res, next) => {
     try {
         // Log the request body
-        logger.info('Message: Delete Vehicle request', req.body);
+        logger.info('Message: Delete VehicleModel request', req.body);
 
         // Check if the ID is empty or invalid
         if (!req.params.id || req.params.id === ':id') {
-            logger.error('Vehicle Id can not be empty!');
-            res.status(400).send({ message: 'Vehicle Id can not be empty!' });
+            logger.error('VehicleModel Id can not be empty!');
+            res.status(400).send({ message: 'VehicleModel Id can not be empty!' });
             return;
         }
-        const model = await VehicleModel.deleteModelByVehicleId(req.params.id);
+        const model = await VehicleModel.deleteVariantByVehicleModelId(req.params.id);
 
         if (!model) {
-            logger.error(' VehicleID not found in Model!');
+            logger.error(' VehicleModelID not found in Model!');
         } else {
-            logger.success(' VehicleID found in Model and deleted successfully!');
+            logger.success(' VehicleModelID found in Model and deleted successfully!');
         }
         // Delete the Vehicle
-        const result = await VehicleModel.deleteVehicleQuery(req.params.id);
+        const result = await VehicleModel.deleteVehicleModelQuery(req.params.id);
 
         // Check if the delete operation was successful
         if (result && result.affectedRows === 0) {
-            logger.error('Unable to delete Vehicle!');
-            throw new HttpException(500, 'Unable to delete Vehicle!');
+            logger.error('Unable to delete VehicleModel!');
+            throw new HttpException(500, 'Unable to delete VehicleModel!');
         }
 
         // Log success message
-        logger.success('Vehicle deleted successfully!');
+        logger.success('VehicleModel deleted successfully!');
 
         // Send success response
         res.status(200).send({
             status: 200,
-            message: 'Vehicle deleted successfully!',
+            message: 'VehicleModel deleted successfully!',
         });
     } catch (err) {
         // Log error message
         logger.error(err.message);
 
         // Send error response
-        res.status(500).send({ message: err.message || 'Some error occurred while deleting Vehicle.' });
+        res.status(500).send({ message: err.message || 'Some error occurred while deleting VehicleModel.' });
     }
 };
 

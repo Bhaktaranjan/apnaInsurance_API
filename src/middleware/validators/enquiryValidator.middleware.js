@@ -196,4 +196,5 @@ exports. createEnquirySchema = [
     body("NomineeRelationship")
         .exists()
         .withMessage("NomineeRelationship is required"),
+         
 ];

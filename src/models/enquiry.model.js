@@ -90,6 +90,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        
     } = data;
 
     // Create the SQL query
@@ -120,7 +121,8 @@ exports.createEnquiryQuery = async (data) => {
     CurrentInsuredLastName,
     NomineeName,
     NomineeAge,
-    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    NomineeRelationship
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     // Log the DB query
     logger.info(`DB Query: Create Enquiry SQL: ${sql}`);
@@ -154,6 +156,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        
     ]);
     const affectedRows = result ? result.affectedRows : 0;
 
