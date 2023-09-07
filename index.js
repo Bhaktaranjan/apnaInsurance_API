@@ -9,8 +9,8 @@ const logger = require('./src/middleware/logger')
 const userRouter = require('./src/routes/user.route');
 const enquiryRouter = require('./src/routes/enquiry.route');
 const manufacturerRouter = require('./src/routes/manufacturer.route');
-const modelVariantRouter = require('./src/routes/model.route');
-const vehicleModelRouter = require('./src/routes/vehicle.route');
+const modelVariantRouter = require('./src/routes/variant.route');
+const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
 
 // Init express

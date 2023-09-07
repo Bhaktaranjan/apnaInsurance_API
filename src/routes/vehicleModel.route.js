@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const VehicleController = require('../controllers/vehicle.controller');
+const VehicleController = require('../controllers/vehicleModel.controller');
 const authAdmin = require('../middleware/adminAuth.middleware');
 const { createVehicleSchema, updateVehicleSchema } = require('../middleware/validators/vehicleValidator.middleware');
 

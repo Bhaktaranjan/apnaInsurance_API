@@ -1,4 +1,4 @@
-const MakeVariant = require('../models/model.model');
+const MakeVariant = require('../models/variant.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
@@ -76,7 +76,7 @@ exports.createVariant = async (req, res, next) => {
     try {
         // Log the request parameters
         logger.info('Message : Create variant Params :', req.body);
-    
+
 
         // Check if the request body is valid
         modelCheckValidation(req);

@@ -45,7 +45,7 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
  * @param {string} data.EmailId - The email ID of the person creating the enquiry.
  * @param {string} data.Vehicle - The vehicle details of the person creating the enquiry.
  * @param {string} data.MakeName - The make name of the vehicle.
- * @param {string} data.ModelName - The model name of the vehicle.
+ * @param {string} data.Variant - The model name of the vehicle.
  * @param {string} data.DateOfRegistration - The date of registration of the vehicle.
  * @param {string} data.YearOfManufacture - The year of manufacture of the vehicle.
  * @param {string} data.RtoRegistered - The RTO registered details of the vehicle.
@@ -72,8 +72,8 @@ exports.createEnquiryQuery = async (data) => {
         ContactNumber,
         EmailId,
         Manufacturer,
-        Vehicle,
-        ModelName,
+        VehicleModel,
+        Variant,
         DateOfRegistration,
         YearOfManufacture,
         RtoRegistered,
@@ -90,7 +90,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
-        
+
     } = data;
 
     // Create the SQL query
@@ -104,8 +104,8 @@ exports.createEnquiryQuery = async (data) => {
     ContactNumber,
     EmailId,
     Manufacturer,
-    Vehicle,
-    Model,
+    VehicleModel,
+    Variant,
     DateOfRegistration,
     YearOfManufacture,
     RtoRegistered,
@@ -138,8 +138,8 @@ exports.createEnquiryQuery = async (data) => {
         ContactNumber,
         EmailId,
         Manufacturer,
-        Vehicle,
-        ModelName,
+        VehicleModel,
+        Variant,
         DateOfRegistration,
         YearOfManufacture,
         RtoRegistered,
@@ -156,7 +156,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
-        
+
     ]);
     const affectedRows = result ? result.affectedRows : 0;
 
