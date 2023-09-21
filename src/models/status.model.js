@@ -1,5 +1,5 @@
 const connection = require("../db/db-connection");
-const { multipleStatusColumnSet } = require('../utils/common.utils');
+const { multipleStatusColumnSet,multipleColumnSet } = require('../utils/common.utils');
 const logger = require('../middleware/logger');
 
 const tableName='status';
@@ -7,7 +7,7 @@ const tableName='status';
 // ************************get all status*********************************
 exports.getAllStatusQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT id, Status,ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = 0`;
+    let sql = `SELECT id, Status,ParentTypeStatus FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllStatusTypes Sql : ${sql}`);
@@ -31,9 +31,9 @@ exports.getAllStatusQuery = async (params = {}) => {
 
 // ******************* get status by id ****************************
 
-exports.getAllStatusByIdQuery = async (id) => {
+exports.getAllStatusByParentTypeIdQuery = async (id) => {
     // Generate base SQL query
-    let sql = `SELECT id, Status, ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = ?`;
+    let sql = `SELECT Id, Status, ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = ?`;
   
     // Log the generated SQL query
     logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
@@ -42,24 +42,39 @@ exports.getAllStatusByIdQuery = async (id) => {
     return await connection.query(sql, [id]);
 }
 
+exports.getAllStatusByIdQuery = async (id) => {
+    // Generate base SQL query
+    let sql = `SELECT id, Status, ParentTypeStatus FROM ${tableName} WHERE id = ?`;
+  
+    // Log the generated SQL query
+    logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
+
+    // Execute the query with the specified id
+    const result = await connection.query(sql, [id]);
+    return result[0];
+}
+
 
 
 
 exports.getAllStatusByNameQuery = async (params = {}) => {
     // Generate columnSet and values for the query
-    const { columnSet, values } =multipleStatusColumnSet(params);
-    console.log(values,columnSet)
+    console.log("params----", params)
+    // const { columnSet, values } =multipleStatusColumnSet(params);
+    // console.log("Valuel>>>>> ",values,columnSet)
     // Construct the SQL query
     const sql = `SELECT Id,Status,ParentTypeStatus FROM ${tableName}
-     WHERE ${columnSet}`;
-
+     WHERE Status = ?`;
 
     // Log the SQL query
     logger.info(` DB Query : Get StatusById Sql : ${sql}`);
 
     // Execute the query and retrieve the result
-    const result = await connection.query(sql, [...values]);
+    const result = await connection.query(sql, [params]);
+    // return await connection.query(sql, [ManufacturerId]);
+
     // Return the FuelType record
+    console.log("result===>>>",result);
     return result[0];
 }
 
@@ -77,8 +92,8 @@ exports.createStatusQuery = async ({ Status,ParentTypeStatus }) => {
 
 exports.updateStatusQuery = async (params, id) => {
     // Generate column set and values
-    const { columnSet, values } = multipleStatusColumnSet(params);
-
+    const { columnSet, values } = multipleColumnSet(params);
+  console.log(columnSet)
     // Generate the SQL query
     const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
 

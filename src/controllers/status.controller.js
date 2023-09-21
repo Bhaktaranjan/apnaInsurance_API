@@ -7,31 +7,33 @@ const logger = require('../middleware/logger');
 // *******************all status***************************
 exports.getAllStatus = async (req, res, next) => {
     try {
-        // Get the list of FuelTypes
         const StatusList = await StatusModel.getAllStatusQuery();
 
-        // Log success message
         logger.success(' Status fetched successfully!');
 
-        // Send response
         res.status(200).send({
             status: 200,
             message: 'Status fetched successfully!',
             status: StatusList,
         });
     } catch (err) {
-        // Log error message
         logger.error(err.message);
 
-        // Send error response
         res.status(500).send({ message: err.message || 'Some error occurred while fetching all status.' });
     }
 }
 
-// *******************all status by the id***************************
-exports.getAllstatusById=async(req,res,next)=>{
+// *******************all status by the ParentTypeid***************************
+exports.getAllstatusByParentTypeId=async(req,res,next)=>{
     try {
-        const StatusList = await StatusModel.getAllStatusByIdQuery(req.params.id );
+
+        if (!req.params.id || req.params.id === ':id') {
+            logger.error('Status Id cannot be empty!');
+            res.status(400).send({ message: 'Status Id can not be empty!' });
+            return;
+        }
+
+        const StatusList = await StatusModel.getAllStatusByParentTypeIdQuery(req.params.id );
         console.log(StatusList)
         logger.success(' Status fetched successfully!');
 
@@ -49,9 +51,6 @@ exports.getAllstatusById=async(req,res,next)=>{
     }
 }
 
-
-
-
 // *****************creat status API**********************************
 
 exports.createStatus = async (req, res, next) => {
@@ -63,7 +62,8 @@ exports.createStatus = async (req, res, next) => {
         statusCheckValidation(req);
 
         // Get all existing fuel types
-        const status = await StatusModel.getAllStatusByNameQuery(req.body);
+        const status = await StatusModel.getAllStatusByNameQuery(req.body.Status);
+        console.log(status);
 
         if (status) {
             logger.error('status already exists!');
@@ -95,6 +95,7 @@ exports.createStatus = async (req, res, next) => {
     } catch (err) {
         // Log error message
         logger.error(err.message);
+        console.log('Catch block called.......');
 
         // Send error response
         res.status(500).send({
@@ -103,61 +104,56 @@ exports.createStatus = async (req, res, next) => {
     }
 }
 
-
 // **************************** update status **************************** 
 
 exports.updateStatus = async (req, res, next) => {
     try {
-        // Log the request parameters
-        logger.info('Message : Update Status Params :', req.body);
 
-        // Check if the ID is empty or invalid
+        logger.info('Message : Update Status Request :', req.body);
+        logger.info('Message : Update Status Params :', req.params);
+        logger.info('Message : Update Status Params :', req.params.id);
+
         if (!req.params.id || req.params.id === ':id') {
             logger.error('Status Id cannot be empty!');
             res.status(400).send({ message: 'Status Id can not be empty!' });
             return;
         }
 
-        // Perform validation checks on the request body
         statusCheckValidation(req);
+        const status = await StatusModel.getAllStatusByNameQuery(req.body.Status)
+        
+        console.log('status:=====>>', status);
+        // console.log('status.id:=====>>', status[0].id);
 
-        // Check if the FuelType already exists
-        const status = await StatusModel.getAllStatusByNameQuery(req.body);
-        console.log('status', status);
-        if (status && status.Id != req.params.id) {
+         if (status && status.Id != req.params.id) {
             logger.error('status already exists!');
-            res.status(409).send({ status: 409, message: 'Status status exists!' });
+            res.status(409).send({ status: 409, message: ' Status already exists!' });
             return;
-        } else {
-            // Update the FuelType
-            const result = await StatusModel.updateStatusQuery(req.body, req.params.id);
 
-            // If update fails, throw an error
+        } else {
+            const result = await StatusModel.updateStatusQuery(req.body, req.params.id);
+        
             if (result && result.affectedRows === 0) {
                 logger.error('Unable to update Status!');
                 throw new HttpException(500, 'Unable to update Status!');
             }
-
-            // Log success message
+        
             logger.success('Status updated successfully!');
-
-            // Send success response
-            res.status(200).send({
+        
+            return res.status(200).send({
                 status: 200,
                 message: 'Status updated successfully!',
-            })
+            });
         }
 
     } catch (err) {
         // Log error message
         logger.error(err.message);
-
+        console.log("hearrrrrr")
         // Send error response
         res.status(500).send({ message: err.message || 'Some error occurred while updating Status.' });
     }
 }
-
-
 
 // ******************* Delete Status ***********************
 exports.deleteStatus = async (req, res, next) => {
@@ -195,14 +191,6 @@ exports.deleteStatus = async (req, res, next) => {
         res.status(500).send({ message: err.message || 'Some error occurred while deleting Status.' });
     }
 }
-
-
-
-
-
-
-
-
 
 const statusCheckValidation = (req) => {
     // Validate the request using the validationResult function

@@ -30,7 +30,7 @@ exports.multipleStatusColumnSet = (object) => {
 	const values = Object.values(object);
 
 	// Generate SQL column set by mapping keys to `${key} = ?` format and joining with comma.
-	const columnSet = keys.map((key) => `${key} = ?`).join(' and ');
+	const columnSet = keys.map((key) => `${key} = ?`).join(' OR ');
 
 	return {
 		columnSet,
