@@ -1,8 +1,8 @@
 const connection = require("../db/db-connection");
-const { multipleStatusColumnSet,multipleColumnSet } = require('../utils/common.utils');
+const { multipleStatusColumnSet, multipleColumnSet, multipleColumnSetQueryParams } = require('../utils/common.utils');
 const logger = require('../middleware/logger');
 
-const tableName='status';
+const tableName = 'status';
 
 // ************************get all status*********************************
 exports.getAllStatusQuery = async (params = {}) => {
@@ -34,7 +34,7 @@ exports.getAllStatusQuery = async (params = {}) => {
 exports.getAllStatusByParentTypeIdQuery = async (id) => {
     // Generate base SQL query
     let sql = `SELECT Id, Status, ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = ?`;
-  
+
     // Log the generated SQL query
     logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
 
@@ -44,8 +44,8 @@ exports.getAllStatusByParentTypeIdQuery = async (id) => {
 
 exports.getAllStatusByIdQuery = async (id) => {
     // Generate base SQL query
-    let sql = `SELECT id, Status, ParentTypeStatus FROM ${tableName} WHERE id = ?`;
-  
+    let sql = `SELECT Id, Status, ParentTypeStatus FROM ${tableName} WHERE id = ?`;
+
     // Log the generated SQL query
     logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
 
@@ -54,46 +54,39 @@ exports.getAllStatusByIdQuery = async (id) => {
     return result[0];
 }
 
-
-
-
 exports.getAllStatusByNameQuery = async (params = {}) => {
     // Generate columnSet and values for the query
-    console.log("params----", params)
-    // const { columnSet, values } =multipleStatusColumnSet(params);
-    // console.log("Valuel>>>>> ",values,columnSet)
-    // Construct the SQL query
-    const sql = `SELECT Id,Status,ParentTypeStatus FROM ${tableName}
-     WHERE Status = ?`;
+    let sql = `SELECT * FROM ${tableName}`;
+    logger.info(`DB Query: Get AllStatus Sql: ${sql}`);
 
-    // Log the SQL query
-    logger.info(` DB Query : Get StatusById Sql : ${sql}`);
-
-    // Execute the query and retrieve the result
-    const result = await connection.query(sql, [params]);
-    // return await connection.query(sql, [ManufacturerId]);
-
-    // Return the FuelType record
-    console.log("result===>>>",result);
-    return result[0];
+    // Check if there are any additional filter parameters
+    if (Object.keys(params).length <= 0) {
+        // If not, execute the query and return the result
+        return await connection.query(sql);
+    } else {
+        // Generate the column set and values for the filter parameters
+        const { columnSetQueryParams, values } = multipleColumnSetQueryParams(params);
+        // Append the filter condition to the SQL query
+        sql += ` WHERE ${columnSetQueryParams}`;
+        // Execute the query with the filter parameters and return the result
+        const result = await connection.query(sql, [...values]);
+        return result[0];
+    }
 }
 
-exports.createStatusQuery = async ({ Status,ParentTypeStatus }) => {
+exports.createStatusQuery = async ({ Status, ParentTypeStatus }) => {
     // Construct the SQL query
     const sql = `INSERT INTO ${tableName} (Status,ParentTypeStatus) VALUES (?,?)`;
 
     // Execute the query and get the result
-    const result = await connection.query(sql, [Status,ParentTypeStatus]);
+    const result = await connection.query(sql, [Status, ParentTypeStatus]);
 
     return result;
 }
 
-
-
 exports.updateStatusQuery = async (params, id) => {
     // Generate column set and values
     const { columnSet, values } = multipleColumnSet(params);
-  console.log(columnSet)
     // Generate the SQL query
     const sql = `UPDATE ${tableName} SET ${columnSet} WHERE id = ?`;
 
@@ -107,7 +100,6 @@ exports.updateStatusQuery = async (params, id) => {
     return result;
 }
 
-
 exports.deleteStatusQuery = async (id) => {
     // Construct the SQL query
     const sql = `DELETE FROM ${tableName} WHERE id = ?`;
@@ -119,6 +111,3 @@ exports.deleteStatusQuery = async (id) => {
     const result = await connection.query(sql, [id]);
     return result;
 }
-
-
-
