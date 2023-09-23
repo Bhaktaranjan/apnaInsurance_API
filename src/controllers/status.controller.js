@@ -87,7 +87,7 @@ exports.createStatus = async (req, res, next) => {
         statusCheckValidation(req);
 
         // Check if the status already exists
-        const status = await StatusModel.getAllStatusByNameQuery(req.body.Status);
+        const status = await StatusModel.getAllStatusByNameQuery(req.body);
 
         if (status) {
             // If the status already exists, send a conflict response

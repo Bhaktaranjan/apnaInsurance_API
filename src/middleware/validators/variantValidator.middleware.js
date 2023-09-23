@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-exports.createModelSchema = [
+exports.createVariantSchema = [
     body('VariantName')
         .exists()
         .withMessage('VariantName is required')
@@ -9,7 +9,7 @@ exports.createModelSchema = [
         })
         .withMessage('VariantName must be at least 1 chars long'),
 ]
-exports.updateModelSchema = [
+exports.updateVariantSchema = [
     body('VariantName')
         .exists()
         .withMessage('VariantName is required')
