@@ -7,7 +7,7 @@ const tableName = 'status';
 // ************************get all status*********************************
 exports.getAllStatusQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT id, Status,ParentTypeStatus FROM ${tableName}`;
+    let sql = `SELECT id, StatusName,ParentTypeStatus FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllStatusTypes Sql : ${sql}`);
@@ -33,7 +33,7 @@ exports.getAllStatusQuery = async (params = {}) => {
 
 exports.getAllStatusByParentTypeIdQuery = async (id) => {
     // Generate base SQL query
-    let sql = `SELECT Id, Status, ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = ?`;
+    let sql = `SELECT Id, StatusName, ParentTypeStatus FROM ${tableName} WHERE ParentTypeStatus = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
@@ -44,10 +44,10 @@ exports.getAllStatusByParentTypeIdQuery = async (id) => {
 
 exports.getAllStatusByIdQuery = async (id) => {
     // Generate base SQL query
-    let sql = `SELECT Id, Status, ParentTypeStatus FROM ${tableName} WHERE id = ?`;
+    let sql = `SELECT Id, StatusName, ParentTypeStatus FROM ${tableName} WHERE Id = ?`;
 
     // Log the generated SQL query
-    logger.info(`DB Query: Get AllStatusTypes with ParentTypeStatus = ${id}`);
+    logger.info(`DB Query: Get AllStatusTypes with Id = ${id}`);
 
     // Execute the query with the specified id
     const result = await connection.query(sql, [id]);
@@ -74,12 +74,12 @@ exports.getAllStatusByNameQuery = async (params = {}) => {
     }
 }
 
-exports.createStatusQuery = async ({ Status, ParentTypeStatus }) => {
+exports.createStatusQuery = async ({ StatusName, ParentTypeStatus }) => {
     // Construct the SQL query
-    const sql = `INSERT INTO ${tableName} (Status,ParentTypeStatus) VALUES (?,?)`;
+    const sql = `INSERT INTO ${tableName} (StatusName,ParentTypeStatus) VALUES (?,?)`;
 
     // Execute the query and get the result
-    const result = await connection.query(sql, [Status, ParentTypeStatus]);
+    const result = await connection.query(sql, [StatusName, ParentTypeStatus]);
 
     return result;
 }

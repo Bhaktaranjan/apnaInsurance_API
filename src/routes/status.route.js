@@ -6,6 +6,7 @@ const { createStatusSchema, updateStatusSchema } = require('../middleware/valida
 
 router.get('/status', StatusController.getAllStatus);
 router.get('/status/:id', StatusController.getAllstatusByParentTypeId);
+router.get('/statusbyid/:id', StatusController.getAllstatusById);
 router.post('/status', authAdmin(), createStatusSchema, StatusController.createStatus);
 router.put('/status/:id', authAdmin(), updateStatusSchema, StatusController.updateStatus);
 router.delete('/status/:id',authAdmin(), StatusController.deleteStatus);

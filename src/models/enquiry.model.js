@@ -163,6 +163,30 @@ exports.createEnquiryQuery = async (data) => {
     return affectedRows;
 };
 
+
+
+
+exports.updateEnquireStatusQuery = async (params,id) => {
+    // Create the SQL query to update L1Status and L2Status based on the EnquiryId
+
+    const { columnSet, values } = multipleColumnSet(params);
+
+    const sql = `UPDATE ${tableName}
+                 SET ${columnSet}
+                 WHERE Id = ?`;
+
+    // Log the DB query
+    logger.info(`DB Query: Update Status SQL: ${sql}`);
+
+    // Execute the query
+    const result = await connection.query(sql, [...values, id]);
+
+    // const affectedRows = result ? result.affectedRows : 0;
+
+    return result;
+};
+
+
 /**
  * Deletes an enquiry from the database.
  *

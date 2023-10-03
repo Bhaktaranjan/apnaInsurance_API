@@ -111,6 +111,39 @@ exports.createEnquiry = async (req, res, next) => {
     }
 };
 
+
+// ************************ Update enquire status******************************
+
+exports.updateEnquiryStatus=async (req,res,next)=>{
+    try {
+        logger.info('Message: Update Enquiry Status request', req.body);
+
+        if (!req.params.id || req.params.id === ':id') {
+            logger.error('Enquiry Id can not be empty!');
+            res.status(400).send({ message: 'Enquiry Id can not be empty!' });
+            return;
+        }
+
+        const result = await EnquiryModel.updateEnquireStatusQuery(req.body, req.params.id);
+        if (result && result.affectedRows === 0) {
+            logger.error('Unable to update Enquire!');
+            throw new HttpException(500, 'Unable to update enquire!');
+        }
+
+        logger.success('enquire status updated successfully!');
+
+        res.status(200).send({
+            status: 200,
+            message: 'enquire updated successfully!',
+        });
+
+    } catch (error) {
+          // Log and send error response
+          logger.error(error.message);
+          res.status(500).send({ message: error.message || 'Some error occurred while updating enquire.' });
+    }
+}
+
 /**
  * Deletes an enquiry.
  *

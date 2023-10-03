@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
 
 exports.createStatusSchema = [
-    body('Status')
+    body('StatusName')
         .exists()
         .withMessage('Status is required')
         .isLength({

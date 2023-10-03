@@ -70,6 +70,36 @@ exports.getAllstatusByParentTypeId = async (req, res, next) => {
     }
 }
 
+exports.getAllstatusById = async (req, res, next) => {
+    try {
+        // Check if the ID is provided
+        if (!req.params.id || req.params.id === ':id') {
+            logger.error('Status Id cannot be empty!');
+            res.status(400).send({ message: 'Status Id can not be empty!' });
+            return;
+        }
+
+        // Retrieve the status list
+        const statusList = await StatusModel.getAllStatusByIdQuery(req.params.id);
+
+        // Log success message
+        logger.success('Status fetched successfully!');
+
+        // Send response with the status list
+        res.status(200).send({
+            status: 200,
+            message: 'Status fetched successfully!',
+            statusList: statusList,
+        });
+    } catch (error) {
+        // Log error message
+        logger.error(error.message);
+
+        // Send error response
+        res.status(500).send({ message: error.message || 'Some error occurred while fetching all status.' });
+    }
+}
+
 // Create a new status
 /**
  * Create a new status.
