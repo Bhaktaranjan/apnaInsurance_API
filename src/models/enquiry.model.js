@@ -166,7 +166,7 @@ exports.createEnquiryQuery = async (data) => {
 
 
 
-exports.updateEnquireStatusQuery = async (params,id) => {
+exports.updateEnquireStatusQuery = async (params, id) => {
     // Create the SQL query to update L1Status and L2Status based on the EnquiryId
 
     const { columnSet, values } = multipleColumnSet(params);
@@ -185,7 +185,19 @@ exports.updateEnquireStatusQuery = async (params,id) => {
 
     return result;
 };
+exports.getEnquiryById = async (enquiryId) => {
+    // Create the SQL query to fetch an enquiry by its Id
+    const sql = `SELECT * FROM ${tableName} WHERE Id = ?`;
 
+    // Log the DB query
+    logger.info(`DB Query: Get Enquiry by Id SQL: ${sql}`);
+
+    // Execute the query
+    const [enquiries] = await connection.query(sql, [enquiryId]);
+
+    // Return the first (and only) enquiry found, or null if not found
+    return enquiries
+};
 
 /**
  * Deletes an enquiry from the database.

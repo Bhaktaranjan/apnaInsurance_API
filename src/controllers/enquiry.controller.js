@@ -114,7 +114,7 @@ exports.createEnquiry = async (req, res, next) => {
 
 // ************************ Update enquire status******************************
 
-exports.updateEnquiryStatus=async (req,res,next)=>{
+exports.updateEnquiryStatus = async (req, res, next) => {
     try {
         logger.info('Message: Update Enquiry Status request', req.body);
 
@@ -129,18 +129,19 @@ exports.updateEnquiryStatus=async (req,res,next)=>{
             logger.error('Unable to update Enquire!');
             throw new HttpException(500, 'Unable to update enquire!');
         }
-
+        const updatedEnquiry = await EnquiryModel.getEnquiryById(req.params.id);
         logger.success('enquire status updated successfully!');
 
         res.status(200).send({
             status: 200,
             message: 'enquire updated successfully!',
+            data: updatedEnquiry
         });
 
     } catch (error) {
-          // Log and send error response
-          logger.error(error.message);
-          res.status(500).send({ message: error.message || 'Some error occurred while updating enquire.' });
+        // Log and send error response
+        logger.error(error.message);
+        res.status(500).send({ message: error.message || 'Some error occurred while updating enquire.' });
     }
 }
 
