@@ -111,27 +111,39 @@ exports.createEnquiry = async (req, res, next) => {
     }
 };
 
-
-// ************************ Update enquire status******************************
-
+/**
+ * Updates the status of an enquiry.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
 exports.updateEnquiryStatus = async (req, res, next) => {
     try {
+        // Log the request body
         logger.info('Message: Update Enquiry Status request', req.body);
 
         if (!req.params.id || req.params.id === ':id') {
+            // Check if enquiry id is empty
             logger.error('Enquiry Id can not be empty!');
             res.status(400).send({ message: 'Enquiry Id can not be empty!' });
             return;
         }
 
+        // Update the enquiry status in the database
         const result = await EnquiryModel.updateEnquireStatusQuery(req.body, req.params.id);
+
         if (result && result.affectedRows === 0) {
+            // Check if the update was successful
             logger.error('Unable to update Enquire!');
             throw new HttpException(500, 'Unable to update enquire!');
         }
+
+        // Retrieve the updated enquiry from the database
         const updatedEnquiry = await EnquiryModel.getEnquiryById(req.params.id);
         logger.success('enquire status updated successfully!');
 
+        // Send the response with the updated enquiry
         res.status(200).send({
             status: 200,
             message: 'enquire updated successfully!',

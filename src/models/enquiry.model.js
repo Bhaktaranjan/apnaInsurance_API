@@ -163,17 +163,17 @@ exports.createEnquiryQuery = async (data) => {
     return affectedRows;
 };
 
-
-
-
+/**
+ * Updates the Enquire status based on the provided parameters and ID.
+ * @param {Object} params - The parameters to update.
+ * @param {number} id - The ID of the Enquiry.
+ * @returns {Promise<Object>} - The result of the update query.
+ */
 exports.updateEnquireStatusQuery = async (params, id) => {
     // Create the SQL query to update L1Status and L2Status based on the EnquiryId
-
     const { columnSet, values } = multipleColumnSet(params);
 
-    const sql = `UPDATE ${tableName}
-                 SET ${columnSet}
-                 WHERE Id = ?`;
+    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE Id = ?`;
 
     // Log the DB query
     logger.info(`DB Query: Update Status SQL: ${sql}`);
@@ -185,18 +185,24 @@ exports.updateEnquireStatusQuery = async (params, id) => {
 
     return result;
 };
+
+/**
+ * Retrieves an enquiry by its ID from the database.
+ * @param {number} enquiryId - The ID of the enquiry to retrieve.
+ * @returns {Promise<object|null>} - The enquiry object if found, or null if not found.
+ */
 exports.getEnquiryById = async (enquiryId) => {
-    // Create the SQL query to fetch an enquiry by its Id
+    // Create the SQL query to fetch an enquiry by its ID
     const sql = `SELECT * FROM ${tableName} WHERE Id = ?`;
 
     // Log the DB query
-    logger.info(`DB Query: Get Enquiry by Id SQL: ${sql}`);
+    logger.info(`DB Query: Get Enquiry by ID SQL: ${sql}`);
 
     // Execute the query
     const [enquiries] = await connection.query(sql, [enquiryId]);
 
     // Return the first (and only) enquiry found, or null if not found
-    return enquiries
+    return enquiries;
 };
 
 /**
