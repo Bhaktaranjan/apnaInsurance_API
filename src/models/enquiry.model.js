@@ -90,6 +90,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        L1Status
 
     } = data;
 
@@ -121,8 +122,9 @@ exports.createEnquiryQuery = async (data) => {
     CurrentInsuredLastName,
     NomineeName,
     NomineeAge,
-    NomineeRelationship
-    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    NomineeRelationship,
+    L1Status
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     // Log the DB query
     logger.info(`DB Query: Create Enquiry SQL: ${sql}`);
@@ -156,6 +158,7 @@ exports.createEnquiryQuery = async (data) => {
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        L1Status
 
     ]);
     const affectedRows = result ? result.affectedRows : 0;
@@ -169,7 +172,7 @@ exports.createEnquiryQuery = async (data) => {
  * @param {number} id - The ID of the Enquiry.
  * @returns {Promise<Object>} - The result of the update query.
  */
-exports.updateEnquireStatusQuery = async (params, id) => {
+exports.updateEnquiryStatusQuery = async (params, id) => {
     // Create the SQL query to update L1Status and L2Status based on the EnquiryId
     const { columnSet, values } = multipleColumnSet(params);
 
