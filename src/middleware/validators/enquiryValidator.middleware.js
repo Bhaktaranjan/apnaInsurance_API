@@ -198,3 +198,13 @@ exports.createEnquirySchema = [
         .withMessage("NomineeRelationship is required"),
 
 ];
+
+exports.updateEnquireSchema=[
+
+    body("L1Status")
+    .exists()
+    .withMessage("L1Status is required"),
+
+    body("L2Status")
+    .optional()
+]

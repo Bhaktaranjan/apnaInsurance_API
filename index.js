@@ -9,9 +9,10 @@ const logger = require('./src/middleware/logger')
 const userRouter = require('./src/routes/user.route');
 const enquiryRouter = require('./src/routes/enquiry.route');
 const manufacturerRouter = require('./src/routes/manufacturer.route');
-const modelVariantRouter = require('./src/routes/variant.route');
+const VariantRouter = require('./src/routes/variant.route');
 const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
+const statusRouter=require('./src/routes/status.route')
 
 // Init express
 const app = express();
@@ -44,9 +45,10 @@ logger.info(`Port number : ${PORT}`);
 app.use(`/userapi`, userRouter);
 app.use(`/enquiryapi`, enquiryRouter);
 app.use(`/manufacturerapi`, manufacturerRouter);
-app.use(`/makeapi`, modelVariantRouter);
-app.use(`/vehicleapi`, vehicleModelRouter);
+app.use(`/variantapi`, VariantRouter);
+app.use(`/vehicleModelapi`, vehicleModelRouter);
 app.use(`/fuelTypeapi`, fuelTypeRouter);
+app.use(`/statusapi`,statusRouter);
 
 app.get('/', function (req, res) {
     res.send(`Automaton App listening on port ${PORT}`);

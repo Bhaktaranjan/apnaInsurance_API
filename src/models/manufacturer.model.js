@@ -12,7 +12,7 @@ const tableName = 'manufacturer';
  */
 exports.findAllManufacturersQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT Id, ManufacturerName FROM ${tableName} WHERE EntityState = 1`;
+    let sql = `SELECT Id, ManufacturerName FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
@@ -25,9 +25,11 @@ exports.findAllManufacturersQuery = async (params = {}) => {
 
     // Generate column set and values for WHERE clause
     const { columnSet, values } = multipleColumnSet(params);
+    // const { columnSet, values } = multipleColumnSetQueryParams(params);
 
     // Append WHERE clause to SQL query
-    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    // sql += ` WHERE ${columnSetQueryParams}`;
+    sql += ` WHERE ${columnSet}`;
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
 
     // Execute the query with the specified values
