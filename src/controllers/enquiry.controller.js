@@ -87,10 +87,10 @@ exports.createEnquiry = async (req, res, next) => {
         manufactureYearValidation(req);
         cubicCapacityValidation(req);
 
-        const allstatus = await StatusModel.getAllStatusQuery()
-        const status = allstatus.find(item => item.StatusName === "Open")
-        req.body.L1Status = status.id
-        console.log(req.body)
+        const allstatus = await StatusModel.getAllStatusQuery();
+        const status = allstatus.find(item => item.StatusName.toLowerCase() === "Open".toLowerCase());
+        req.body.L1Status = status.id;
+
         // Create the enquiry using EnquiryModel
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
