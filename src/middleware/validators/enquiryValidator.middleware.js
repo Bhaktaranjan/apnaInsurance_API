@@ -199,12 +199,12 @@ exports.createEnquirySchema = [
 
 ];
 
-exports.updateEnquireSchema=[
+exports.updateEnquireSchema = [
 
     body("L1Status")
-    .exists()
-    .withMessage("L1Status is required"),
+        .exists()
+        .optional(),
 
     body("L2Status")
-    .optional()
+        .optional()
 ]
