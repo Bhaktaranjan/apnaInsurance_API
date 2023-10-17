@@ -152,12 +152,12 @@ exports.updateEnquiryStatus = async (req, res, next) => {
 
         // Retrieve the updated enquiry from the database
         const updatedEnquiry = await EnquiryModel.getEnquiryById(req.params.id);
-        logger.success('enquiry status updated successfully!');
+        logger.success('Enquiry status updated successfully!');
 
         // Send the response with the updated enquiry
         res.status(200).send({
             status: 200,
-            message: 'enquiry updated successfully!',
+            message: 'Enquiry updated successfully!',
             data: updatedEnquiry
         });
 
