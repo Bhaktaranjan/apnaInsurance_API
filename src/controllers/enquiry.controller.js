@@ -135,9 +135,14 @@ exports.updateEnquiryStatus = async (req, res, next) => {
             res.status(400).send({ message: 'Enquiry Id can not be empty!' });
             return;
         }
-
+        const params = {
+            L1Status: req.body.L1Status,
+            L2Status: req.body.L2Status,
+            EditedBy: req.body.EditedBy,
+            EditedOn: new Date(Date.now())
+        }
         // Update the enquiry status in the database
-        const result = await EnquiryModel.updateEnquiryStatusQuery(req.body, req.params.id);
+        const result = await EnquiryModel.updateEnquiryStatusQuery(params, req.params.id);
 
         if (result && result.affectedRows === 0) {
             // Check if the update was successful
