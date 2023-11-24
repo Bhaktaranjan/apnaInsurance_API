@@ -1,5 +1,5 @@
 const connection = require("../db/db-connection");
-const { multipleStatusColumnSet, multipleColumnSet, multipleColumnSetQueryParams } = require('../utils/common.utils');
+const { multipleColumnSet, multipleColumnSetQueryParams } = require('../utils/common.utils');
 const logger = require('../middleware/logger');
 
 const tableName = 'status';

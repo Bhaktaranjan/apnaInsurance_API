@@ -149,8 +149,6 @@ exports.createStatus = async (req, res, next) => {
     } catch (err) {
         // Log error message
         logger.error(err.message);
-        console.log('Catch block called.......');
-
         // Send error response
         res.status(500).send({
             message: err.message || 'Some error occurred while creating status.'

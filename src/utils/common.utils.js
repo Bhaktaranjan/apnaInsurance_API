@@ -11,6 +11,7 @@ exports.multipleColumnSet = (object) => {
 	}
 
 	const keys = Object.keys(object);
+
 	const values = Object.values(object);
 
 	// Generate SQL column set by mapping keys to `${key} = ?` format and joining with comma.
@@ -63,3 +64,5 @@ exports.multipleColumnSetQueryParams = (object) => {
 		values,
 	};
 }
+
+

@@ -13,7 +13,7 @@ const VariantRouter = require('./src/routes/variant.route');
 const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
 const statusRouter=require('./src/routes/status.route')
-
+const documentRouter=require('./src/routes/document.route')
 // Init express
 const app = express();
 
@@ -49,6 +49,7 @@ app.use(`/variantapi`, VariantRouter);
 app.use(`/vehicleModelapi`, vehicleModelRouter);
 app.use(`/fuelTypeapi`, fuelTypeRouter);
 app.use(`/statusapi`,statusRouter);
+app.use(`/documentapi`,documentRouter);
 
 app.get('/', function (req, res) {
     res.send(`Automaton App listening on port ${PORT}`);
@@ -59,7 +60,7 @@ https
     .createServer({
         key: fs.readFileSync(path.resolve('dist/ssl/server.key')),
         cert: fs.readFileSync(path.resolve('dist/ssl/server.crt')),
-        passphrase: 'changeit',
+        passphrase: 'changeit'
     },
         app
     )
