@@ -7,7 +7,7 @@ const {FileUploadSchema}=require('../middleware/validators/documentValidator')
  
 
 router.post("/upload",authAdmin(), upload.single('file'),FileUploadSchema,Documentcontroller.CreateDocument);
-router.get("/upload/:enquiryid",authAdmin(),Documentcontroller.getAllDocumentByEnquiryId);
-router.put("/upload/:id",authAdmin(),Documentcontroller.getDocumentById,upload.single('file'),Documentcontroller.updateDocumentById);
-router.get("/download",authAdmin(),Documentcontroller.downloadDocumentByPath)
+router.get("/getall/:enquiryid",authAdmin(),Documentcontroller.getAllDocumentByEnquiryId);
+router.put("/update/:id",authAdmin(),Documentcontroller.getDocumentById,upload.single('file'),Documentcontroller.updateDocumentById);
+router.get("/download/:filename",authAdmin(),Documentcontroller.downloadDocumentByPath)
 module.exports=router;
