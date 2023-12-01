@@ -5,53 +5,56 @@ const documentmodel = require("../models/document.model");
 const fs = require("fs");
 const path = require('path');
 const dotenv = require("dotenv");
+const { validationResult } = require('express-validator');
+const EnquiryModel = require('../models/enquiry.model');
 dotenv.config()
-// const { log } = require('console');
-// const { error, log } = require('console');
-// const { validationResult } = require('express-validator');
-// const upload = require('../middleware/validators/filevalidator.middleware');
+
+const findData = async (id) => {
+    if (!id) {
+        throw new HttpException(400, 'Enquiry Id is required');
+    }
+    const enquiry = await EnquiryModel.getEnquiryById(id);
+    return enquiry;
+}
 
 exports.CreateDocument = async (req, res, next) => {
     logger.info(" uploaded File:", req.body);
 
     try {
-
-        if (!req.file) {
-            logger.error(" No file were uploaded")
-            return res.status(400).send({ message: "No file were uploaded" })
-        };
+        documentCheckValidation(req);
 
         const data = {
-            DocumentName: req.body.documentname,
+            DocumentName: req.body.DocumentName,
             FileName: req.file.filename,
             EnquiryId: req.body.EnquiryId,
             CreatedBy: req.body.CreatedBy
         };
 
-        logger.info('Payload Data:', data);
+        logger.info('Requested Payload Data:', data);
         const result = await documentmodel.createDocument(data);
 
         if (!result) {
             logger.error('Unable to upload the file!');
             throw new HttpException(500, 'Unable to upload the file!');
         } else {
-            logger.success('Document Upload successfull');
+            logger.success('Document Uploaded Successfully');
             res.status(200).send({
                 status: 200,
-                message: 'Document Uploaded successfully',
+                message: 'Document Uploaded Successfully',
             });
         };
 
     } catch (error) {
         logger.error(error.message)
-        res.send({ message: error.message })
+        res.send({ message: error.message || 'Some Error Ocurred while uploading Document' })
     }
 };
 
 // ************function for find filepath by file name******************
 
-const findFilePathByFileName = (filename) => {
-    const documentDirectory = `./${process.env.FILE_UPLOAD_DIR}`;
+const findFilePathByFileName = async (filename, id) => {
+    const enquiry = await findData(id);
+    const documentDirectory = `./${process.env.FILE_UPLOAD_DIR}/${enquiry.RegistrationNumber}_${id}`;
     const filesInDirectory = fs.readdirSync(documentDirectory);
     const foundFile = filesInDirectory.find(file => file === filename);
 
@@ -66,171 +69,174 @@ const findFilePathByFileName = (filename) => {
 };
 
 
-
 exports.getAllDocumentByEnquiryId = async (req, res, next) => {
-    logger.info("Enquiry Id: ", req.params.enquiryid);
+    logger.info("Requested Params: ", req.params.enquiryid);
     try {
 
         if (!req.params.enquiryid || req.params.enquiryid == ":enquiryid") {
-            logger.error('Enquiry can not be empty!');
-            res.status(400).send({ message: 'Enquiry Id can not be empty!' });
+            logger.error('EnquiryID can not be empty!');
+            res.status(400).send({ message: 'EnquiryID can not be empty!' });
             return;
         }
 
         const documentlist = await documentmodel.getAlldocumentByEnquireId(req.params.enquiryid);
 
         if (!documentlist) {
-            logger.error("Document not fetched")
-            res.status(400).send({ message: "Document not fetched" })
+            logger.error("Unable to fetch Document")
+            res.status(400).send({ message: "Unable to fetch Document" })
         } else {
             documentlist.map((item) => {
-                item.filePath = findFilePathByFileName(item.FileName)
+                item.filePath = findFilePathByFileName(item.FileName, req.params.enquiryid)
             })
 
-            logger.success("document fetched successfully")
-            res.send({ status: 200, message: "Document fetched Successfully", document: documentlist });
+            logger.success("Documents fetched Successfully")
+            res.send({ status: 200, message: "Documents fetched Successfully", document: documentlist });
             // res.download(`'${documentlist[4].FileName}'`);
         }
 
     } catch (error) {
         logger.error(error.message);
-        res.status(500).send({ message: error.message })
+        res.status(500).send({ message: error.message || 'Some Error Ocurred while Getting All Document' })
     }
 
 }
 
 exports.getDocumentById = async (req, res, next) => {
-    logger.info("Document Id: ", req.params.Id)
+    logger.info("Requested Params: ", req.params.id)
 
     try {
-
-        if (!req.params.id || req.params.Id == ":id") {
+        if (!req.params.id || req.params.id == ":id") {
             logger.error("Id can not be empty!");
             return res.status(400).send({ message: "Id can not be empty" });
         }
         const document = await documentmodel.getDocumentbyId(req.params.id);
-
         if (document && document.length == 0) {
-            logger.error(" Document not present for this Id : ", req.params.id);
-            return res.status(400).send({ message: "Document not present for this Id" })
+            logger.error(" Document not found for this Id : ", req.params.id);
+            return res.status(400).send({ message: "Document not found for this Id" })
         }
         next()
     } catch (error) {
         logger.error(error.message);
-        res.status(500).send({ message: error.message });
+        res.status(500).send({ message: error.message || 'Some Error Ocurred while Getting Document' });
     }
 }
 
 
 exports.updateDocumentById = async (req, res, next) => {
-    logger.info("upload File:", req.file);
+    logger.info("Requested File to update:", req.file);
+    logger.info('Requested Body to update', req.body);
     try {
 
         if (!req.params.id || req.params.id === ":id") {
-            logger.error("Id can not be empty!");
-            return res.status(400).send({ message: "Id can not be empty" });
+            logger.error("Id can't be empty!");
+            return res.status(400).send({ message: "Id can't be empty" });
         }
 
         if (!req.body.FileName || req.body.FileName === "" || req.body.FileName === ":filename") {
-            logger.error("Filename can not be empty");
-            return res.status(400).send({ message: "Filename can not be empty" });
+            logger.error("Filename can't be empty" + req.body.FileName);
+            return res.status(400).send({ message: "Filename can't be empty" });
         }
-
-        // if (req.body.FileName && req.body.FileName.includes('\n')) {
-        //     req.body.FileName = req.body.FileName.replace(/\n/g, '');
-        // }
-
+        documentCheckValidation(req);
 
         if (!req.file) {
-            logger.error(" No file were uploaded.");
-            return res.status(400).send({ message: "Please upload a file" });
+            logger.error(" Please select a file to upload");
+            return res.status(400).send({ message: "Please select a file to upload" });
         }
 
-        const result = await documentmodel.updateDocument(req.file.filename, req.body.EditedBy, req.body.EditedOn, req.params.id);
+        const result = await documentmodel.updateDocument(req.file.filename, req.body.EditedBy, new Date(Date.now()), req.params.id);
 
         if (!result) {
-            logger.error('Unable to update Document!');
+            logger.error('Unable to update Document');
             throw new Error('Unable to update Document');
         } else {
-            fs.unlink(`./${process.env.FILE_UPLOAD_DIR}/${req.body.FileName}`, (error) => {
+            const filepath = await findFilePathByFileName(req.body.FileName, req.body.EnquiryId);
 
-                if (error) {
-                    logger.error('Error in deleting the file:', error);
-                    return res.status(500).send({ message: error.message });
-                }
-                logger.success("Existing file deletion successful");
-                logger.success("Document update successful");
-                res.status(200).send({ status: 200, message: "Document updated successfully", result: result });
-            })
+            if (filepath) {
+                fs.unlink(`./${filepath}`, (error) => {
 
+                    if (error) {
+                        logger.error('Error in deleting the file:', error);
+                        return res.status(500).send({ message: error.message });
+                    }
+                    logger.success("Document Updated Successfully with deleted existing file from DIR:", `./${filepath}`);
+                    res.status(200).send({ status: 200, message: "Document updated Successfully", result: result });
+                })
+            }
         }
-
 
     } catch (error) {
         logger.error(error.message);
-        res.status(500).send({ message: error.message });
+        res.status(500).send({ message: error.message || 'Some Error Ocurred while Update Document' });
     }
 };
 
 
-exports.downloadDocumentByPath = (req, res, next) => {
+exports.downloadDocumentByPath = async (req, res, next) => {
     try {
-        logger.info("req data:", req.params)
-        const fileName = req.params.filename;
-        if(!fileName || fileName===":filename" || fileName===""){
-            logger.error("Filename can not be empty!")
-            return res.status(400).send({ message: "Filename can not be empty!" });
-        }
-        const filepath = findFilePathByFileName(fileName)
-        logger.info("File Path :", filepath)
+        logger.info("Requested Params:", req.params);
 
-        if (fs.existsSync(filepath)) {
-            res.download(filepath, fileName, (err) => {
+        if (!req.params.filename || req.params.filename === ":filename" || req.params.filename === "") {
+            logger.error("Filename can not be empty")
+            return res.status(400).send({ message: "Filename can not be empty" });
+        }
+        const filepath = await findFilePathByFileName(req.params.filename, req.body.EnquiryId);
+        logger.info("Found file Path by fileName for Download Document:", filepath)
+
+        if (filepath && fs.existsSync(filepath)) {
+            res.download(filepath, req.params.filename, (err) => {
 
                 if (err) {
                     logger.error("Error in downloading file:", err);
                     res.status(500).send({ message: err.message });
                 }
-                logger.success("Document download successfull")
+                logger.success("Document download Successfully")
 
             });
         } else {
-            logger.error(" File not found of this path: ", filepath);
-            res.status(400).send({ message: "File not found!" })
+            logger.error(" File not found for this path: ", filepath);
+            res.status(400).send({ message: "File not found" })
         }
 
     } catch (error) {
-        console.error('Internal server error:', error);
-        res.status(500).send({ message: 'Internal server error' });
+        logger.error(error);
+        res.status(500).send({ message: error.message || 'Some Error Ocurred while Download Document' });
     }
 };
 
-exports.viewDocument=(req,res,next)=>{
+exports.viewDocument = async (req, res, next) => {
     try {
 
-        logger.info("req data:", req.params)
-        const fileName = req.params.filename;
+        logger.info("Requested Params:", req.params);
+        logger.info("Requested Body:", req.body);
 
-        if(!fileName || fileName===":filename" || fileName===""){
+        if (!req.params.filename || req.params.filename === ":filename" || req.params.filename === "") {
             logger.error("Filename can not be empty!")
-            return res.status(400).send({ message: "Filename can not be empty!" });
+            return res.status(400).send({ message: "Filename can not be empty" });
         }
-        const filepath = findFilePathByFileName(fileName)
-        logger.info("File Path :", filepath)
-        
-        if(fs.existsSync(filepath)){
-            logger.success("Find filepath successfull.");
-            logger.success("Send file successfull")
-            res.sendFile(path.join(`${process.env.ROOT_DIR}`, `./${process.env.FILE_UPLOAD_DIR}/`, fileName));
+        const filepath = await findFilePathByFileName(req.params.filename, req.body.EnquiryId);
+        logger.info("Found file Path by fileName for View Document:", filepath)
 
-        }else{
-            logger.error(" File not found of this path: ", filepath);
-            res.status(400).send({ message: "File not found!" })
+        if (fs.existsSync(filepath)) {
+            logger.success("Found file and send Successfully.");
+            res.sendFile(path.join(__dirname, `../../${filepath}`));
+
+        } else {
+            logger.error(" File not found for this path: ", filepath);
+            res.status(400).send({ message: "Unable to find the file" })
         }
-       
+
     } catch (error) {
-        console.error('Internal server error:', error);
-        res.status(500).send({ message: 'Internal server error' });
+        logger.error(error);
+        res.status(500).send({ message: error.message || 'Some Error Ocurred while View Document' });
     }
 }
 
+const documentCheckValidation = (req) => {
+    const validationErrors = validationResult(req);
+
+    if (!validationErrors.isEmpty()) {
+        logger.error('Validation Failed!', validationErrors.errors[0].msg);
+        const firstErrorMessage = validationErrors.errors[0].msg;
+        throw new HttpException(400, firstErrorMessage, firstErrorMessage);
+    }
+};
