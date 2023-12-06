@@ -3,14 +3,17 @@ const dotenv = require("dotenv")
 const EnquiryModel = require('../models/enquiry.model');
 const fs = require('fs');
 const path = require('path');
+const HttpException = require('../utils/HttpException.utils');
+const { constants } = require('fs/promises');
+const { isArray } = require('util');
 dotenv.config();
 
 const findData = async (req) => {
-    if (!req.EnquiryId) {
-        throw new HttpException(400, 'Enquiry Id is required');
+    if (req.EnquiryId) {
+        // throw new HttpException(400, 'Enquiry Id is required');
+        const enquiry = await EnquiryModel.getEnquiryById(req.EnquiryId);
+        return enquiry;
     }
-    const enquiry = await EnquiryModel.getEnquiryById(req.EnquiryId);
-    return enquiry;
 }
 
 const storage = multer.diskStorage({
@@ -36,14 +39,29 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    fileFilter(req, file, cb) {
-        const allowedExtensions = ['.ppt', '.pdf', '.doc', '.docx', '.pptx'];
-        const fileExtension = path.extname(file.originalname).toLowerCase();
-        if (!allowedExtensions.includes(fileExtension)) {
-            return cb(new Error(`File format not supported. Allowed formats: ${allowedExtensions.join(', ')}`));
+    // limits: {
+    //     fileSize: parseInt(process.env.FILE_MAX_LIMIT),
+    // },
+
+    fileFilter(req, file, cb, err) {
+        var allowedFileMimetypes = [];
+
+        if (Array.isArray(JSON.parse(process.env.ALLOWED_FILE_MIMETYPES))) {
+
+            for (let index = 0; index < JSON.parse(process.env.ALLOWED_FILE_MIMETYPES).length; index++) {
+                const element = JSON.parse(process.env.ALLOWED_FILE_MIMETYPES)[index];
+                allowedFileMimetypes.push(element.mimetype);
+            }
+
+            if (allowedFileMimetypes && allowedFileMimetypes.includes(file.mimetype.toLowerCase())) {
+
+                req.file = file;
+                cb(null, true);
+            } else {
+                req.file = false;
+                cb(null, false);
+            }
         }
-        req.file = file;
-        cb(null, true);
     }
 });
 module.exports = upload;

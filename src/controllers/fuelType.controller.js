@@ -113,7 +113,6 @@ exports.updateFuelType = async (req, res, next) => {
 
         // Check if the FuelType already exists
         const fuelType = await FuelTypeModel.getAllFuelTypeByNameQuery(req.body);
-        console.log('fuelType', fuelType);
         if (fuelType && fuelType.Id != req.params.id) {
             logger.error('FuelType already exists!');
             res.status(409).send({ status: 409, message: 'FuelType already exists!' });

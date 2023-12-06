@@ -149,7 +149,6 @@ exports.updateVariant = async (req, res, next) => {
         } else {
             // Update the model 
             const result = await MakeVariant.updateVariantQuery(req.body, req.params.id);
-            console.log(result)
 
             if (result && result.affectedRows === 0) {
                 logger.error('Unable to update variant!');

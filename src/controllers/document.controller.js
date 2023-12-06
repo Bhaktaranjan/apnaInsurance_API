@@ -17,7 +17,7 @@ const findData = async (id) => {
     return enquiry;
 }
 
-exports.CreateDocument = async (req, res, next) => {
+exports.createDocument = async (req, res, next) => {
     logger.info(" uploaded File:", req.body);
 
     try {
@@ -30,6 +30,10 @@ exports.CreateDocument = async (req, res, next) => {
             CreatedBy: req.body.CreatedBy
         };
 
+        if (!req.file) {
+            logger.error("Please select a correct file format to upload!");
+            return res.status(400).send({ message: 'Please select a correct file format to upload!' });
+        }
         logger.info('Requested Payload Data:', data);
         const result = await documentmodel.createDocument(data);
 
@@ -43,7 +47,6 @@ exports.CreateDocument = async (req, res, next) => {
                 message: 'Document Uploaded Successfully',
             });
         };
-
     } catch (error) {
         logger.error(error.message)
         res.send({ message: error.message || 'Some Error Ocurred while uploading Document' })
@@ -67,7 +70,6 @@ const findFilePathByFileName = async (filename, id) => {
         return null
     }
 };
-
 
 exports.getAllDocumentByEnquiryId = async (req, res, next) => {
     logger.info("Requested Params: ", req.params.enquiryid);
@@ -121,7 +123,6 @@ exports.getDocumentById = async (req, res, next) => {
     }
 }
 
-
 exports.updateDocumentById = async (req, res, next) => {
     logger.info("Requested File to update:", req.file);
     logger.info('Requested Body to update', req.body);
@@ -139,8 +140,8 @@ exports.updateDocumentById = async (req, res, next) => {
         documentCheckValidation(req);
 
         if (!req.file) {
-            logger.error(" Please select a file to upload");
-            return res.status(400).send({ message: "Please select a file to upload" });
+            logger.error(" Please select a correct file format to upload!");
+            return res.status(400).send({ message: "Please select a correct file format to upload!" });
         }
 
         const result = await documentmodel.updateDocument(req.file.filename, req.body.EditedBy, new Date(Date.now()), req.params.id);

@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const mysql2 = require('mysql2');
+const logger = require('../middleware/logger');
 // const HttpException = require('../utils/HttpException.utils');
 
 const conn = mysql2.createPool({
@@ -19,7 +20,7 @@ const conn = mysql2.createPool({
 
 conn.getConnection(error => {
     if (error) throw error;
-    console.log("Database connection established successfully.")
+    logger.success("Database connection established successfully.")
 });
 
 exports.query = async (sql, values) => {
