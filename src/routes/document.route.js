@@ -10,4 +10,5 @@ router.get("/getall/:enquiryid", authAdmin(), Documentcontroller.getAllDocumentB
 router.put("/update/:id", authAdmin(), Documentcontroller.getDocumentById, upload.single('file'), fileUpdate, Documentcontroller.updateDocumentById);
 router.post("/download/:filename", authAdmin(), Documentcontroller.downloadDocumentByPath);
 router.post("/viewfile/:filename", authAdmin(), Documentcontroller.viewDocument);
+router.delete("/delete/:id",authAdmin(),Documentcontroller.deletDocument);
 module.exports = router;
