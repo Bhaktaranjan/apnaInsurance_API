@@ -1,25 +1,12 @@
-const { body } = require("express-validator")
-exports.fileUploadSchema = [
-
-    body('EnquiryId')
-        .exists()
-        .withMessage('EnquiryId required')
-        .notEmpty()
-        .withMessage('EnquiryId cannot be empty'),
-    body('DocumentName')
-        .exists()
-        .withMessage("DocumentName required")
-        .notEmpty()
-        .withMessage('DocumentName cannot be empty'),
-    body('CreatedBy')
-        .exists()
-        .withMessage('CreatedBy required')
-        .notEmpty()
-        .withMessage('CreatedBy cannot be empty'),
-
-];
-exports.fileUpdate = [
-    body('FileName')
-        .exists()
-        .withMessage("File Name required")
+const {body}=require("express-validator");
+exports.createDocumentSchema=[
+    body("DocumentName")
+    .exists()
+    .notEmpty()
+    .withMessage("DocumentName Can not be empty."),
+    body("StatusId")
+    .exists()
+    .notEmpty()
+    .withMessage("StatusId can not be empty."),
+   
 ]

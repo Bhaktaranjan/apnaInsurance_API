@@ -8,3 +8,4 @@ router.get('/enquiry', authAdmin(), EnquiryController.getAllEnquires);
 router.post('/enquiry', createEnquirySchema, EnquiryController.createEnquiry);
 router.put('/enquiry/:id', updateEnquireSchema, authAdmin(), EnquiryController.updateEnquiryStatus)
 module.exports = router;
+

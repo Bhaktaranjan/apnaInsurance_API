@@ -12,8 +12,9 @@ const manufacturerRouter = require('./src/routes/manufacturer.route');
 const VariantRouter = require('./src/routes/variant.route');
 const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
-const statusRouter=require('./src/routes/status.route')
-const documentRouter=require('./src/routes/document.route')
+const statusRouter=require('./src/routes/status.route');
+const enquirydocumentRouter=require('./src/routes/enquirydocument.route');
+const documentRouter=require("./src/routes/document.rout")
 // Init express
 const app = express();
 
@@ -49,6 +50,7 @@ app.use(`/variantapi`, VariantRouter);
 app.use(`/vehicleModelapi`, vehicleModelRouter);
 app.use(`/fuelTypeapi`, fuelTypeRouter);
 app.use(`/statusapi`,statusRouter);
+app.use(`/enquirydocumentapi`,enquirydocumentRouter);
 app.use(`/documentapi`,documentRouter);
 
 app.get('/', function (req, res) {

@@ -1,51 +1,24 @@
 const connection = require("../db/db-connection");
-const {
-  multipleColumnSet,
-  multipleColumnSetQueryParams,
-} = require("../utils/common.utils");
 const logger = require("../middleware/logger");
+const dotenv = require("dotenv");
+dotenv.config();
+const tablename = process.env.DOCUMENT_TABLE;
 
-const tableName = "enquiry_documents";
-
-exports.getAlldocumentByEnquireId = async (id) => {
-  logger.info("Document Id: ", id);
-  let sql = `SELECT Id, DocumentName,FileName,EnquiryId,CreatedOn,EditedOn  FROM ${tableName} WHERE EnquiryId = ?`;
-  logger.info(`db query: get All Documnets with EnquiryId:${id}`);
-  return await connection.query(sql, [id]);
+exports.createDocumentQuery = async (data) => {
+  const { DocumentName, StatusId, CreatedBy } = data;
+  const sql = `INSERT INTO ${tablename} (DocumentName,StatusId) VALUES (?,?)`;
+  logger.info(`db query: Create document sql:${sql}`);
+  return await connection.query(sql, [DocumentName, StatusId]);
 };
 
-exports.getDocumentbyId = async (id) => {
-  let sql = `SELECT Id,DocumentName,FileName,EnquiryId FROM ${tableName} WHERE Id=?`;
-  logger.info(`Db query: get Document By Id: ${sql}`);
-  return await connection.query(sql, [id]);
+exports.getAllDocumnetQuery = async () => {
+  let sql = `SELECT * FROM ${tablename}`;
+  logger.info(`db query: Get all documnet sql:${sql}`);
+  return await connection.query(sql);
 };
 
-exports.createDocument = async (data) => {
-  const { DocumentName, FileName, EnquiryId, CreatedBy } = data;
-  let sql = `INSERT INTO ${tableName} (DocumentName,FileName, EnquiryId,CreatedBy ) VALUES (?,?,?,?) `;
-  logger.info(`db query: create document query:${sql}`);
-  const result = await connection.query(sql, [
-    DocumentName,
-    FileName,
-    EnquiryId,
-    CreatedBy,
-  ]);
-  const affectedRows = result ? result.affectedRows : 0;
-  return affectedRows;
-};
-
-exports.updateDocument = async (file, EditedBy, EditedOn, id) => {
-  const sql = `UPDATE ${tableName} SET FileName = ?,EditedBy=?,EditedOn=? where id = ?`;
-  logger.info(`db query:update document query:${sql}`);
-
-  const result = await connection.query(sql, [file, EditedBy, EditedOn, id]);
-  // Return the result
-  return result;
-};
-
-exports.deleteDocument = async (id) => {
-  const sql = `DELETE FROM ${tableName} WHERE id = ?`;
-  logger.info(`db query:delete document query:${sql}`);
-  const result = await connection.query(sql, [id]);
-  return result;
+exports.getAllDocumentByStatusIdQuery = async (statusid) => {
+  const sql = `SELECT Id,DocumentName FROM ${tablename} WHERE StatusId = ?`;
+  logger.info(`db query: Get all document by statusid sql:${sql}`);
+  return await connection.query(sql, [statusid]);
 };
