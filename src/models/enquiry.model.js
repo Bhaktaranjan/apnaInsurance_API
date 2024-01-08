@@ -10,7 +10,6 @@ const tableName = 'enquires';
  * @returns {Promise<Array>} - A promise that resolves to an array of enquiries.
  */
 exports.findAllEnquiriesQuery = async (params = {}) => {
-    console.log('findAllEnquiriesQuery Params', params);
     // Construct the base SQL query
     let sql = `SELECT * FROM ${tableName} ORDER BY Id DESC`;
 
@@ -25,8 +24,6 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
 
     // Generate the column set and corresponding values for the WHERE clause
     const { columnSet, values } = multipleColumnSet(params);
-    console.log('columnSet', columnSet);
-    console.log('values', values);
     sql += ` LIMIT ${values[1]}, ${values[0]}`;
     logger.info(` DB Query : Get AllEnquiries Sql : ${sql}`);
 
@@ -45,7 +42,7 @@ exports.findAllEnquiriesQuery = async (params = {}) => {
  * @param {string} data.EmailId - The email ID of the person creating the enquiry.
  * @param {string} data.Vehicle - The vehicle details of the person creating the enquiry.
  * @param {string} data.MakeName - The make name of the vehicle.
- * @param {string} data.ModelName - The model name of the vehicle.
+ * @param {string} data.Variant - The model name of the vehicle.
  * @param {string} data.DateOfRegistration - The date of registration of the vehicle.
  * @param {string} data.YearOfManufacture - The year of manufacture of the vehicle.
  * @param {string} data.RtoRegistered - The RTO registered details of the vehicle.
@@ -72,8 +69,8 @@ exports.createEnquiryQuery = async (data) => {
         ContactNumber,
         EmailId,
         Manufacturer,
-        Vehicle,
-        ModelName,
+        VehicleModel,
+        Variant,
         DateOfRegistration,
         YearOfManufacture,
         RtoRegistered,
@@ -85,9 +82,13 @@ exports.createEnquiryQuery = async (data) => {
         FuelType,
         PolicyNumber,
         InsuranceCompany,
+        CurrentInsuredFirstName,
+        CurrentInsuredLastName,
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        L1Status
+
     } = data;
 
     // Create the SQL query
@@ -101,8 +102,8 @@ exports.createEnquiryQuery = async (data) => {
     ContactNumber,
     EmailId,
     Manufacturer,
-    Vehicle,
-    Model,
+    VehicleModel,
+    Variant,
     DateOfRegistration,
     YearOfManufacture,
     RtoRegistered,
@@ -114,9 +115,13 @@ exports.createEnquiryQuery = async (data) => {
     FuelType,
     PolicyNumber,
     InsuranceCompany,
+    CurrentInsuredFirstName,
+    CurrentInsuredLastName,
     NomineeName,
     NomineeAge,
-    NomineeRelationship) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    NomineeRelationship,
+    L1Status
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     // Log the DB query
     logger.info(`DB Query: Create Enquiry SQL: ${sql}`);
@@ -132,8 +137,8 @@ exports.createEnquiryQuery = async (data) => {
         ContactNumber,
         EmailId,
         Manufacturer,
-        Vehicle,
-        ModelName,
+        VehicleModel,
+        Variant,
         DateOfRegistration,
         YearOfManufacture,
         RtoRegistered,
@@ -145,13 +150,59 @@ exports.createEnquiryQuery = async (data) => {
         FuelType,
         PolicyNumber,
         InsuranceCompany,
+        CurrentInsuredFirstName,
+        CurrentInsuredLastName,
         NomineeName,
         NomineeAge,
         NomineeRelationship,
+        L1Status
+
     ]);
     const affectedRows = result ? result.affectedRows : 0;
 
     return affectedRows;
+};
+
+/**
+ * Updates the Enquire status based on the provided parameters and ID.
+ * @param {Object} params - The parameters to update.
+ * @param {number} id - The ID of the Enquiry.
+ * @returns {Promise<Object>} - The result of the update query.
+ */
+exports.updateEnquiryStatusQuery = async (params, id) => {
+    // Create the SQL query to update L1Status and L2Status based on the EnquiryId
+    const { columnSet, values } = multipleColumnSet(params);
+
+    const sql = `UPDATE ${tableName} SET ${columnSet} WHERE Id = ?`;
+
+    // Log the DB query
+    logger.info(`DB Query: Update Status SQL: ${sql}`);
+
+    // Execute the query
+    const result = await connection.query(sql, [...values, id]);
+
+    // const affectedRows = result ? result.affectedRows : 0;
+
+    return result;
+};
+
+/**
+ * Retrieves an enquiry by its ID from the database.
+ * @param {number} enquiryId - The ID of the enquiry to retrieve.
+ * @returns {Promise<object|null>} - The enquiry object if found, or null if not found.
+ */
+exports.getEnquiryById = async (enquiryId) => {
+    // Create the SQL query to fetch an enquiry by its ID
+    const sql = `SELECT * FROM ${tableName} WHERE Id = ?`;
+
+    // Log the DB query
+    logger.info(`DB Query: Get Enquiry by ID SQL: ${sql}`);
+
+    // Execute the query
+    const [enquiries] = await connection.query(sql, [enquiryId]);
+
+    // Return the first (and only) enquiry found, or null if not found
+    return enquiries;
 };
 
 /**

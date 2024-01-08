@@ -158,7 +158,7 @@ exports.signinUser = async (req, res, next) => {
             logger.info('Get secretKey from env :', secretKey);
 
             const token = jwt.sign({ id: user.Id.toString() }, secretKey, {
-                expiresIn: '24h',
+                expiresIn: '24hr',
             });
             logger.info('Create Token using secretKey :', token);
 

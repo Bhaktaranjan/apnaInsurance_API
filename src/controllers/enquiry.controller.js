@@ -2,6 +2,7 @@ const EnquiryModel = require('../models/enquiry.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const logger = require('../middleware/logger');
+const StatusModel = require("../models/status.model")
 
 
 // const getPagination = (_page, _limit) => {
@@ -85,6 +86,11 @@ exports.createEnquiry = async (req, res, next) => {
         registrationNoFormat(req);
         manufactureYearValidation(req);
         cubicCapacityValidation(req);
+
+        const allstatus = await StatusModel.getAllStatusQuery();
+        const status = allstatus.find(item => item.StatusName.toLowerCase() === "Open".toLowerCase());
+        req.body.L1Status = status.id;
+
         // Create the enquiry using EnquiryModel
         const result = await EnquiryModel.createEnquiryQuery(req.body);
 
@@ -110,6 +116,57 @@ exports.createEnquiry = async (req, res, next) => {
         res.status(500).send({ message: err.message || 'Some error occurred while fetching all Enquiry.' });
     }
 };
+
+/**
+ * Updates the status of an enquiry.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
+exports.updateEnquiryStatus = async (req, res, next) => {
+    try {
+        // Log the request body
+        logger.info('Message: Update Enquiry Status request', req.body);
+
+        if (!req.params.id || req.params.id === ':id') {
+            // Check if enquiry id is empty
+            logger.error('Enquiry Id can not be empty!');
+            res.status(400).send({ message: 'Enquiry Id can not be empty!' });
+            return;
+        }
+        const params = {
+            L1Status: req.body.L1Status,
+            L2Status: req.body.L2Status,
+            EditedBy: req.body.EditedBy,
+            EditedOn: new Date(Date.now())
+        }
+        // Update the enquiry status in the database
+        const result = await EnquiryModel.updateEnquiryStatusQuery(params, req.params.id);
+
+        if (result && result.affectedRows === 0) {
+            // Check if the update was successful
+            logger.error('Unable to update enquiry!');
+            throw new HttpException(500, 'Unable to update enquiry!');
+        }
+
+        // Retrieve the updated enquiry from the database
+        const updatedEnquiry = await EnquiryModel.getEnquiryById(req.params.id);
+        logger.success('Enquiry status updated successfully!');
+
+        // Send the response with the updated enquiry
+        res.status(200).send({
+            status: 200,
+            message: 'Enquiry updated successfully!',
+            data: updatedEnquiry
+        });
+
+    } catch (error) {
+        // Log and send error response
+        logger.error(error.message);
+        res.status(500).send({ message: error.message || 'Some error occurred while updating enquiry.' });
+    }
+}
 
 /**
  * Deletes an enquiry.

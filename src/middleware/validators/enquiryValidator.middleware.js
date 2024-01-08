@@ -6,6 +6,9 @@ exports.createEnquirySchema = [
         .withMessage("FirstName is required")
         .isLength({
             min: 1,
+        })
+        .withMessage("FirstName must be minimum 1 chars long")
+        .isLength({
             max: 25,
         })
         .withMessage("FirstName must be maximum 25 chars long"),
@@ -15,6 +18,10 @@ exports.createEnquirySchema = [
         .withMessage("LastName is required")
         .isLength({
             min: 1,
+
+        })
+        .withMessage("LastName must be minimum 1 chars long")
+        .isLength({
             max: 25,
 
         })
@@ -72,13 +79,13 @@ exports.createEnquirySchema = [
         .exists()
         .withMessage("Manufacturer is required"),
 
-    body("Vehicle")
+    body("VehicleModel")
         .exists()
-        .withMessage("Vehicle is required"),
+        .withMessage("VehicleModel is required"),
 
-    body("ModelName")
+    body("Variant")
         .exists()
-        .withMessage("ModelName is required"),
+        .withMessage("Variant is required"),
 
     body("DateOfRegistration")
         .exists()
@@ -137,9 +144,36 @@ exports.createEnquirySchema = [
             max: 20,
         })
         .withMessage("PolicyNumber must be maximum 20 chars long"),
+
     body("InsuranceCompany")
         .exists()
         .withMessage("InsuranceCompany is required"),
+
+    body("CurrentInsuredFirstName")
+        .exists()
+        .withMessage("CurrentInsuredFirstName is required")
+        .isLength({
+            min: 1,
+
+        })
+        .withMessage("CurrentInsuredFirstName must be minimum 1 chars long")
+        .isLength({
+            max: 25,
+        })
+        .withMessage("CurrentInsuredFirstName must be maximum 25 chars long"),
+
+    body("CurrentInsuredLastName")
+        .exists()
+        .withMessage("CurrentInsuredLastName is required")
+        .isLength({
+            min: 1,
+        })
+        .withMessage("CurrentInsuredLastName must be minimum 1 chars long")
+        .isLength({
+            max: 25,
+        })
+        .withMessage("CurrentInsuredLastName must be maximum 25 chars long"),
+
     body("NomineeName")
         .exists()
         .withMessage("NomineeName is required")
@@ -162,4 +196,15 @@ exports.createEnquirySchema = [
     body("NomineeRelationship")
         .exists()
         .withMessage("NomineeRelationship is required"),
+
 ];
+
+exports.updateEnquireSchema = [
+
+    body("L1Status")
+        .exists()
+        .optional(),
+
+    body("L2Status")
+        .optional()
+]

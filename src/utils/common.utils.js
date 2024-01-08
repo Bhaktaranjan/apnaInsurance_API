@@ -11,10 +11,27 @@ exports.multipleColumnSet = (object) => {
 	}
 
 	const keys = Object.keys(object);
+
 	const values = Object.values(object);
 
 	// Generate SQL column set by mapping keys to `${key} = ?` format and joining with comma.
 	const columnSet = keys.map((key) => `${key} = ?`).join(', ');
+
+	return {
+		columnSet,
+		values,
+	};
+};
+exports.multipleStatusColumnSet = (object) => {
+	if (typeof object !== 'object') {
+		throw new Error('Invalid input');
+	}
+
+	const keys = Object.keys(object);
+	const values = Object.values(object);
+
+	// Generate SQL column set by mapping keys to `${key} = ?` format and joining with comma.
+	const columnSet = keys.map((key) => `${key} = ?`).join(' OR ');
 
 	return {
 		columnSet,
@@ -47,3 +64,5 @@ exports.multipleColumnSetQueryParams = (object) => {
 		values,
 	};
 }
+
+

@@ -12,7 +12,7 @@ const tableName = 'manufacturer';
  */
 exports.findAllManufacturersQuery = async (params = {}) => {
     // Generate base SQL query
-    let sql = `SELECT Id, ManufacturerName FROM ${tableName} WHERE EntityState = 1`;
+    let sql = `SELECT Id, ManufacturerName FROM ${tableName}`;
 
     // Log the generated SQL query
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
@@ -25,9 +25,11 @@ exports.findAllManufacturersQuery = async (params = {}) => {
 
     // Generate column set and values for WHERE clause
     const { columnSet, values } = multipleColumnSet(params);
+    // const { columnSet, values } = multipleColumnSetQueryParams(params);
 
     // Append WHERE clause to SQL query
-    sql += ` LIMIT ${values[1]}, ${values[0]}`;
+    // sql += ` WHERE ${columnSetQueryParams}`;
+    sql += ` WHERE ${columnSet}`;
     logger.info(` DB Query : Get AllManufacturers Sql : ${sql}`);
 
     // Execute the query with the specified values
@@ -123,7 +125,7 @@ exports.deleteManufacturerQuery = async (id) => {
 
 exports.deleteModelByManufacturerId = async (id) => {
     // Construct the SQL query
-    const sql = `DELETE FROM model WHERE ManufacturerId = ?`;
+    const sql = `DELETE FROM variant WHERE ManufacturerId = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query : Delete deleteModelByManufacturerId Sql : ${sql}`);
@@ -136,7 +138,7 @@ exports.deleteModelByManufacturerId = async (id) => {
 }
 exports.deleteVehicleByManufacturerId = async (id) => {
     // Construct the SQL query
-    const sql = `DELETE FROM vehicle WHERE ManufacturerId = ?`;
+    const sql = `DELETE FROM vehicle_model WHERE ManufacturerId = ?`;
 
     // Log the generated SQL query
     logger.info(`DB Query : Delete deleteVehicleByManufacturerId Sql : ${sql}`);
