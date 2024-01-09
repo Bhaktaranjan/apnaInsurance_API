@@ -14,7 +14,7 @@ const vehicleModelRouter = require('./src/routes/vehicleModel.route');
 const fuelTypeRouter = require('./src/routes/fuelType.route');
 const statusRouter=require('./src/routes/status.route');
 const enquirydocumentRouter=require('./src/routes/enquirydocument.route');
-const documentRouter=require("./src/routes/document.rout")
+const documentRouter=require("./src/routes/document.route")
 // Init express
 const app = express();
 
